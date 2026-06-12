@@ -1,0 +1,2088 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   NOW PAGE — TASARIM SİSTEMİ v2 "Sıcak Editoryal Bento"
+   ────────────────────────────────────────────────────────────────────────────
+   Tasarım dili:
+   • Bento grid      → tek kolon yerine asimetrik, dergi hissi veren yerleşim
+   • Sıcak amber     → klişe mor/indigo yerine altın vurgu + ılık zeminler
+   • Editoryal serif → Inter'in yanında Instrument Serif italik vurgular
+   • Canlı detaylar  → işleyen saat, kayan şerit, nabız atan rozetler
+
+   Teknik yaklaşım:
+   1. Tüm renk/gölge değerleri CSS değişkeni → tema, tek attribute ile döner.
+   2. BEM isimlendirme (blok__element--modifier) → çakışmasız, okunabilir.
+   3. Animasyonlar yalnızca transform + opacity → GPU katmanı, 60fps.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+
+/* ── 1. DESIGN TOKENS ──────────────────────────────────────────────────────── */
+
+:root {
+  /* Tipografi: Inter (UI) + Instrument Serif (editoryal) + JetBrains Mono (veri) */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+
+  /* Yumuşaklık eğrisi: ease-out-expo — premium hissin matematiksel karşılığı */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-theme: background-color 0.45s ease, border-color 0.45s ease,
+    color 0.45s ease, box-shadow 0.45s ease;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-full: 999px;
+}
+
+/* ── KOYU TEMA (varsayılan): sıcak, fitilli kahve tonları ── */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #0d0b09;
+  --surface: rgba(255, 248, 235, 0.03);
+  --surface-2: rgba(255, 248, 235, 0.06);
+  --glass: rgba(25, 21, 17, 0.62);
+
+  --border: rgba(245, 238, 224, 0.09);
+  --border-strong: rgba(245, 238, 224, 0.17);
+
+  --text-primary: #f4efe6;
+  --text-secondary: rgba(236, 228, 212, 0.6);
+  --text-tertiary: rgba(236, 228, 212, 0.36);
+
+  /* Altın amber: monokrom zeminde tek sıcak vurgu */
+  --accent: #e8a33c;
+  --accent-contrast: #211505;
+  --accent-soft: rgba(232, 163, 60, 0.12);
+  --accent-glow: rgba(232, 163, 60, 0.13);
+  --accent-border: rgba(232, 163, 60, 0.35);
+
+  --success: #5fd38a;
+  --danger: #f87171;
+  --shimmer: rgba(255, 248, 235, 0.07);
+  --grid-line: rgba(255, 248, 235, 0.03);
+  --glow-opacity: 0.5;
+  --noise-opacity: 0.05;
+
+  --shadow-card:
+    0 1px 1px rgba(0, 0, 0, 0.3),
+    0 8px 24px rgba(0, 0, 0, 0.32);
+  --shadow-card-hover:
+    0 1px 1px rgba(0, 0, 0, 0.3),
+    0 14px 36px rgba(0, 0, 0, 0.42),
+    0 0 0 1px var(--accent-glow);
+}
+
+/* ── AÇIK TEMA: sıcak kâğıt dokusu ── */
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #faf7f1;
+  --surface: rgba(30, 24, 16, 0.03);
+  --surface-2: rgba(30, 24, 16, 0.06);
+  --glass: rgba(255, 253, 249, 0.78);
+
+  --border: rgba(30, 24, 16, 0.09);
+  --border-strong: rgba(30, 24, 16, 0.18);
+
+  --text-primary: #1e1812;
+  --text-secondary: rgba(30, 24, 18, 0.64);
+  --text-tertiary: rgba(30, 24, 18, 0.42);
+
+  --accent: #b05e0a;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(176, 94, 10, 0.09);
+  --accent-glow: rgba(176, 94, 10, 0.1);
+  --accent-border: rgba(176, 94, 10, 0.32);
+
+  --success: #178a4c;
+  --danger: #dc2626;
+  --shimmer: rgba(30, 24, 16, 0.05);
+  --grid-line: rgba(30, 24, 16, 0.04);
+  --glow-opacity: 0.3;
+  --noise-opacity: 0.06;
+
+  --shadow-card:
+    0 1px 2px rgba(30, 24, 16, 0.04),
+    0 8px 24px rgba(30, 24, 16, 0.06);
+  --shadow-card-hover:
+    0 2px 4px rgba(30, 24, 16, 0.05),
+    0 16px 40px rgba(30, 24, 16, 0.1),
+    0 0 0 1px var(--accent-glow);
+}
+
+
+/* ── 2. RESET & TEMEL KURALLAR ─────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--text-primary);
+  /* Inter'in OpenType incelikleri: ürün tipografisi hissi */
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
+  transition: var(--transition-theme);
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Erişilebilirlik: klavye odağı her zaman görünür */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Navbar sabit olduğu için bölüm linkleri menünün altına hizalanır */
+#odak,
+#projeler,
+#github,
+#iletisim {
+  scroll-margin-top: 96px;
+}
+
+/* Ekran okuyucuya özel gizli metin */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* ── 3. SAYFA İSKELETİ & ARKA PLAN ─────────────────────────────────────────── */
+
+.page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: clip; /* marquee tam genişlik taşmasını keser */
+}
+
+.page__content {
+  width: 100%;
+  max-width: 1104px;
+  margin-inline: auto;
+  padding: 0 28px;
+  flex: 1;
+}
+
+.page__background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Sıcak ışık haleleri: dev, bulanık radyal gradyanlar */
+.page__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: var(--glow-opacity);
+  animation: glow-drift 24s ease-in-out infinite alternate;
+}
+
+.page__glow--one {
+  width: 640px;
+  height: 640px;
+  top: -280px;
+  left: 50%;
+  margin-left: -320px;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+}
+
+.page__glow--two {
+  width: 480px;
+  height: 480px;
+  bottom: -240px;
+  right: -150px;
+  background: radial-gradient(circle, rgba(225, 110, 80, 0.09) 0%, transparent 70%);
+  animation-delay: -12s;
+}
+
+@keyframes glow-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(44px, 30px, 0) scale(1.07); }
+}
+
+/* İnce mühendislik grid'i: üstte belirgin, aşağıda mask ile kaybolur */
+.page__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 76px 76px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 55% at 50% 0%, #000 35%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 55% at 50% 0%, #000 35%, transparent 78%);
+}
+
+/* Film greni: SVG turbulence dokusuyla "basılı sayfa" hissi */
+.page__noise {
+  position: absolute;
+  inset: 0;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+
+/* ── 4. ANİMASYON SİSTEMİ ──────────────────────────────────────────────────── */
+
+/* Scroll-reveal: JS sadece .is-visible ekler, gerisi CSS'in işi */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.8s var(--ease-out),
+    transform 0.8s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hero giriş: sayfa yüklenince kademeli yükselme */
+.hero-enter {
+  opacity: 0;
+  animation: fade-up 0.9s var(--ease-out) forwards;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Nabız atan canlı durum noktası */
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 45%, transparent); }
+  70%  { box-shadow: 0 0 0 7px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes shimmer-sweep {
+  to { transform: translateX(100%); }
+}
+
+@keyframes equalize {
+  0%, 100% { transform: scaleY(0.25); }
+  50%      { transform: scaleY(1); }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+/* Sonsuz şerit: iki kopyalı liste, %50'de kusursuz döngü */
+@keyframes marquee-scroll {
+  to { transform: translateX(-50%); }
+}
+
+
+/* ── 5. NAVBAR (cam hap menü) ──────────────────────────────────────────────── */
+
+.navbar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px 6px 16px;
+  border-radius: var(--radius-full);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-theme);
+}
+
+/* Monogram: serif italik kişisel imza */
+.navbar__brand {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.2rem;
+  line-height: 1;
+  margin-right: 10px;
+  color: var(--text-primary);
+}
+
+.navbar__brand-dot {
+  color: var(--accent);
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+}
+
+.navbar__link {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 7px 11px;
+  border-radius: var(--radius-full);
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+
+.navbar__link:hover {
+  color: var(--text-primary);
+  background: var(--surface-2);
+}
+
+/* Tema düğmesi navbar'ın içinde yaşar */
+.theme-toggle {
+  width: 32px;
+  height: 32px;
+  margin-left: 8px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  transition: var(--transition-theme), transform 0.3s var(--ease-out);
+}
+
+.theme-toggle:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+  transform: scale(1.06);
+}
+
+.theme-toggle:active {
+  transform: scale(0.92);
+}
+
+/* İki ikon üst üste; aktif olmayan döndürülerek kaybolur */
+.theme-toggle__icon {
+  grid-area: 1 / 1;
+  transition: transform 0.5s var(--ease-out), opacity 0.35s ease;
+}
+
+[data-theme='dark'] .theme-toggle__icon--sun {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+
+[data-theme='dark'] .theme-toggle__icon--moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+[data-theme='light'] .theme-toggle__icon--sun {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+[data-theme='light'] .theme-toggle__icon--moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+}
+
+
+/* ── 6. ORTAK YAPI TAŞLARI ─────────────────────────────────────────────────── */
+
+/* Glassmorphism kart: tüm bento hücrelerinin ortak zemini */
+.card {
+  position: relative;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 26px;
+  transition:
+    transform 0.4s var(--ease-out),
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    background-color 0.45s ease;
+}
+
+/* Hover: 2px yükselme + gölge derinleşmesi (yalnızca transform) */
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Kart etiketi: sol üstteki küçük mono başlık — "✱ ANA ODAK" */
+.card-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 18px;
+}
+
+.card-label::before {
+  content: '✱';
+  color: var(--accent);
+  margin-right: 8px;
+}
+
+/* Hairline chip'ler */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 5px 12px;
+  background: var(--surface);
+  transition: var(--transition-theme);
+}
+
+.chip--accent {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--accent-border);
+}
+
+.chip--small {
+  padding: 3px 9px;
+  font-size: 0.6875rem;
+}
+
+/* İlerleme çubuğu (kitap, müzik, backlog ortak parçası) */
+.progress {
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.progress__fill {
+  display: block;
+  height: 100%;
+  width: 0; /* başlangıç: boş — kart görünür olunca dolar */
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #f5d889));
+  transition: width 1.1s var(--ease-out) 0.25s;
+}
+
+.reveal.is-visible .progress__fill {
+  width: var(--progress-value, 0%);
+}
+
+/* Ok ikonlu metin linkleri */
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: color 0.25s ease;
+}
+
+.text-link:hover {
+  color: var(--accent);
+}
+
+.text-link__arrow {
+  transition: transform 0.3s var(--ease-out);
+}
+
+.text-link:hover .text-link__arrow {
+  transform: translate(2px, -2px);
+}
+
+/* Butonlar */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 11px 18px;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  transition:
+    transform 0.3s var(--ease-out),
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Birincil: sayfadaki en sıcak nokta — amber zemin, koyu metin */
+.btn--primary {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.btn--primary:hover {
+  background: color-mix(in srgb, var(--accent) 88%, #fff);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+/* Kopyalandı geri bildirimi: kısa süreliğine yeşile döner */
+.btn--copied {
+  background: var(--success);
+  color: #102517;
+}
+
+.btn--copied:hover {
+  background: var(--success);
+}
+
+.btn--ghost {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  background: var(--surface);
+}
+
+.btn--ghost:hover {
+  border-color: var(--accent-border);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.btn__arrow {
+  transition: transform 0.3s var(--ease-out);
+  opacity: 0.7;
+}
+
+.btn:hover .btn__arrow {
+  transform: translate(2px, -2px);
+}
+
+
+/* ── 7. HERO ───────────────────────────────────────────────────────────────── */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 56px;
+  align-items: center;
+  padding-top: clamp(120px, 17vh, 176px);
+}
+
+.hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 22px;
+}
+
+.hero__eyebrow::before {
+  content: '—';
+  color: var(--accent);
+  margin-right: 10px;
+}
+
+/* Dev display tipografisi: Inter + serif italik karışımı */
+.hero__title {
+  font-size: clamp(3.2rem, 7.5vw, 5.5rem);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 0.99;
+  margin-bottom: 26px;
+}
+
+.hero__title-line {
+  display: block;
+}
+
+/* İkinci satır: Instrument Serif italik — insan eli değmiş editoryal vurgu */
+.hero__title-line--serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  margin-top: 4px;
+}
+
+.hero__intro {
+  max-width: 54ch;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+.hero__intro strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Sağ kolon: avatar + canlı bilgi paneli */
+.hero__side {
+  justify-self: end;
+  width: 100%;
+  max-width: 296px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hero__portrait {
+  position: relative;
+  width: fit-content;
+}
+
+.hero__portrait img,
+.hero__monogram {
+  width: 132px;
+  height: 132px;
+  border-radius: 32px;
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-card);
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+.hero__monogram {
+  display: grid;
+  place-items: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 2.4rem;
+  color: var(--accent);
+}
+
+/* Hafif eğik sticker: "insan eli değmiş" hissi veren detay */
+.hero__sticker {
+  position: absolute;
+  bottom: -12px;
+  left: -14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-card);
+  transform: rotate(-5deg);
+  transition: transform 0.35s var(--ease-out);
+}
+
+.hero__portrait:hover .hero__sticker {
+  transform: rotate(-1deg) translateY(-2px);
+}
+
+.hero__sticker-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+/* Canlı bilgi paneli: konum + işleyen saat + odak */
+.hero__facts {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  padding: 4px 18px;
+}
+
+.hero__fact {
+  padding: 12px 0;
+}
+
+.hero__fact + .hero__fact {
+  border-top: 1px solid var(--border);
+}
+
+.hero__fact dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 3px;
+}
+
+.hero__fact dt svg {
+  color: var(--accent);
+}
+
+.hero__fact dd {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Saniyede bir işleyen saat: mono font, sabit genişlikli rakamlar */
+.hero__fact-clock {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ── 8. MARQUEE (kayan şerit) ──────────────────────────────────────────────── */
+
+.marquee {
+  /* Konteynerden taşıp tüm görünür genişliğe yayılır */
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 72px;
+  padding: 15px 0;
+  border-block: 1px solid var(--border);
+  overflow: hidden;
+  /* Kenarlarda yumuşak kaybolma */
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 38s linear infinite;
+}
+
+/* Okumak isteyen için: üzerine gelince durur */
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+.marquee__item {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.marquee__star {
+  color: var(--accent);
+  margin: 0 26px;
+  font-size: 0.6rem;
+}
+
+
+/* ── 9. BENTO GRID ─────────────────────────────────────────────────────────── */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  margin-top: 72px;
+}
+
+/* Mobile-first: tüm kartlar tam genişlik; desktop'ta span'lar devreye girer */
+.bento {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 900px) {
+  .bento--4  { grid-column: span 4; }
+  .bento--5  { grid-column: span 5; }
+  .bento--7  { grid-column: span 7; }
+  .bento--12 { grid-column: span 12; }
+}
+
+/* Orta boy ekran: 4'lük raf kartları ikili akar */
+@media (min-width: 640px) and (max-width: 899px) {
+  .bento--4 { grid-column: span 6; }
+  .bento-grid { grid-template-columns: repeat(12, 1fr); }
+}
+
+
+/* ── 10. ANA ODAK (spotlight kart) ─────────────────────────────────────────── */
+
+.focus-card {
+  overflow: hidden; /* spotlight halesi kart sınırından taşmasın */
+}
+
+.focus-card__surface {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* Spotlight kart kenarlarına kadar uzansın diye padding'i telafi eder */
+  margin: -8px;
+  padding: 8px;
+}
+
+/* Fareyi takip eden ışık: koordinatlar JS'ten --mx/--my olarak gelir */
+.focus-card__surface::before {
+  content: '';
+  position: absolute;
+  inset: -26px;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 0%),
+    var(--accent-glow),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+}
+
+.focus-card:hover .focus-card__surface::before {
+  opacity: 1;
+}
+
+.focus-card__icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+
+.focus-card__title {
+  font-size: clamp(1.3rem, 2.6vw, 1.55rem);
+  font-weight: 650;
+  letter-spacing: -0.022em;
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+.focus-card__description {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  max-width: 58ch;
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+
+/* ── 11. SİSTEM DURUMU (pil) ───────────────────────────────────────────────── */
+
+.energy-card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.energy-card__context {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+}
+
+.energy-card__percent {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.energy-card__percent svg {
+  color: var(--accent);
+}
+
+/* Tamamen CSS ile çizilmiş pil gövdesi */
+.battery {
+  position: relative;
+  height: 32px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 9px;
+  padding: 3px;
+  margin-right: 6px; /* kutup başına yer aç */
+}
+
+.battery::after {
+  content: '';
+  position: absolute;
+  right: -7.5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 13px;
+  border-radius: 0 3px 3px 0;
+  background: var(--border-strong);
+}
+
+.battery__fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 5px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #f7e1a0));
+  transition: width 1.2s var(--ease-out) 0.3s;
+}
+
+.reveal.is-visible .battery__fill {
+  width: var(--battery-value, 0%);
+}
+
+.energy-card__note {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: auto;
+  padding-top: 18px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.energy-card__note svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+
+/* ── 12. SES ARKA PLANIM (mini player) ─────────────────────────────────────── */
+
+.player__top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.player__art {
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(140deg, var(--accent-soft), transparent 70%),
+    var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--accent);
+}
+
+.player__art-disc {
+  animation: spin-slow 7s linear infinite;
+}
+
+/* Duraklatınca tüm hareketli parçalar CSS ile donar */
+.player.is-paused .player__art-disc,
+.player.is-paused .player__equalizer span {
+  animation-play-state: paused;
+}
+
+.player.is-paused .player__equalizer {
+  opacity: 0.35;
+}
+
+.player__info {
+  min-width: 0;
+  flex: 1;
+}
+
+.player__state {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.player__track {
+  font-size: 0.9875rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player__artist {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+
+.player__equalizer {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+  transition: opacity 0.3s ease;
+}
+
+.player__equalizer span {
+  width: 3px;
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  transform-origin: bottom;
+  animation: equalize 1.1s ease-in-out infinite;
+}
+
+.player__equalizer span:nth-child(2) { animation-delay: 0.18s; }
+.player__equalizer span:nth-child(3) { animation-delay: 0.36s; }
+.player__equalizer span:nth-child(4) { animation-delay: 0.1s; }
+
+.player__timeline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.progress--player {
+  flex: 1;
+}
+
+.player__time {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+}
+
+.player__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.player__button {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: var(--surface);
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s var(--ease-out),
+    background-color 0.25s ease;
+}
+
+.player__button:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+  transform: scale(1.07);
+}
+
+.player__button:active {
+  transform: scale(0.92);
+}
+
+.player__button--primary {
+  width: 42px;
+  height: 42px;
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--accent-contrast);
+}
+
+.player__button--primary:hover {
+  color: var(--accent-contrast);
+  background: color-mix(in srgb, var(--accent) 86%, #fff);
+}
+
+
+/* ── 13. ÖĞRENİM RADARI ────────────────────────────────────────────────────── */
+
+.radar-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 28px;
+  row-gap: 6px;
+}
+
+.radar-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 9px 0;
+}
+
+.radar-row__icon {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  transition: var(--transition-theme);
+}
+
+.radar-row:hover .radar-row__icon {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+}
+
+.radar-row__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.radar-row__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.radar-row__name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.radar-row__stage {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.radar-row__stage--derinlesiyorum {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+}
+
+.radar-row__stage--aktif {
+  color: var(--text-secondary);
+  background: var(--surface-2);
+}
+
+.radar-row__stage--kesif {
+  border-style: dashed;
+}
+
+.radar-row__meter {
+  height: 3px;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.radar-row__meter-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 1s var(--ease-out) 0.3s;
+}
+
+.reveal.is-visible .radar-row__meter-fill {
+  width: var(--meter-value, 0%);
+}
+
+
+/* ── 14. KÜTÜPHANEM ────────────────────────────────────────────────────────── */
+
+.reading-card__top {
+  display: flex;
+  gap: 22px;
+}
+
+/* Tamamen CSS ile çizilmiş kitap kapağı */
+.reading-card__cover {
+  position: relative;
+  flex-shrink: 0;
+  width: 92px;
+  aspect-ratio: 3 / 4.2;
+  align-self: flex-start;
+  border-radius: 5px 10px 10px 5px; /* sol kenar cilt gibi keskin */
+  background:
+    linear-gradient(150deg, var(--accent-soft), transparent 60%),
+    linear-gradient(320deg, var(--surface-2), transparent),
+    var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 8px 10px 14px;
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.45s var(--ease-out);
+}
+
+/* Kart hover'ında kapak hafifçe eğilir — raftan alınıyor hissi */
+.reading-card__top:hover .reading-card__cover {
+  transform: rotate(-2.5deg) translateY(-3px);
+}
+
+.reading-card__cover-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 6px;
+  width: 1px;
+  background: var(--border-strong);
+}
+
+.reading-card__cover-icon {
+  color: var(--accent);
+}
+
+.reading-card__cover-title {
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.reading-card__cover-author {
+  font-size: 0.5rem;
+  color: var(--text-tertiary);
+}
+
+.reading-card__meta {
+  min-width: 0;
+}
+
+.reading-card__title {
+  font-size: 1.15rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.reading-card__author {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  margin-top: 3px;
+}
+
+/* Okuma sebebi: serif italik editoryal alıntı — dergi sayfası hissi */
+.reading-card__reason {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.06rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-top: 14px;
+}
+
+.reading-card__progress {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.reading-card__progress-text {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  margin-top: 8px;
+}
+
+
+/* ── 15. HAYATTAN BİR KARE (kartpostal) ────────────────────────────────────── */
+
+.postcard__frame {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  transition: border-color 0.3s ease;
+}
+
+.postcard:hover .postcard__frame {
+  border-color: var(--accent-border);
+}
+
+/* Köşedeki pul: kesikli çerçeveli mini uçak */
+.postcard__stamp {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1.5px dashed var(--accent-border);
+  border-radius: 8px;
+  color: var(--accent);
+  transform: rotate(6deg);
+  transition: transform 0.35s var(--ease-out);
+}
+
+.postcard:hover .postcard__stamp {
+  transform: rotate(0deg) scale(1.05);
+}
+
+.postcard__meta {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+  padding-right: 48px; /* pula çarpmasın */
+}
+
+/* Şehir adı: serif italik — kartpostal el yazısı havası */
+.postcard__title {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.9rem;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.postcard__description {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+
+/* ── 16. PROJELER ──────────────────────────────────────────────────────────── */
+
+.project-card__columns {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 28px;
+  flex: 1;
+}
+
+.project-card__header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.project-card__icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+}
+
+.project-card__name {
+  font-size: 1.3rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  flex: 1;
+}
+
+.project-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--success);
+  border: 1px solid color-mix(in srgb, var(--success) 35%, transparent);
+  background: color-mix(in srgb, var(--success) 9%, transparent);
+  border-radius: var(--radius-full);
+  padding: 4px 11px;
+}
+
+.project-card__status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+.project-card__description {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin-bottom: 18px;
+}
+
+.project-card__links {
+  display: flex;
+  gap: 20px;
+  margin-top: 18px;
+}
+
+/* Mimari kararlar paneli: teknik derinlik bir bakışta */
+.project-card__architecture-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+}
+
+.project-card__architecture-title {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+
+.project-card__architecture {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.project-card__architecture li {
+  position: relative;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  padding-left: 20px;
+}
+
+.project-card__architecture li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.68em;
+  width: 11px;
+  height: 1.5px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+}
+
+/* Raf kartları */
+.mini-project {
+  padding: 22px;
+}
+
+.mini-project__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+
+.mini-project__name {
+  font-size: 0.9875rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+.mini-project__status {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.mini-project__status--gelistiriliyor {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+}
+
+.mini-project__status--tamamlandi {
+  color: var(--success);
+  border-color: color-mix(in srgb, var(--success) 35%, transparent);
+  background: color-mix(in srgb, var(--success) 9%, transparent);
+}
+
+.mini-project__description {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  flex: 1;
+}
+
+
+/* ── 17. ÖĞRENME LİSTESİ (backlog) ─────────────────────────────────────────── */
+
+.backlog-card__summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.backlog-card__count {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.progress--backlog {
+  flex: 1;
+}
+
+.backlog-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.backlog-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 2px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.backlog-item + .backlog-item {
+  border-top: 1px solid var(--border);
+}
+
+.backlog-item__icon {
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+.backlog-item--done .backlog-item__icon {
+  color: var(--success);
+}
+
+.backlog-item--done .backlog-item__label {
+  color: var(--text-tertiary);
+  text-decoration: line-through;
+  text-decoration-color: var(--border-strong);
+}
+
+
+/* ── 18. GITHUB CANLI VERİ ─────────────────────────────────────────────────── */
+
+.github-card__profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.github-card__avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+}
+
+.github-card__profile-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.github-card__name {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.github-card__login {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--text-tertiary);
+}
+
+.github-card__bio {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  margin-top: 3px;
+}
+
+.github-card__stats {
+  display: flex;
+  gap: 36px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 2px;
+  margin: 18px 0;
+}
+
+.github-card__stat dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.github-card__stat dd {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-top: 4px;
+}
+
+.github-card__repos {
+  display: flex;
+  flex-direction: column;
+}
+
+.github-card__repos li + li {
+  border-top: 1px solid var(--border);
+}
+
+.repo-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 13px 10px;
+  margin: 0 -10px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.25s ease;
+}
+
+.repo-row:hover {
+  background: var(--surface-2);
+}
+
+.repo-row__name {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.repo-row__description {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.repo-row__meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.repo-row__language,
+.repo-row__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.repo-row__language-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.github-card__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.github-card__error svg {
+  flex-shrink: 0;
+  color: var(--danger);
+  margin-top: 2px;
+}
+
+.github-card__error a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+
+/* ── 19. SKELETON LOADING (shimmer) ────────────────────────────────────────── */
+
+.skeleton {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--shimmer), transparent);
+  animation: shimmer-sweep 1.5s ease-in-out infinite;
+}
+
+.skeleton--avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.skeleton--line {
+  height: 13px;
+  border-radius: var(--radius-full);
+}
+
+.skeleton--line + .skeleton--line {
+  margin-top: 9px;
+}
+
+.skeleton--stat {
+  width: 72px;
+  height: 44px;
+}
+
+.github-card__stats .skeleton--stat + .skeleton--stat {
+  margin-left: 24px;
+}
+
+.skeleton--repo {
+  height: 56px;
+}
+
+.skeleton--repo + .skeleton--repo {
+  margin-top: 10px;
+}
+
+
+/* ── 20. KAPANIŞ CTA ───────────────────────────────────────────────────────── */
+
+.cta {
+  margin-top: 120px;
+  text-align: center;
+}
+
+.cta__label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 18px;
+}
+
+.cta__label::before {
+  content: '✱';
+  color: var(--accent);
+  margin-right: 8px;
+}
+
+.cta__title {
+  font-size: clamp(2.6rem, 6vw, 4.3rem);
+  font-weight: 720;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+/* Vurgu kelimesi: serif italik amber — sayfanın imza dokunuşu */
+.cta__title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.cta__title-dot {
+  color: var(--accent);
+}
+
+.cta__note {
+  max-width: 52ch;
+  margin: 20px auto 0;
+  font-size: 0.975rem;
+  color: var(--text-secondary);
+}
+
+.cta__actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+
+/* ── 21. FOOTER ────────────────────────────────────────────────────────────── */
+
+.footer {
+  margin-top: 96px;
+  border-top: 1px solid var(--border);
+  padding: 26px 28px 40px;
+}
+
+.footer__inner {
+  max-width: 1104px;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footer__credit,
+.footer__made {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+}
+
+.footer__updated {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+}
+
+.footer__updated time {
+  color: var(--text-secondary);
+}
+
+
+/* ── 22. RESPONSIVE TASARIM ────────────────────────────────────────────────── */
+
+/* Geniş tablet ve altı: hero tek kolona iner */
+@media (max-width: 899px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: clamp(104px, 14vh, 140px);
+  }
+
+  /* Yan panel: avatar solda, bilgiler sağda yatay düzen */
+  .hero__side {
+    justify-self: start;
+    max-width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 26px;
+  }
+
+  .hero__facts {
+    flex: 1;
+  }
+
+  .project-card__columns {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .bento-grid {
+    margin-top: 56px;
+  }
+
+  .marquee {
+    margin-top: 56px;
+  }
+}
+
+/* Dar tablet: radar tek kolon */
+@media (max-width: 680px) {
+  .radar-list {
+    grid-template-columns: 1fr;
+    row-gap: 2px;
+  }
+}
+
+/* Telefon */
+@media (max-width: 560px) {
+  .page__content {
+    padding: 0 18px;
+  }
+
+  .navbar {
+    padding: 5px 6px 5px 12px;
+  }
+
+  .navbar__brand {
+    font-size: 1.05rem;
+    margin-right: 6px;
+  }
+
+  .navbar__link {
+    font-size: 0.75rem;
+    padding: 6px 8px;
+  }
+
+  .theme-toggle {
+    width: 30px;
+    height: 30px;
+    margin-left: 4px;
+  }
+
+  .card {
+    padding: 22px;
+  }
+
+  /* Yan panel tekrar dikey: avatar üstte, bilgiler altta */
+  .hero__side {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+  }
+
+  .hero__sticker {
+    left: -6px;
+  }
+
+  .hero__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .github-card__stats {
+    gap: 0;
+    justify-content: space-between;
+  }
+
+  .reading-card__top {
+    gap: 16px;
+  }
+
+  .footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+
+/* ── 23. ERİŞİLEBİLİRLİK: HAREKETİ AZALT ───────────────────────────────────── */
+
+/* Vestibüler hassasiyeti olan kullanıcılar için tüm hareket kapatılır.
+   İçerik anında, animasyonsuz görünür — hiçbir bilgi kaybolmaz. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal,
+  .hero-enter {
+    opacity: 1;
+    transform: none;
+  }
+
+  .marquee__track {
+    animation: none;
+  }
+}
