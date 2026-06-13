@@ -306,3 +306,16 @@ export const learningBacklog = [
   { id: 'portfolio', label: 'Kişisel portfolyo sitesini yayına almak', done: false },
   { id: 'oss', label: 'Açık kaynak bir projeye ilk katkımı yapmak', done: false },
 ]
+
+// ── 09 · Araç Kutum ──────────────────────────────────────────────────────────
+// Günlük geliştirme rutininde kullanılan araçlar/ortam. "icon" anahtarı
+// component'teki lucide ikonuna eşlenir (içerik ↔ sunum ayrımı korunur).
+export const toolbox = [
+  { id: 'editor', label: 'Editör', tool: 'VS Code', icon: 'code' },
+  { id: 'ios', label: 'iOS', tool: 'Xcode', icon: 'app' },
+  { id: 'design', label: 'Tasarım', tool: 'Figma', icon: 'pen' },
+  { id: 'version', label: 'Versiyon', tool: 'Git & GitHub', icon: 'git' },
+  { id: 'db', label: 'Veritabanı', tool: 'SQLite', icon: 'database' },
+  { id: 'circuit', label: 'Devre', tool: 'Tinkercad', icon: 'cpu' },
+  { id: 'os', label: 'Sistem', tool: 'macOS', icon: 'laptop' },
+]

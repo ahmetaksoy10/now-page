@@ -1809,6 +1809,84 @@ img {
 }
 
 
+/* ── 17b. ARAÇ KUTUM ───────────────────────────────────────────────────────── */
+
+.toolbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Tek araç: ikon + kategori/araç adı satırı */
+.toolbox-item {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 13px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    transform 0.3s var(--ease-out);
+}
+
+.toolbox-item:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  transform: translateY(-2px);
+}
+
+.toolbox-item__icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  transition: var(--transition-theme);
+}
+
+.toolbox-item:hover .toolbox-item__icon {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+}
+
+.toolbox-item__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.toolbox-item__label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.toolbox-item__tool {
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 7 araç, 2 kolon → son tek öğe tüm satırı kaplasın (boşluk kalmasın) */
+.toolbox-item:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+
 /* ── 18. GITHUB CANLI VERİ ─────────────────────────────────────────────────── */
 
 /* Kart: katkı ızgarası taşmasın diye taşan içerik kırpılır */
@@ -2672,6 +2750,24 @@ img {
     gap: 18px;
   }
 
+  /* GitHub kartı tek kolona iner; repolar bölümü alta geçer */
+  .github-card__layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .github-card__side {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding-left: 0;
+    padding-top: 20px;
+  }
+
+  /* Dar alanda animasyonlu ızgara dağıtmasın diye gizlenir */
+  .github-grid {
+    display: none;
+  }
+
   .bento-grid {
     margin-top: 56px;
   }
@@ -2761,9 +2857,15 @@ img {
     justify-content: center;
   }
 
+  /* İstatistikler telefonda 2×2 ızgaraya iner (4'lü tek satır sıkışmasın) */
   .github-card__stats {
-    gap: 0;
-    justify-content: space-between;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 12px;
+  }
+
+  /* Araç kutusu telefonda tek kolon — adlar rahat sığsın */
+  .toolbox-grid {
+    grid-template-columns: 1fr;
   }
 
   .reading-card__top {

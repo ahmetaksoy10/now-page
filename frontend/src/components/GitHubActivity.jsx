@@ -35,23 +35,32 @@ const DIL_RENKLERI = {
 
 const dilRengi = (dil) => DIL_RENKLERI[dil] || 'var(--accent)'
 
+// Deterministik pseudo-random: indeksten 0–1 arası, saf (idempotent) değer üretir.
+// Math.random yerine bunu kullanıyoruz; böylece render saf kalır (React purity
+// kuralı) ve ızgara her render'da aynı organik desende olur. tohum, aynı indeksin
+// üç farklı özelliği için farklı çıktı vermesini sağlar.
+const sozdeRastgele = (indeks, tohum) => {
+  const x = Math.sin((indeks + 1) * tohum) * 43758.5453
+  return x - Math.floor(x)
+}
+
 /**
  * KatkiIzgarasi — GitHub katkı grafiğini (contribution heatmap) andıran,
  * yanıp sönen kareler arka planı. Tamamen dekoratif (aria-hidden).
  *
- * Kareler `useMemo` ile bir kez üretilir; her birine rastgele bir animasyon
- * gecikmesi ve süresi verilir, böylece ızgara organik biçimde "nefes alır".
- * Animasyonun kendisi CSS'tedir (github-cell-pulse) — JS sadece zamanlamayı
- * dağıtır, kare başına render maliyeti sıfırdır.
+ * Kareler `useMemo` ile bir kez üretilir; her birine indekse bağlı (deterministik)
+ * bir animasyon gecikmesi ve süresi verilir, böylece ızgara organik biçimde
+ * "nefes alır". Animasyonun kendisi CSS'tedir (github-cell-pulse) — JS sadece
+ * zamanlamayı dağıtır, kare başına render maliyeti sıfırdır.
  */
 function KatkiIzgarasi() {
   const kareler = useMemo(
     () =>
-      Array.from({ length: 110 }, () => ({
-        delay: (Math.random() * 4).toFixed(2),
-        duration: (2.5 + Math.random() * 3).toFixed(2),
+      Array.from({ length: 110 }, (_, i) => ({
+        delay: (sozdeRastgele(i, 12.9898) * 4).toFixed(2),
+        duration: (2.5 + sozdeRastgele(i, 78.233) * 3).toFixed(2),
         // Kareler farklı "yoğunluk" seviyelerinde başlasın (gerçek heatmap gibi)
-        seviye: Math.floor(Math.random() * 4),
+        seviye: Math.floor(sozdeRastgele(i, 39.425) * 4),
       })),
     [],
   )

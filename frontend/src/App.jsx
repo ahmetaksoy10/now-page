@@ -9,6 +9,7 @@ import CurrentlyReading from './components/CurrentlyReading.jsx'
 import LifeHighlight from './components/LifeHighlight.jsx'
 import ActiveProject from './components/ActiveProject.jsx'
 import LearningBacklog from './components/LearningBacklog.jsx'
+import Toolbox from './components/Toolbox.jsx'
 import GitHubActivity from './components/GitHubActivity.jsx'
 import ContactCta from './components/ContactCta.jsx'
 import Footer from './components/Footer.jsx'
@@ -20,7 +21,7 @@ import Footer from './components/Footer.jsx'
  * "besteler" (composition root). Kartlar 12 kolonluk bir bento grid'e
  * yerleşir; her kart kendi span'ını BentoCard üzerinden bildirir.
  *
- * Bento ritmi (desktop):  7+5 → 5+7 → 7+5 → 12 → 4+4+4 → 12 → 12
+ * Bento ritmi (desktop):  7+5 → 5+7 → 7+5 → 12 → 4+4+4 → 7+5 → 12
  * Mobilde tüm kartlar tek kolona akar (CSS media query).
  */
 function App() {
@@ -49,6 +50,7 @@ function App() {
           <LifeHighlight />
           <ActiveProject />
           <LearningBacklog />
+          <Toolbox />
           <GitHubActivity />
         </div>
 
