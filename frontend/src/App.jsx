@@ -20,7 +20,7 @@ import Footer from './components/Footer.jsx'
  * "besteler" (composition root). Kartlar 12 kolonluk bir bento grid'e
  * yerleşir; her kart kendi span'ını BentoCard üzerinden bildirir.
  *
- * Bento ritmi (desktop):  7+5 → 5+7 → 7+5 → 12 → 4+4+4 → 5+7
+ * Bento ritmi (desktop):  7+5 → 5+7 → 7+5 → 12 → 4+4+4 → 12 → 12
  * Mobilde tüm kartlar tek kolona akar (CSS media query).
  */
 function App() {

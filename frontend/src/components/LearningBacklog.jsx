@@ -14,7 +14,7 @@ function LearningBacklog() {
   const oran = Math.round((tamamlanan / learningBacklog.length) * 100)
 
   return (
-    <BentoCard span={5} label="Öğrenme Listesi" labelId="backlog-baslik">
+    <BentoCard span={7} label="Öğrenme Listesi" labelId="backlog-baslik">
       <div className="backlog-card__summary">
         <p className="backlog-card__count">
           {tamamlanan} / {learningBacklog.length} tamamlandı
@@ -34,7 +34,8 @@ function LearningBacklog() {
         </div>
       </div>
 
-      <ul className="backlog-list">
+      {/* Geniş kartta liste iki kolona akar (CSS columns) — dengeli durur */}
+      <ul className="backlog-list backlog-list--columns">
         {learningBacklog.map((oge) => (
           <li
             key={oge.id}

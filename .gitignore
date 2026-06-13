@@ -52,3 +52,4 @@ Thumbs.db
 #  Claude Code yerel ayarları (paylaşılan launch.json hariç)
 # ───────────────────────────────────────────────────────────────────────────
 .claude/settings.local.json
+.claude
