@@ -19,6 +19,7 @@ function BentoCard({
   id,
   className = '',
   children,
+  ...rest // onClick gibi ek davranışlar karta dışarıdan eklenebilir
 }) {
   const ref = useScrollReveal()
 
@@ -29,6 +30,7 @@ function BentoCard({
       className={`card bento bento--${span} reveal ${className}`.trim()}
       style={{ '--reveal-delay': `${delay}ms` }}
       aria-labelledby={labelId}
+      {...rest}
     >
       {label && (
         <p className="card-label" id={labelId}>

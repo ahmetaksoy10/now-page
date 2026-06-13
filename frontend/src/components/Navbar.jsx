@@ -11,9 +11,9 @@ import ThemeToggle from './ThemeToggle.jsx'
 function Navbar() {
   return (
     <nav className="navbar" aria-label="Sayfa içi gezinme">
-      {/* Monogram: logo yerine zarif bir kişisel imza */}
+      {/* İsim, imza gibi: sayfanın sahibi her an görünür */}
       <a href="#top" className="navbar__brand" aria-label="Sayfa başına dön">
-        aa<span className="navbar__brand-dot">.</span>
+        ahmet aksoy<span className="navbar__brand-dot">.</span>
       </a>
 
       <div className="navbar__links">

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { ArrowUpRight, Clock3, Crosshair, MapPin } from 'lucide-react'
 import { GitHubIcon, LinkedInIcon } from './icons/BrandIcons.jsx'
 import { profile, currentFocus } from '../data/content.js'
@@ -8,17 +7,15 @@ import CopyEmailButton from './CopyEmailButton.jsx'
 /**
  * HeroSection — Açılış sahnesi: iki kolonlu, asimetrik kompozisyon.
  *
- * Sol: dev tipografi (Inter + Instrument Serif italik karışımı),
- *      kısa tanıtım ve aksiyon butonları (e-posta kopyala, GitHub, LinkedIn).
- * Sağ: GitHub avatarı + üzerine iliştirilmiş "staja açık" sticker'ı ve
- *      canlı bilgi paneli (konum, saniye saniye işleyen yerel saat, odak).
+ * Sol: İSİM manşette (işe alımcı ilk bakışta kimin sayfası olduğunu görür),
+ *      altında serif italik "now page" mottosu, tanıtım ve aksiyon butonları.
+ * Sağ: gerçek profil fotoğrafı + "staja açık" sticker'ı ve canlı bilgi
+ *      paneli (konum, saniye saniye işleyen yerel saat, odak).
  *
  * Giriş animasyonları sayfa yüklenince kademeli çalışır (hero-enter).
  */
 function HeroSection() {
   const yerelSaat = useLocalTime()
-  // Avatar yüklenemezse (çevrimdışı vb.) monogram devreye girer
-  const [avatarHatasi, setAvatarHatasi] = useState(false)
 
   return (
     <header className="hero" aria-label="Tanıtım">
@@ -27,20 +24,21 @@ function HeroSection() {
           Now Page — Haziran 2026
         </p>
 
+        {/* İsim manşette: sayfanın kime ait olduğu ilk saniyede netleşir */}
         <h1 className="hero__title">
           <span className="hero__title-line hero-enter" style={{ '--enter-delay': '70ms' }}>
-            Şu an.
+            Ahmet Aksoy<span className="hero__title-dot">.</span>
           </span>
           <span
             className="hero__title-line hero__title-line--serif hero-enter"
             style={{ '--enter-delay': '140ms' }}
           >
-            bugünün ben&rsquo;i
+            şu an — bugünün ben&rsquo;i
           </span>
         </h1>
 
         <p className="hero__intro hero-enter" style={{ '--enter-delay': '220ms' }}>
-          Merhaba, ben <strong>{profile.name}</strong> — {profile.role}. {profile.intro}
+          Merhaba! <strong>{profile.role}yim.</strong> {profile.intro}
         </p>
 
         <div className="hero__actions hero-enter" style={{ '--enter-delay': '300ms' }}>
@@ -69,22 +67,15 @@ function HeroSection() {
       </div>
 
       <aside className="hero__side hero-enter" style={{ '--enter-delay': '260ms' }}>
-        {/* Avatar: doğrudan GitHub'dan gelir — sayfa her zaman güncel kalır */}
+        {/* Gerçek profil fotoğrafı: kimlik bir bakışta */}
         <div className="hero__portrait">
-          {avatarHatasi ? (
-            <span className="hero__monogram" aria-hidden="true">
-              AA
-            </span>
-          ) : (
-            <img
-              src={`https://github.com/${profile.githubUsername}.png`}
-              alt={`${profile.name} profil fotoğrafı`}
-              width="132"
-              height="132"
-              loading="eager"
-              onError={() => setAvatarHatasi(true)}
-            />
-          )}
+          <img
+            src={profile.photo}
+            alt={`${profile.name} profil fotoğrafı`}
+            width="148"
+            height="148"
+            loading="eager"
+          />
           {/* Hafif eğik sticker: insan eli değmiş hissi veren detay */}
           <span className="hero__sticker">
             <span className="hero__sticker-dot" aria-hidden="true" />

@@ -1,29 +1,27 @@
-import { BookOpen } from 'lucide-react'
 import { currentlyReading } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 
 /**
  * CurrentlyReading — Şu an okunan kitabın editorial kartı.
  *
- * Kitap kapağı harici görsel değildir: gradient, tipografi ve cilt
- * çizgisiyle tamamen CSS'te çizilir. Okuma sebebi serif italik bir
- * alıntı olarak sunulur — dergi sayfası hissi.
+ * Gerçek kitap kapağı + serif italik okuma notu = dergi sayfası hissi.
+ * İlerleme yüzdesi sayfa sayısından türetilir, elle yazılmaz.
  */
 function CurrentlyReading() {
-  const { title, author, reason, currentPage, totalPages } = currentlyReading
+  const { title, author, cover, reason, currentPage, totalPages } = currentlyReading
   // İlerleme yüzdesi veriden türetilir — elle yazılmaz
   const ilerleme = Math.round((currentPage / totalPages) * 100)
 
   return (
     <BentoCard span={7} label="Kütüphanem" labelId="kitap-baslik">
       <div className="reading-card__top">
-        {/* CSS ile çizilmiş kitap kapağı */}
-        <div className="reading-card__cover" aria-hidden="true">
-          <span className="reading-card__cover-spine" />
-          <BookOpen size={16} className="reading-card__cover-icon" />
-          <span className="reading-card__cover-title">{title}</span>
-          <span className="reading-card__cover-author">{author}</span>
-        </div>
+        {/* Gerçek kapak: alt yazı zaten kitabı tanıttığı için dekoratif sayılır */}
+        <img
+          src={cover}
+          alt={`${title} kitap kapağı`}
+          className="reading-card__cover"
+          loading="lazy"
+        />
 
         <div className="reading-card__meta">
           <h2 className="reading-card__title">{title}</h2>

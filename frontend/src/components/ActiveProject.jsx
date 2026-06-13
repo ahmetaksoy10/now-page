@@ -1,7 +1,9 @@
-import { ArrowUpRight, FolderGit2 } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowUpRight, FolderGit2, Maximize2 } from 'lucide-react'
 import { GitHubIcon } from './icons/BrandIcons.jsx'
 import { activeProject, otherProjects } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
+import ProjectModal from './ProjectModal.jsx'
 
 // Türkçe durum etiketini CSS sınıf adına çevirir ("Tamamlandı" → "tamamlandi").
 function durumSinifi(durum) {
@@ -21,11 +23,15 @@ function durumSinifi(durum) {
  *
  * Vitrin kartı (12 kolon) iki iç kolona ayrılır: solda hikâye
  * (isim, açıklama, teknolojiler, linkler), sağda mimari kararlar paneli.
- * Raf kartları (4'er kolon) kademeli gecikmeyle grid'e akar.
+ * Raf kartları (4'er kolon) tıklanabilir — her biri ProjectModal'ı açar:
+ * tüm ekran görüntüleri, uzun açıklama, özellikler ve GitHub linki.
  */
 function ActiveProject() {
   const { name, status, description, architecture, stack, repoUrl, liveUrl } =
     activeProject
+
+  // Açık olan projeyi tutan tek state — null ise modal kapalıdır.
+  const [acikProje, setAcikProje] = useState(null)
 
   return (
     <>
@@ -94,15 +100,39 @@ function ActiveProject() {
         </div>
       </BentoCard>
 
-      {/* Proje rafı: kademeli girişle akan kompakt kartlar */}
+      {/* Proje rafı: her kart tıklanınca detay modalını açar */}
       {otherProjects.map((proje, sira) => (
         <BentoCard
           key={proje.id}
           span={4}
           delay={sira * 70}
-          className="mini-project"
+          className="mini-project mini-project--clickable"
           labelId={`proje-${proje.id}`}
+          onClick={() => setAcikProje(proje)}
+          // Karta klavye erişilebilirliği: buton gibi davranır
+          role="button"
+          tabIndex={0}
+          onKeyDown={(olay) => {
+            if (olay.key === 'Enter' || olay.key === ' ') {
+              olay.preventDefault()
+              setAcikProje(proje)
+            }
+          }}
         >
+          {/* Gerçek ekran görüntüleri: tek karelik vitrin ya da üçlü şerit */}
+          <div
+            className={`mini-project__media ${proje.screenshots.length === 1 ? 'mini-project__media--single' : ''}`}
+          >
+            {proje.screenshots.map((kare) => (
+              <img key={kare.src} src={kare.src} alt={kare.alt} loading="lazy" />
+            ))}
+            {/* Hover'da beliren "detayları gör" ipucu */}
+            <span className="mini-project__expand" aria-hidden="true">
+              <Maximize2 size={15} />
+              Detayları gör
+            </span>
+          </div>
+
           <div className="mini-project__head">
             <h2 className="mini-project__name" id={`proje-${proje.id}`}>
               {proje.name}
@@ -123,6 +153,9 @@ function ActiveProject() {
           </ul>
         </BentoCard>
       ))}
+
+      {/* Detay modalı: açık proje varsa görünür, yoksa hiçbir şey çizmez */}
+      <ProjectModal project={acikProje} onClose={() => setAcikProje(null)} />
     </>
   )
 }

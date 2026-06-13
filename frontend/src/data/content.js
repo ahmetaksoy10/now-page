@@ -2,14 +2,57 @@
  * ─────────────────────────────────────────────────────────────────────────────
  *  İÇERİK KATMANI (Single Source of Truth)
  * ─────────────────────────────────────────────────────────────────────────────
- *  Sayfadaki TÜM metinler bu dosyada toplanır. Component'ler içerik bilmez,
- *  sadece bu veriyi import edip ekrana çizer.
+ *  Sayfadaki TÜM metinler ve görseller bu dosyada toplanır. Component'ler
+ *  içerik bilmez, sadece bu veriyi import edip ekrana çizer.
  *
  *  Neden böyle? İçerik ile sunum (UI) birbirinden ayrılınca:
  *   1. Bilgileri güncellemek için tek bir dosyayı düzenlemek yeterli olur.
  *   2. Component'ler tekrar kullanılabilir ve test edilebilir kalır.
+ *
+ *  Görseller ES import ile alınır: Vite build sırasında dosyaları
+ *  hash'leyip doğru base path ile sunar (GitHub Pages uyumu otomatik).
  * ─────────────────────────────────────────────────────────────────────────────
  */
+
+// ── Görseller ────────────────────────────────────────────────────────────────
+import profilFoto from '../assets/profile.jpg'
+import siloKapak from '../assets/silo-kapak.jpg'
+import romaSelfie from '../assets/roma/roma2.jpg'
+import romaKubbe from '../assets/roma/roma5.jpg'
+import romaTapinak from '../assets/roma/roma8.jpg'
+import romaKolezyum from '../assets/roma/roma1.jpg'
+import travioAna from '../assets/projects/travio4.png'
+import travioArama from '../assets/projects/travio5.png'
+import travioGiris from '../assets/projects/travio2.png'
+import subgravePano from '../assets/projects/subgrave1.png'
+import subgraveMezarlik from '../assets/projects/subgrave3.png'
+import subgraveDetay from '../assets/projects/subgrave2.png'
+import travelguidePano from '../assets/projects/travelguide3.png'
+
+// Galeri setleri: klasördeki TÜM görseller tek seferde, dosya adına göre
+// sıralı toplanır. Yeni ekran görüntüsü eklemek = dosyayı klasöre atmak;
+// kod değişikliği gerekmez (import.meta.glob, Vite'ın derleme zamanı sihri).
+const galeriYap = (moduller, etiket) =>
+  Object.keys(moduller)
+    .sort()
+    .map((yol, sira) => ({ src: moduller[yol], alt: `${etiket} — görsel ${sira + 1}` }))
+
+const travioGaleri = galeriYap(
+  import.meta.glob('../assets/projects/travio*.png', { eager: true, import: 'default' }),
+  'Travio ekran görüntüsü',
+)
+const subgraveGaleri = galeriYap(
+  import.meta.glob('../assets/projects/subgrave*.png', { eager: true, import: 'default' }),
+  'Subgrave ekran görüntüsü',
+)
+const travelguideGaleri = galeriYap(
+  import.meta.glob('../assets/projects/travelguide*.png', { eager: true, import: 'default' }),
+  'TravelGuide ekran görüntüsü',
+)
+export const romaGaleri = galeriYap(
+  import.meta.glob('../assets/roma/roma*.jpg', { eager: true, import: 'default' }),
+  'Roma seyahatinden kare',
+)
 
 // ── Kimlik & Sosyal Medya ────────────────────────────────────────────────────
 export const profile = {
@@ -17,8 +60,8 @@ export const profile = {
   role: 'Balıkesir Üniversitesi Bilgisayar Mühendisliği 2. sınıf öğrencisi',
   location: 'Karesi, Balıkesir',
   email: 'a.aksoy1020@gmail.com',
-  // GitHub API entegrasyonu bu kullanıcı adıyla canlı veri çeker;
-  // hero'daki avatar da doğrudan github.com/KULLANICI.png adresinden gelir.
+  photo: profilFoto,
+  // GitHub API entegrasyonu bu kullanıcı adıyla canlı veri çeker.
   githubUsername: 'ahmetaksoy10',
   intro:
     'Kod yazmayı, öğrenmeyi ve yeni şeyler denemeyi seviyorum. Bu sayfa, ' +
@@ -90,14 +133,15 @@ export const learningRadar = [
 
 // ── 03 · Kütüphanem ──────────────────────────────────────────────────────────
 export const currentlyReading = {
-  title: 'Clean Architecture',
-  author: 'Robert C. Martin',
+  title: 'Silo (Wool)',
+  author: 'Hugh Howey',
+  cover: siloKapak,
   reason:
-    'Yazılımın sadece bugün çalışması değil, yıllar sonra da sürdürülebilir ' +
-    'kalması nasıl mümkün olur? Projelerimdeki katmanlı mimariyi daha bilinçli ' +
-    'kurmak için okuyorum.',
-  currentPage: 173,
-  totalPages: 432, // ≈ %40 ilerleme
+    'Yeraltındaki dev bir siloda geçen distopik bir hikâye. Gün boyu kod ' +
+    'yazdıktan sonra zihnimi bambaşka bir dünyaya taşıyor — kurgu, benim için ' +
+    'en iyi dinlenme şekli.',
+  currentPage: 200,
+  totalPages: 500, // = %40 ilerleme
 }
 
 // ── 04 · Ses Arka Planı ──────────────────────────────────────────────────────
@@ -127,6 +171,14 @@ export const lifeHighlight = {
     'Antik mimariyi, dar sokakların ritmini ve bambaşka bir yaşam tarzını ' +
     'yakından gözlemledim. Seyahat tutkusu projelerime de sızıyor — ' +
     'TravelGuide ve Travio boşuna değil.',
+  // Ana kare + küçük şerit: gerçek seyahat fotoğrafları
+  photo: romaSelfie,
+  photoAlt: 'Ahmet Aksoy, Roma’da Kolezyum önünde',
+  gallery: [
+    { src: romaKubbe, alt: 'Roma’da barok kubbeler' },
+    { src: romaTapinak, alt: 'Villa Borghese’de göl kenarındaki antik tapınak' },
+    { src: romaKolezyum, alt: 'Kolezyum’un dış cephesi' },
+  ],
 }
 
 // ── 07 · Projeler ────────────────────────────────────────────────────────────
@@ -148,34 +200,100 @@ export const activeProject = {
   liveUrl: 'https://ahmetaksoy10.github.io/internet-programlama-final-2026/',
 }
 
-// Raftaki diğer projeler — durum etiketi karta renk kodu olarak yansır
+// Raftaki diğer projeler:
+//  - screenshots → karttaki üst medya şeridi (seçilmiş 1-3 kare)
+//  - gallery     → detay modalındaki TÜM ekran görüntüleri (otomatik toplanır)
+//  - features    → modaldaki "Öne Çıkanlar" listesi
+//  - repoUrl     → GitHub linki (null ise repo henüz özel demektir)
 export const otherProjects = [
   {
     id: 'travio',
     name: 'Travio',
     status: 'Geliştiriliyor',
+    tagline: 'Yapay zekâ destekli iOS seyahat asistanı',
     description:
       'Uçak, otobüs ve otel aramayı tek platformda birleştiren iOS seyahat ' +
       'uygulaması. Gemini AI ile kişiye özel, gün gün tatil planı üretiyor.',
-    stack: ['SwiftUI', 'Firebase', 'Gemini AI'],
+    longDescription:
+      'Travio; uçak, otobüs ve otel aramayı tek platformda birleştiren bir iOS ' +
+      'uygulaması. Kalbinde "Travio Mind" var: destinasyon, bütçe, ilgi alanı ve ' +
+      'tempoya göre Google Gemini AI ile gün gün kişisel tatil planı üreten asistan. ' +
+      'Ödeme, abonelik ve kimlik doğrulama uçtan uca gerçek servislerle çalışıyor.',
+    features: [
+      'Gemini AI ile kişiye özel, gün gün tatil planı üretimi',
+      'Duffel API ile uçak araması; otobüs ve otel tek platformda',
+      'Firebase Auth — e-posta ve Google ile giriş',
+      'RevenueCat ile Plus aboneliği, Iyzico 3D Secure kart ödemesi',
+      'Feature-based MVVM + Repository Pattern mimarisi',
+      'Hassas anahtarlar Firebase Functions backend’inde; rate limiting ve PCI uyumu',
+    ],
+    stack: ['SwiftUI', 'Firebase', 'Gemini AI', 'Duffel API', 'RevenueCat', 'Iyzico'],
+    repoUrl: null, // repo şimdilik özel — yayınlanınca linki buraya ekleyin
+    screenshots: [
+      { src: travioAna, alt: 'Travio ana ekranı — Nereye gitmek istersin?' },
+      { src: travioArama, alt: 'Travio arama ekranı' },
+      { src: travioGiris, alt: 'Travio giriş ekranı' },
+    ],
+    gallery: travioGaleri,
   },
   {
     id: 'subgrave',
     name: 'Subgrave',
     status: 'Geliştiriliyor',
+    tagline: '"Abonelik Mezarlığı" metaforuyla abonelik takibi',
     description:
       '"Abonelik Mezarlığı" metaforuyla abonelik takibi: kullanılmayan ' +
       'abonelikler hayalete dönüşüyor, yıl sonunda Wrapped tarzı rapor sunuyor.',
-    stack: ['SwiftUI', 'SwiftData', 'AppIntents'],
+    longDescription:
+      'Subgrave, abonelik takibini sıkıcı bir tablodan çıkarıp bir hikâyeye ' +
+      'dönüştürüyor: iptal ettiğin abonelikler özel çizilmiş mezar taşlarıyla ' +
+      '"Mezarlık"ta yatıyor, 30 günden uzun süredir kullanmadıkların hayalet olarak ' +
+      'işaretleniyor. Sıfır backend felsefesiyle tamamen cihaz üzerinde çalışıyor.',
+    features: [
+      '4 sekme: Dashboard, Yaşayanlar, Mezarlık ve İstatistik',
+      'TombstoneShape ile özel çizilmiş mezar taşları',
+      '30+ gün kullanılmayan abonelikler otomatik "hayalet" işaretlenir',
+      'Yenilemeden 3 gün önce yerel bildirim',
+      'Spotify Wrapped tarzı yıllık rapor, Swift Charts ile grafikler',
+      'AppIntents ile Siri otomasyonu',
+      'iOS 17 Observation framework (@Observable) + SwiftData kalıcılığı',
+    ],
+    stack: ['SwiftUI', 'SwiftData', 'Swift Charts', 'AppIntents'],
+    repoUrl: null, // repo şimdilik özel — yayınlanınca linki buraya ekleyin
+    screenshots: [
+      { src: subgravePano, alt: 'Subgrave ana panosu — abonelik özetleri' },
+      { src: subgraveMezarlik, alt: 'Subgrave mezarlık ekranı — iptal edilen abonelikler' },
+      { src: subgraveDetay, alt: 'Subgrave abonelik listesi' },
+    ],
+    gallery: subgraveGaleri,
   },
   {
     id: 'travelguide',
     name: 'TravelGuide',
     status: 'Tamamlandı',
+    tagline: 'Türkiye’yi oyunlaştıran masaüstü gezi rehberi',
     description:
       'Türkiye’nin 81 ilini oyunlaştırılmış şehir kartlarıyla keşfettiren ' +
       'masaüstü gezi rehberi; 19 rozet, seviye sistemi ve haftalık seri.',
-    stack: ['Python', 'PyQt5', 'SQLite'],
+    longDescription:
+      'TravelGuide, Türkiye’nin 81 ilini interaktif şehir kartlarıyla keşfettiren, ' +
+      'oyunlaştırılmış bir masaüstü uygulaması. Rozetler, seviyeler ve haftalık ' +
+      'seriyle keşfi bir oyuna çeviriyor; internetsiz ortamda bile tamamen ' +
+      'çevrimdışı çalışıyor.',
+    features: [
+      '81 il, interaktif şehir kartları ve keşif puanı',
+      '19 rozetlik başarım sistemi, haftalık seri (streak), 6 seviyeli ilerleme',
+      'PDF gezi karnesi ve favorileri dışa aktarma',
+      'Açık/koyu tema; 94 Lucide SVG ikonu runtime’da retina netliğinde boyanır',
+      'Sıfır backend — SQLite ile cihazda saklama, tamamen çevrimdışı',
+      'Katmanlı modüler mimari: main / ui_components / database / styles / icons',
+    ],
+    stack: ['Python', 'PyQt5', 'SQLite', 'QSS'],
+    repoUrl: 'https://github.com/ahmetaksoy10/travel-guide',
+    screenshots: [
+      { src: travelguidePano, alt: 'TravelGuide ana ekranı — keşif yolculuğu panosu' },
+    ],
+    gallery: travelguideGaleri,
   },
 ]
 

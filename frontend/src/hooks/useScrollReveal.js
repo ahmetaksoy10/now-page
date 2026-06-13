@@ -34,9 +34,10 @@ export function useScrollReveal() {
           }
         })
       },
-      // Element %15 oranında görünür olduğunda tetiklenir —
-      // kullanıcı içeriği tam görmeden animasyon "kaçmaz".
-      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' },
+      // Element ekranın altından ~110px içeri girince tetiklenir —
+      // böylece kullanıcı kaydırırken her kartın açılış animasyonunu
+      // tam görüş alanında, net biçimde yakalar (animasyon "kaçmaz").
+      { threshold: 0.1, rootMargin: '0px 0px -110px 0px' },
     )
 
     observer.observe(element)
