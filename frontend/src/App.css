@@ -214,9 +214,35 @@ img {
 .page__background {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   overflow: hidden;
   pointer-events: none;
+}
+
+/* Three.js 3D sahne tuvali: CSS arka planının (z:-2) üstünde, ama tüm
+   içeriğin (z:auto) arkasında. pointer-events:none → fare olayları sayfaya
+   geçer (sahne window üzerinden imleci zaten dinler). */
+.three-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* Açılışta yumuşak bir görünme — sahne hazır olunca belirir */
+  animation: three-bg-in 1.6s var(--ease-out) both;
+}
+
+@keyframes three-bg-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Hareketi azalt tercihinde açılış solması da kapanır */
+@media (prefers-reduced-motion: reduce) {
+  .three-bg {
+    animation: none;
+  }
 }
 
 /* Sıcak ışık haleleri: dev, bulanık radyal gradyanlar */
@@ -1907,6 +1933,12 @@ img {
   gap: 30px;
 }
 
+/* Grid kolonlarının içeriği (uzun repo adları, çizgiler) taşmasın */
+.github-card__main,
+.github-card__side {
+  min-width: 0;
+}
+
 .github-card__side {
   border-left: 1px solid var(--border);
   padding-left: 28px;
@@ -2243,13 +2275,11 @@ img {
   margin-top: 9px;
 }
 
+/* Stat iskeletleri grid hücresini doldurur — sabit genişlik + margin
+   yeni grid layout'ta taşıp üst üste biniyordu; grid gap zaten boşluğu verir. */
 .skeleton--stat {
-  width: 72px;
+  width: 100%;
   height: 44px;
-}
-
-.github-card__stats .skeleton--stat + .skeleton--stat {
-  margin-left: 24px;
 }
 
 .skeleton--repo {

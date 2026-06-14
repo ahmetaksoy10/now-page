@@ -1,4 +1,5 @@
 import Navbar from './components/Navbar.jsx'
+import ThreeBackground from './components/ThreeBackground.jsx'
 import HeroSection from './components/HeroSection.jsx'
 import Marquee from './components/Marquee.jsx'
 import CurrentFocus from './components/CurrentFocus.jsx'
@@ -34,6 +35,9 @@ function App() {
         <div className="page__grid" />
         <div className="page__noise" />
       </div>
+
+      {/* Three.js 3D sahne: CSS arka planının üstünde, içeriğin arkasında */}
+      <ThreeBackground />
 
       <Navbar />
 
