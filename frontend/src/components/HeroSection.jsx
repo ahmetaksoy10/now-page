@@ -33,7 +33,7 @@ function HeroSection() {
             className="hero__title-line hero__title-line--serif hero-enter"
             style={{ '--enter-delay': '140ms' }}
           >
-            şu an — bugünün ben&rsquo;i
+            şu an — bugünkü ben
           </span>
         </h1>
 

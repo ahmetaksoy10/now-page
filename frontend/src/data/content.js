@@ -196,8 +196,8 @@ export const activeProject = {
     'GitHub Actions ile otomatik CI/CD deploy (GitHub Pages)',
   ],
   stack: ['React', 'Vite', 'Vanilla CSS', 'GitHub API'],
-  repoUrl: 'https://github.com/ahmetaksoy10/internet-programlama-final-2026',
-  liveUrl: 'https://ahmetaksoy10.github.io/internet-programlama-final-2026/',
+  repoUrl: 'https://github.com/ahmetaksoy10/now-page',
+  liveUrl: 'https://ahmetaksoy10.github.io/now-page/',
 }
 
 // Raftaki diğer projeler:

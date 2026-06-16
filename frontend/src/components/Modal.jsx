@@ -20,8 +20,30 @@ function Modal({ open, onClose, labelledBy, variant = '', children }) {
   useEffect(() => {
     if (!open) return
 
+    // Modal açılmadan önce odakta olan öğeyi sakla — kapanınca geri verilecek
+    const oncekiOdak = document.activeElement
+
     const tusDinleyici = (olay) => {
-      if (olay.key === 'Escape') onClose()
+      if (olay.key === 'Escape') {
+        onClose()
+        return
+      }
+      // Focus trap: Tab ile odak panel içinde döner, arkadaki sayfaya kaçmaz.
+      if (olay.key === 'Tab') {
+        const odaklanabilir = panelRef.current?.querySelectorAll(
+          'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])',
+        )
+        if (!odaklanabilir || odaklanabilir.length === 0) return
+        const ilk = odaklanabilir[0]
+        const son = odaklanabilir[odaklanabilir.length - 1]
+        if (olay.shiftKey && document.activeElement === ilk) {
+          olay.preventDefault()
+          son.focus()
+        } else if (!olay.shiftKey && document.activeElement === son) {
+          olay.preventDefault()
+          ilk.focus()
+        }
+      }
     }
 
     document.addEventListener('keydown', tusDinleyici)
@@ -34,6 +56,8 @@ function Modal({ open, onClose, labelledBy, variant = '', children }) {
     return () => {
       document.removeEventListener('keydown', tusDinleyici)
       document.body.style.overflow = eskiOverflow
+      // Odağı modalı açan öğeye geri ver (klavye kullanıcısı kaybolmaz)
+      if (oncekiOdak instanceof HTMLElement) oncekiOdak.focus()
     }
   }, [open, onClose])
 

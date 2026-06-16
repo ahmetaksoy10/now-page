@@ -3,6 +3,7 @@ import { AlertCircle, ArrowUpRight, GitFork, Star, Users } from 'lucide-react'
 import { GitHubIcon } from './icons/BrandIcons.jsx'
 import { profile } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
+import Counter from './Counter.jsx'
 
 const GITHUB_API = 'https://api.github.com'
 // Vitrine çıkarılacak repo sayısı — yıldız sayısına göre en iyi N repo seçilir.
@@ -263,27 +264,28 @@ function GitHubActivity() {
               </a>
             </div>
 
-            {/* Dört istatistik: repo, yıldız, takipçi, takip */}
+            {/* Dört istatistik: repo, yıldız, takipçi, takip.
+                Rakamlar görünür olunca 0'dan sayarak gelir (canlı veri hissi). */}
             <dl className="github-card__stats">
               <div className="github-card__stat">
                 <dt>Repo</dt>
-                <dd>{kullanici.public_repos}</dd>
+                <dd><Counter value={kullanici.public_repos} /></dd>
               </div>
               <div className="github-card__stat">
                 <dt>
                   <Star size={12} aria-hidden="true" /> Yıldız
                 </dt>
-                <dd>{toplamYildiz}</dd>
+                <dd><Counter value={toplamYildiz} /></dd>
               </div>
               <div className="github-card__stat">
                 <dt>
                   <Users size={12} aria-hidden="true" /> Takipçi
                 </dt>
-                <dd>{kullanici.followers}</dd>
+                <dd><Counter value={kullanici.followers} /></dd>
               </div>
               <div className="github-card__stat">
                 <dt>Takip</dt>
-                <dd>{kullanici.following}</dd>
+                <dd><Counter value={kullanici.following} /></dd>
               </div>
             </dl>
 

@@ -8,7 +8,53 @@
       name="description"
       content="Ahmet Aksoy — Şu an hayatımda neler olduğunu anlatan kişisel Now Page: odak noktam, öğrendiklerim, okuduklarım ve aktif projelerim."
     />
+    <meta name="author" content="Ahmet Aksoy" />
     <title>Şu An — Ahmet Aksoy</title>
+
+    <!--
+      Sosyal paylaşım önizlemesi (Open Graph + Twitter Card). Link bir yere
+      yapıştırıldığında başlık, açıklama ve görsel kartı görünür.
+      NOT: URL'ler vite `base` ('/now-page/') ile uyumludur; deploy reposu
+      farklıysa aşağıdaki mutlak adresleri ve vite.config base'ini güncelleyin.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:site_name" content="Ahmet Aksoy — Now Page" />
+    <meta property="og:title" content="Şu An — Ahmet Aksoy" />
+    <meta
+      property="og:description"
+      content="Şu an hayatımda neler olduğunu anlatan kişisel Now Page: odak noktam, öğrendiklerim, okuduklarım ve aktif projelerim."
+    />
+    <meta property="og:url" content="https://ahmetaksoy10.github.io/now-page/" />
+    <meta property="og:image" content="https://ahmetaksoy10.github.io/now-page/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Şu An — Ahmet Aksoy" />
+    <meta
+      name="twitter:description"
+      content="Şu an hayatımda neler olduğunu anlatan kişisel Now Page."
+    />
+    <meta name="twitter:image" content="https://ahmetaksoy10.github.io/now-page/og-image.jpg" />
+
+    <!-- Yapısal veri (JSON-LD): arama motorlarına "bu bir kişi" bilgisini verir -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Ahmet Aksoy",
+        "url": "https://ahmetaksoy10.github.io/now-page/",
+        "image": "https://ahmetaksoy10.github.io/now-page/og-image.jpg",
+        "jobTitle": "Bilgisayar Mühendisliği Öğrencisi",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Balıkesir",
+          "addressCountry": "TR"
+        },
+        "sameAs": [
+          "https://github.com/ahmetaksoy10",
+          "https://www.linkedin.com/in/ahmet-aksoy10"
+        ]
+      }
+    </script>
 
     <!--
       Tipografi: Inter, modern ürün arayüzlerinin (Linear, Vercel, Stripe) standart fontudur.

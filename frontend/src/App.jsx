@@ -13,6 +13,7 @@ import LearningBacklog from './components/LearningBacklog.jsx'
 import Toolbox from './components/Toolbox.jsx'
 import GitHubActivity from './components/GitHubActivity.jsx'
 import ContactCta from './components/ContactCta.jsx'
+import ScrollToTop from './components/ScrollToTop.jsx'
 import Footer from './components/Footer.jsx'
 
 /**
@@ -61,6 +62,7 @@ function App() {
         <ContactCta />
       </main>
 
+      <ScrollToTop />
       <Footer />
     </div>
   )

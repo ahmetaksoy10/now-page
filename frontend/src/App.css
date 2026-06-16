@@ -47,7 +47,7 @@
 
   --text-primary: #f4efe6;
   --text-secondary: rgba(236, 228, 212, 0.6);
-  --text-tertiary: rgba(236, 228, 212, 0.36);
+  --text-tertiary: rgba(236, 228, 212, 0.48);
 
   /* Altın amber: monokrom zeminde tek sıcak vurgu */
   --accent: #e8a33c;
@@ -86,7 +86,7 @@
 
   --text-primary: #1e1812;
   --text-secondary: rgba(30, 24, 18, 0.64);
-  --text-tertiary: rgba(30, 24, 18, 0.42);
+  --text-tertiary: rgba(30, 24, 18, 0.54);
 
   --accent: #b05e0a;
   --accent-contrast: #ffffff;
@@ -427,6 +427,12 @@ img {
   background: var(--surface-2);
 }
 
+/* Scroll-spy: o an görünen bölümün linki vurgulanır (kullanıcı konumunu bilir) */
+.navbar__link.is-active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
 /* Tema düğmesi navbar'ın içinde yaşar */
 .theme-toggle {
   width: 32px;
@@ -448,6 +454,46 @@ img {
 
 .theme-toggle:active {
   transform: scale(0.92);
+}
+
+/* ── Yukarı dön butonu ── */
+.scroll-top {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 30;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border: 1px solid transparent;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 30%, transparent);
+  /* Görünmezken: aşağıda, küçük ve tıklanamaz */
+  opacity: 0;
+  transform: translateY(16px) scale(0.85);
+  pointer-events: none;
+  transition:
+    opacity 0.3s var(--ease-out),
+    transform 0.3s var(--ease-out),
+    background-color 0.25s ease;
+}
+
+.scroll-top.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.scroll-top:hover {
+  background: color-mix(in srgb, var(--accent) 88%, #fff);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.scroll-top:active {
+  transform: translateY(0) scale(0.95);
 }
 
 /* İki ikon üst üste; aktif olmayan döndürülerek kaybolur */
@@ -503,8 +549,14 @@ img {
   box-shadow: var(--shadow-card-hover);
 }
 
-/* Kart etiketi: sol üstteki küçük mono başlık — "✱ ANA ODAK" */
+/* Kart etiketi: sol üstte, küçük mono başlık. Bu bölümler bir SIRA değil
+   (frontend-design: yapısal işaret içeriğe dair gerçek bir şey kodlamalı),
+   bu yüzden numara/yıldız yerine kısa bir amber vurgu çizgisi — editoryal
+   bir "bölüm işareti", dekoratif süs değil. */
 .card-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-family: var(--font-mono);
   font-size: 0.65rem;
   font-weight: 500;
@@ -515,9 +567,12 @@ img {
 }
 
 .card-label::before {
-  content: '✱';
-  color: var(--accent);
-  margin-right: 8px;
+  content: '';
+  width: 16px;
+  height: 2px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  flex-shrink: 0;
 }
 
 /* Hairline chip'ler */
@@ -877,6 +932,12 @@ img {
   text-transform: uppercase;
   color: var(--text-secondary);
   white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+/* Tek bir öğenin üzerine gelince vurgulanır (şerit zaten :hover'da durur) */
+.marquee__item:hover {
+  color: var(--accent);
 }
 
 .marquee__star {
@@ -2862,9 +2923,14 @@ img {
   }
 
   .theme-toggle {
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
     margin-left: 4px;
+  }
+
+  /* Mobilde navbar linkleri daha yüksek dokunma hedefi alır */
+  .navbar__link {
+    padding-block: 9px;
   }
 
   .card {
