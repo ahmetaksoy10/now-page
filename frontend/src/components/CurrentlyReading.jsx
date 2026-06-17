@@ -1,5 +1,6 @@
 import { currentlyReading } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
+import BlurImage from './BlurImage.jsx'
 
 /**
  * CurrentlyReading — Şu an okunan kitabın editorial kartı.
@@ -16,7 +17,7 @@ function CurrentlyReading() {
     <BentoCard span={7} label="Kütüphanem" labelId="kitap-baslik">
       <div className="reading-card__top">
         {/* Gerçek kapak: alt yazı zaten kitabı tanıttığı için dekoratif sayılır */}
-        <img
+        <BlurImage
           src={cover}
           alt={`${title} kitap kapağı`}
           className="reading-card__cover"

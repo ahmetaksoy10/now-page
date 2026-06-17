@@ -14,19 +14,4 @@ export default defineConfig({
   server: {
     port: Number(process.env.PORT) || 5173,
   },
-  build: {
-    // Three.js chunk'ı doğası gereği büyük; eşiği ona göre ayarla.
-    chunkSizeWarningLimit: 600,
-    rollupOptions: {
-      output: {
-        // Three.js'i kendi chunk'ına ayır: ağır 3D kütüphane, uygulama
-        // kodundan bağımsız olarak paralel indirilir ve tarayıcıda ayrı
-        // önbelleklenir (uygulama kodu değişince yeniden indirilmez).
-        // Vite 8 / rolldown manualChunks'ı fonksiyon olarak bekler.
-        manualChunks(id) {
-          if (id.includes('node_modules/three')) return 'three'
-        },
-      },
-    },
-  },
 })

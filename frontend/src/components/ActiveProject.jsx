@@ -3,6 +3,7 @@ import { ArrowUpRight, FolderGit2, Maximize2 } from 'lucide-react'
 import { GitHubIcon } from './icons/BrandIcons.jsx'
 import { activeProject, otherProjects } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
+import BlurImage from './BlurImage.jsx'
 import ProjectModal from './ProjectModal.jsx'
 
 // Türkçe durum etiketini CSS sınıf adına çevirir ("Tamamlandı" → "tamamlandi").
@@ -124,7 +125,7 @@ function ActiveProject() {
             className={`mini-project__media ${proje.screenshots.length === 1 ? 'mini-project__media--single' : ''}`}
           >
             {proje.screenshots.map((kare) => (
-              <img key={kare.src} src={kare.src} alt={kare.alt} loading="lazy" />
+              <BlurImage key={kare.src} src={kare.src} alt={kare.alt} loading="lazy" />
             ))}
             {/* Hover'da beliren "detayları gör" ipucu */}
             <span className="mini-project__expand" aria-hidden="true">

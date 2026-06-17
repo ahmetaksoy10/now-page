@@ -81,23 +81,69 @@ export const navLinks = [
   { id: 'odak', label: 'Odak', href: '#odak' },
   { id: 'projeler', label: 'Projeler', href: '#projeler' },
   { id: 'github', label: 'GitHub', href: '#github' },
+  { id: 'yolculuk', label: 'Yolculuk', href: '#yolculuk' },
   { id: 'iletisim', label: 'İletişim', href: '#iletisim' },
 ]
 
-// ── Kayan şerit (marquee) — teknolojiler + kişilik karışımı ──────────────────
-export const marqueeItems = [
-  'Python',
-  'FastAPI',
-  'React',
-  'SwiftUI',
-  'SQLite',
-  'Git & GitHub',
-  'Docker (öğreniyorum)',
-  'Tinkercad',
-  'Figma',
-  'Bolca kahve',
-  'Türkçe müzik',
-  'Roma gezgini',
+// ── Skill cloud (etiket bulutu) — teknolojiler + kişilik karışımı ─────────────
+// weight: 1–3. Bulutta yazı boyutunu belirler (3 = en büyük/baskın yetenek).
+// kind: 'tech' nötr yetenek; 'fun' kişilik dokunuşu (farklı renk vurgusu alır).
+export const skills = [
+  { label: 'Python', weight: 3, kind: 'tech' },
+  { label: 'React', weight: 3, kind: 'tech' },
+  { label: 'SwiftUI', weight: 2, kind: 'tech' },
+  { label: 'FastAPI', weight: 2, kind: 'tech' },
+  { label: 'JavaScript', weight: 2, kind: 'tech' },
+  { label: 'CSS', weight: 2, kind: 'tech' },
+  { label: 'Git & GitHub', weight: 2, kind: 'tech' },
+  { label: 'SQLite', weight: 1, kind: 'tech' },
+  { label: 'Vite', weight: 1, kind: 'tech' },
+  { label: 'Figma', weight: 1, kind: 'tech' },
+  { label: 'Firebase', weight: 1, kind: 'tech' },
+  { label: 'Docker', weight: 1, kind: 'tech' },
+  { label: 'Bolca kahve', weight: 1, kind: 'fun' },
+  { label: 'Türkçe müzik', weight: 1, kind: 'fun' },
+  { label: 'Roma gezgini', weight: 1, kind: 'fun' },
+]
+
+// ── Zaman çizelgesi (Yolculuk) ───────────────────────────────────────────────
+// Kronolojik sırada okunur; her madde scroll'la kademeli belirir.
+export const timeline = [
+  {
+    id: 'baslangic',
+    date: 'Eylül 2024',
+    title: 'Bilgisayar Mühendisliği',
+    text: 'Balıkesir Üniversitesi’nde yolculuk başladı. İlk satır kod, ilk gece yarısı debug.',
+    icon: 'school',
+  },
+  {
+    id: 'masaustu',
+    date: '2024 – 2025',
+    title: 'İlk projeler — TravelGuide',
+    text: 'Python ve PyQt ile Türkiye’nin 81 ilini oyunlaştıran masaüstü gezi rehberi.',
+    icon: 'code',
+  },
+  {
+    id: 'ios',
+    date: '2025',
+    title: 'iOS dünyasına giriş',
+    text: 'SwiftUI ile Travio ve Subgrave: yapay zekâ, SwiftData ve gerçek servis entegrasyonları.',
+    icon: 'smartphone',
+  },
+  {
+    id: 'roma',
+    date: 'Nisan 2026',
+    title: 'Roma',
+    text: 'Antik mimari ve seyahat tutkusu projelere sızdı — gezi temalı uygulamalar tesadüf değil.',
+    icon: 'map',
+  },
+  {
+    id: 'simdi',
+    date: 'Haziran 2026',
+    title: 'Şu an',
+    text: 'OEE Dashboard hackathonu, bu Now Page ve Yaz 2026 staj arayışı.',
+    icon: 'target',
+  },
 ]
 
 // ── Kapanış CTA bölümü ───────────────────────────────────────────────────────

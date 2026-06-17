@@ -1,7 +1,8 @@
 import Navbar from './components/Navbar.jsx'
-import ThreeBackground from './components/ThreeBackground.jsx'
+import AuroraBackground from './components/AuroraBackground.jsx'
+import IntroOverlay from './components/IntroOverlay.jsx'
 import HeroSection from './components/HeroSection.jsx'
-import Marquee from './components/Marquee.jsx'
+import SkillCloud from './components/SkillCloud.jsx'
 import CurrentFocus from './components/CurrentFocus.jsx'
 import EnergyStatus from './components/EnergyStatus.jsx'
 import CurrentlyListening from './components/CurrentlyListening.jsx'
@@ -12,6 +13,7 @@ import ActiveProject from './components/ActiveProject.jsx'
 import LearningBacklog from './components/LearningBacklog.jsx'
 import Toolbox from './components/Toolbox.jsx'
 import GitHubActivity from './components/GitHubActivity.jsx'
+import Timeline from './components/Timeline.jsx'
 import ContactCta from './components/ContactCta.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import Footer from './components/Footer.jsx'
@@ -23,28 +25,29 @@ import Footer from './components/Footer.jsx'
  * "besteler" (composition root). Kartlar 12 kolonluk bir bento grid'e
  * yerleşir; her kart kendi span'ını BentoCard üzerinden bildirir.
  *
- * Bento ritmi (desktop):  7+5 → 5+7 → 7+5 → 12 → 4+4+4 → 7+5 → 12
+ * Bento ritmi (desktop):  7+5 → 5+7 → 7+5 → 12 → 4+4+4 → 12
  * Mobilde tüm kartlar tek kolona akar (CSS media query).
  */
 function App() {
   return (
     <div className="page" id="top">
-      {/* Dekoratif arka plan: sıcak ışık haleleri + ince grid + film greni */}
+      {/* Kısa açılış perdesi (oturumda bir kez, reduced-motion'da atlanır) */}
+      <IntroOverlay />
+
+      {/* Dekoratif arka plan: ince mühendislik grid'i + film greni */}
       <div className="page__background" aria-hidden="true">
-        <div className="page__glow page__glow--one" />
-        <div className="page__glow page__glow--two" />
         <div className="page__grid" />
         <div className="page__noise" />
       </div>
 
-      {/* Three.js 3D sahne: CSS arka planının üstünde, içeriğin arkasında */}
-      <ThreeBackground />
+      {/* Yaşayan aurora arka plan: yavaşça süzülen sıcak renk küreleri (saf CSS) */}
+      <AuroraBackground />
 
       <Navbar />
 
       <main className="page__content">
         <HeroSection />
-        <Marquee />
+        <SkillCloud />
 
         <div className="bento-grid">
           <CurrentFocus />
@@ -58,6 +61,8 @@ function App() {
           <Toolbox />
           <GitHubActivity />
         </div>
+
+        <Timeline />
 
         <ContactCta />
       </main>

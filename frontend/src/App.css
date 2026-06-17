@@ -56,6 +56,12 @@
   --accent-glow: rgba(232, 163, 60, 0.13);
   --accent-border: rgba(232, 163, 60, 0.35);
 
+  /* Aurora küreleri: accent'ten daha doygun, hafif farklı sıcak tonlar
+     (amber → koral → altın). Koyu zeminde belirgin ama yumuşak okunur. */
+  --aurora-a: rgba(232, 163, 60, 0.32);
+  --aurora-b: rgba(229, 115, 78, 0.26);
+  --aurora-c: rgba(240, 182, 92, 0.24);
+
   --success: #5fd38a;
   --danger: #f87171;
   --shimmer: rgba(255, 248, 235, 0.07);
@@ -93,6 +99,11 @@
   --accent-soft: rgba(176, 94, 10, 0.09);
   --accent-glow: rgba(176, 94, 10, 0.1);
   --accent-border: rgba(176, 94, 10, 0.32);
+
+  /* Aurora küreleri: sıcak kâğıt zeminde belirgin ama gözü yormayacak yoğunluk */
+  --aurora-a: rgba(196, 110, 28, 0.2);
+  --aurora-b: rgba(210, 120, 60, 0.16);
+  --aurora-c: rgba(176, 94, 10, 0.14);
 
   --success: #178a4c;
   --danger: #dc2626;
@@ -200,7 +211,7 @@ img {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  overflow-x: clip; /* marquee tam genişlik taşmasını keser */
+  overflow-x: clip; /* yatay taşmaları (aurora küreleri vb.) keser */
 }
 
 .page__content {
@@ -219,62 +230,104 @@ img {
   pointer-events: none;
 }
 
-/* Three.js 3D sahne tuvali: CSS arka planının (z:-2) üstünde, ama tüm
-   içeriğin (z:auto) arkasında. pointer-events:none → fare olayları sayfaya
-   geçer (sahne window üzerinden imleci zaten dinler). */
-.three-bg {
+/* ── Aurora arka plan: yaşayan, bulanık renk küreleri (saf CSS) ─────────────
+   Eski Three.js sahnesinin yerini alır: sıfır JS/GPU yükü, yalnızca
+   transform + opacity animasyonu. Renkler accent paletinden gelir → tema
+   ile otomatik uyumlu. CSS grid+noise katmanının (z:-2) üstünde, içeriğin
+   arkasında (z:-1) durur; pointer-events:none → fare olayları sayfaya geçer. */
+.aurora {
   position: fixed;
   inset: 0;
   z-index: -1;
-  width: 100%;
-  height: 100%;
+  overflow: hidden;
   pointer-events: none;
-  /* Açılışta yumuşak bir görünme — sahne hazır olunca belirir */
-  animation: three-bg-in 1.6s var(--ease-out) both;
+  /* Açılışta yumuşak görünme */
+  animation: aurora-in 1.8s var(--ease-out) both;
 }
 
-@keyframes three-bg-in {
+.aurora__blob {
+  position: absolute;
+  border-radius: 50%;
+  /* 80px blur: doygun renkle birlikte "düz" değil, hacimli okunur; 100px'e
+     göre daha hafif (ilk boyamada GPU yükü düşük → scroll daha akıcı). */
+  filter: blur(80px);
+  will-change: transform;
+}
+
+/* Dört küre: farklı renk, konum, boyut ve ritimle bağımsız süzülür —
+   böylece desen asla tekrar etmez, "yaşayan" hissi verir. */
+.aurora__blob--1 {
+  width: 640px;
+  height: 640px;
+  top: -240px;
+  left: 50%;
+  margin-left: -360px;
+  background: radial-gradient(circle, var(--aurora-a) 0%, transparent 68%);
+  animation: aurora-drift-1 24s ease-in-out infinite alternate;
+}
+
+.aurora__blob--2 {
+  width: 540px;
+  height: 540px;
+  top: 4%;
+  right: -150px;
+  background: radial-gradient(circle, var(--aurora-b) 0%, transparent 68%);
+  animation: aurora-drift-2 29s ease-in-out infinite alternate;
+}
+
+.aurora__blob--3 {
+  width: 580px;
+  height: 580px;
+  bottom: -240px;
+  left: -150px;
+  background: radial-gradient(circle, var(--aurora-c) 0%, transparent 68%);
+  animation: aurora-drift-3 27s ease-in-out infinite alternate;
+}
+
+.aurora__blob--4 {
+  width: 460px;
+  height: 460px;
+  bottom: 6%;
+  right: 4%;
+  background: radial-gradient(circle, var(--aurora-b) 0%, transparent 68%);
+  animation: aurora-drift-4 33s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
-/* Hareketi azalt tercihinde açılış solması da kapanır */
+/* Her küre farklı yön/hız/ölçekte "nefes alır" — senkron olmamaları kilit.
+   Hareket eskisinden biraz daha geniş, ama yavaş ve yumuşak (göz yormaz). */
+@keyframes aurora-drift-1 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(90px, 70px, 0) scale(1.16); }
+}
+
+@keyframes aurora-drift-2 {
+  from { transform: translate3d(0, 0, 0) scale(1.06); }
+  to   { transform: translate3d(-100px, 60px, 0) scale(0.92); }
+}
+
+@keyframes aurora-drift-3 {
+  from { transform: translate3d(0, 0, 0) scale(0.94); }
+  to   { transform: translate3d(110px, -70px, 0) scale(1.14); }
+}
+
+@keyframes aurora-drift-4 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-80px, -60px, 0) scale(1.1); }
+}
+
+/* Hareketi azalt: küreler durur ama yumuşak renk zemini korunur (boş kalmaz) */
 @media (prefers-reduced-motion: reduce) {
-  .three-bg {
+  .aurora {
     animation: none;
   }
-}
-
-/* Sıcak ışık haleleri: dev, bulanık radyal gradyanlar */
-.page__glow {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(110px);
-  opacity: var(--glow-opacity);
-  animation: glow-drift 24s ease-in-out infinite alternate;
-}
-
-.page__glow--one {
-  width: 640px;
-  height: 640px;
-  top: -280px;
-  left: 50%;
-  margin-left: -320px;
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-}
-
-.page__glow--two {
-  width: 480px;
-  height: 480px;
-  bottom: -240px;
-  right: -150px;
-  background: radial-gradient(circle, rgba(225, 110, 80, 0.09) 0%, transparent 70%);
-  animation-delay: -12s;
-}
-
-@keyframes glow-drift {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to   { transform: translate3d(44px, 30px, 0) scale(1.07); }
+  .aurora__blob {
+    animation: none;
+  }
 }
 
 /* İnce mühendislik grid'i: üstte belirgin, aşağıda mask ile kaybolur */
@@ -301,25 +354,23 @@ img {
 /* ── 4. ANİMASYON SİSTEMİ ──────────────────────────────────────────────────── */
 
 /* Scroll-reveal: JS sadece .is-visible ekler, gerisi CSS'in işi.
-   Sinematik giriş: kart alttan yükselirken hafifçe büyür, bulanıklıktan
-   netliğe geçer ve minik bir 3D eğimden düzelir — "ekran açılıyor" hissi. */
+   Sinematik giriş: kart alttan yükselirken hafifçe büyür ve minik bir 3D
+   eğimden düzelir — "ekran açılıyor" hissi. Yalnızca opacity + transform
+   animasyonu (GPU katmanında) → ilk scroll'da bile pürüzsüz, kasma yok.
+   (Eski filter: blur geçişi her karede pahalıydı; kaldırıldı.) */
 .reveal {
   opacity: 0;
-  transform: perspective(1200px) translateY(46px) scale(0.965) rotateX(7deg);
-  filter: blur(10px);
+  transform: perspective(1200px) translateY(38px) scale(0.97) rotateX(5deg);
   transform-origin: center top;
   transition:
-    opacity 0.85s var(--ease-out),
-    transform 0.95s var(--ease-out),
-    filter 0.85s var(--ease-out);
+    opacity 0.7s var(--ease-out),
+    transform 0.8s var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform, filter;
 }
 
 .reveal.is-visible {
   opacity: 1;
   transform: perspective(1200px) translateY(0) scale(1) rotateX(0deg);
-  filter: blur(0);
 }
 
 /* Bento grid'de aynı anda görünen kartlar dalga dalga gelsin:
@@ -364,11 +415,6 @@ img {
 
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
-}
-
-/* Sonsuz şerit: iki kopyalı liste, %50'de kusursuz döngü */
-@keyframes marquee-scroll {
-  to { transform: translateX(-50%); }
 }
 
 
@@ -895,55 +941,293 @@ img {
 }
 
 
-/* ── 8. MARQUEE (kayan şerit) ──────────────────────────────────────────────── */
+/* ── 8. SKILL CLOUD (yetenek bulutu) ───────────────────────────────────────── */
 
-.marquee {
-  /* Konteynerden taşıp tüm görünür genişliğe yayılır */
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 72px;
-  padding: 15px 0;
-  border-block: 1px solid var(--border);
-  overflow: hidden;
-  /* Kenarlarda yumuşak kaybolma */
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+/* Hero ile bento arasında nefes alan, ortalı yetenek bandı.
+   Eski sonsuz kayan şeridin yerini alır: sürekli hareket yerine sakin,
+   okunabilir; çipler bulut görünür olunca kademeli belirir, hover'da canlanır. */
+.skill-cloud-wrap {
+  margin-top: 60px;
 }
 
-.marquee__track {
+.skill-cloud {
   display: flex;
-  width: max-content;
-  animation: marquee-scroll 38s linear infinite;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 11px 12px;
+  list-style: none;
+  margin: 0;
+  padding: 26px 8px;
+  border-block: 1px solid var(--border);
 }
 
-/* Okumak isteyen için: üzerine gelince durur */
-.marquee:hover .marquee__track {
-  animation-play-state: paused;
-}
-
-.marquee__item {
+.skill-chip {
   display: inline-flex;
   align-items: center;
+  padding: 7px 15px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: default;
+  /* Kademeli giriş başlangıcı: gizli + hafif aşağıda (bulut görününce düzelir).
+     Stagger yalnızca opacity'de — transform'a gecikme verilmez ki hover/çıkış
+     anında ve takılmadan çalışsın (gecikmeli transform "yapışık" hissettirir). */
+  opacity: 0;
+  transform: translateY(14px) scale(0.9);
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.32s var(--ease-out),
+    opacity 0.5s var(--ease-out) var(--chip-delay, 0ms);
+}
+
+/* Ağırlığa göre boyut: baskın yetenekler büyük, yan beceriler küçük */
+.skill-chip--w1 {
+  font-size: 0.74rem;
+}
+.skill-chip--w2 {
+  font-size: 0.86rem;
+  padding: 8px 17px;
+}
+.skill-chip--w3 {
+  font-size: 1rem;
+  padding: 9px 20px;
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+/* Kişilik etiketleri (kahve, müzik…): serif italik + sıcak accent ile ayrışır */
+.skill-chip--fun {
+  font-family: var(--font-serif);
+  font-style: italic;
+  letter-spacing: 0;
+  font-size: 0.92rem;
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+}
+
+/* Hover: çip yükselir, accent'e geçer — "canlı" his */
+.skill-chip:hover {
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-3px) scale(1.06);
+}
+
+/* Bulut görünür olunca çipler kademeli "pop" yapar */
+.skill-cloud.is-visible .skill-chip {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+
+/* ── 8c. ZAMAN ÇİZELGESİ (Yolculuk) ────────────────────────────────────────── */
+
+.timeline-section {
+  margin-top: 92px;
+  scroll-margin-top: 92px; /* navbar altına kayıp gizlenmesin */
+}
+
+.timeline-section__header {
+  margin-bottom: 32px;
+}
+
+.timeline-section__title {
+  margin: 8px 0 0;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.timeline-section__title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.timeline {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Sol dikey ray: noktaların merkezinden geçer, aşağı doğru soluklaşır */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(var(--accent-border), var(--border) 55%, transparent);
+}
+
+.timeline__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 18px;
+  padding-bottom: 30px;
+}
+
+.timeline__item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline__node {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--glass);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.timeline__content {
+  padding-top: 1px;
+}
+
+.timeline__date {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--accent);
+}
+
+.timeline__title {
+  margin: 5px 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.timeline__text {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
   color: var(--text-secondary);
-  white-space: nowrap;
-  transition: color 0.25s ease;
 }
 
-/* Tek bir öğenin üzerine gelince vurgulanır (şerit zaten :hover'da durur) */
-.marquee__item:hover {
-  color: var(--accent);
+
+/* ── 8d. AÇILIŞ PERDESİ (Intro overlay) ────────────────────────────────────── */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  transition:
+    transform 0.8s var(--ease-out),
+    opacity 0.8s var(--ease-out);
 }
 
-.marquee__star {
+/* Perde yukarı kayıp sayfayı açar */
+.intro--leaving {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.intro__name {
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  opacity: 0;
+  transform: translateY(18px);
+  animation: intro-rise 0.8s var(--ease-out) 0.1s forwards;
+}
+
+.intro__tag {
+  margin-top: 6px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1rem, 3vw, 1.4rem);
   color: var(--accent);
-  margin: 0 26px;
-  font-size: 0.6rem;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: intro-rise 0.8s var(--ease-out) 0.28s forwards;
+}
+
+.intro__line {
+  width: 0;
+  height: 2px;
+  margin-top: 22px;
+  background: var(--accent);
+  border-radius: 2px;
+  animation: intro-line 0.9s var(--ease-out) 0.5s forwards;
+}
+
+@keyframes intro-rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes intro-line {
+  from { width: 0; }
+  to   { width: 120px; }
+}
+
+
+/* ── 8e. BLUR-UP GÖRSEL (lazy-load) ────────────────────────────────────────── */
+
+/* Görsel yüklenene kadar bulanık + soluk; yüklenince netleşip belirir.
+   transform'a DOKUNULMAZ → kartların hover zoom/tilt geçişleri bozulmaz,
+   ama transform geçişini koruyarak o hover'ları akıcı tutarız. */
+.blur-img {
+  opacity: 0;
+  filter: blur(12px);
+  transition:
+    opacity 0.6s var(--ease-out),
+    filter 0.7s var(--ease-out),
+    transform 0.5s var(--ease-out);
+}
+
+.blur-img.is-loaded {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* Hareketi azalt: görsel anında net görünür (bulanık geçiş yok) */
+@media (prefers-reduced-motion: reduce) {
+  .blur-img {
+    opacity: 1;
+    filter: none;
+  }
 }
 
 
@@ -2863,8 +3147,8 @@ img {
     margin-top: 56px;
   }
 
-  .marquee {
-    margin-top: 56px;
+  .skill-cloud-wrap {
+    margin-top: 48px;
   }
 }
 
@@ -2997,7 +3281,6 @@ img {
     filter: none;
   }
 
-  .marquee__track,
   .gallery__autobar {
     animation: none;
   }

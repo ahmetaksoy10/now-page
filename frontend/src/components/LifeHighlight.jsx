@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Images, Plane } from 'lucide-react'
 import { lifeHighlight, romaGaleri } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
+import BlurImage from './BlurImage.jsx'
 import Modal from './Modal.jsx'
 import GalleryViewer from './GalleryViewer.jsx'
 
@@ -46,7 +47,7 @@ function LifeHighlight() {
           onClick={() => lightboxAc(photo)}
           aria-label="Roma fotoğraf galerisini aç"
         >
-          <img src={photo} alt={photoAlt} className="postcard__photo" loading="lazy" />
+          <BlurImage src={photo} alt={photoAlt} className="postcard__photo" loading="lazy" />
           {/* Hover'da beliren galeri ipucu */}
           <span className="postcard__photo-hint" aria-hidden="true">
             <Images size={15} />
@@ -64,7 +65,7 @@ function LifeHighlight() {
               onClick={() => lightboxAc(kare.src)}
               aria-label={`${kare.alt} — galeride aç`}
             >
-              <img
+              <BlurImage
                 src={kare.src}
                 alt={kare.alt}
                 className="postcard__strip-photo"
