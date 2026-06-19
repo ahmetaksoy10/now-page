@@ -1,8 +1,14 @@
 import { ArrowUpRight, Clock3, Crosshair, MapPin } from 'lucide-react'
 import { GitHubIcon, LinkedInIcon } from './icons/BrandIcons.jsx'
-import { profile, currentFocus } from '../data/content.js'
+import { profile, currentFocus, lastUpdated } from '../data/content.js'
 import { useLocalTime } from '../hooks/useLocalTime.js'
 import CopyEmailButton from './CopyEmailButton.jsx'
+
+// "Son güncelleme" damgası için kısa Türkçe tarih (ör. "17 Haziran")
+const guncellemeKisa = new Intl.DateTimeFormat('tr-TR', {
+  day: 'numeric',
+  month: 'long',
+}).format(new Date(lastUpdated))
 
 /**
  * HeroSection — Açılış sahnesi: iki kolonlu, asimetrik kompozisyon.
@@ -20,9 +26,14 @@ function HeroSection() {
   return (
     <header className="hero" aria-label="Tanıtım">
       <div className="hero__main">
-        <p className="hero__eyebrow hero-enter" style={{ '--enter-delay': '0ms' }}>
-          Now Page — Haziran 2026
-        </p>
+        <div className="hero__eyebrow-row hero-enter" style={{ '--enter-delay': '0ms' }}>
+          <p className="hero__eyebrow">Now Page — Haziran 2026</p>
+          {/* Now-page'in canlı olduğunu gösteren damga: nabız atan nokta + tarih */}
+          <span className="hero__stamp" title={`İçerik en son ${guncellemeKisa} güncellendi`}>
+            <span className="hero__stamp-dot" aria-hidden="true" />
+            Son güncelleme · {guncellemeKisa}
+          </span>
+        </div>
 
         {/* İsim manşette: sayfanın kime ait olduğu ilk saniyede netleşir */}
         <h1 className="hero__title">

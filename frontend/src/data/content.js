@@ -76,6 +76,12 @@ export const socialLinks = [
   { id: 'mail', label: 'Bana e-posta gönder', url: 'mailto:a.aksoy1020@gmail.com' },
 ]
 
+// ── Son güncelleme ───────────────────────────────────────────────────────────
+// Now-page'in en önemli sinyali: sayfanın CANLI olduğu. Bu tarih elle, içeriği
+// her gerçekten güncellediğinde değiştirilir (sayfanın açıldığı an değil).
+// Hero'daki damga ve Footer aynı kaynaktan beslenir (tek doğruluk noktası).
+export const lastUpdated = '2026-06-17'
+
 // ── Navigasyon (yapışkan mini menü) ──────────────────────────────────────────
 export const navLinks = [
   { id: 'odak', label: 'Odak', href: '#odak' },
