@@ -38,6 +38,11 @@ jobs:
       - name: Build project
         run: npm run build
         working-directory: ./frontend
+        env:
+          # Last.fm API anahtarı GitHub repo secret'ından gelir (kod/repoda tutulmaz).
+          # Repo → Settings → Secrets and variables → Actions → New repository secret:
+          #   ad: VITE_LASTFM_API_KEY
+          VITE_LASTFM_API_KEY: ${{ secrets.VITE_LASTFM_API_KEY }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

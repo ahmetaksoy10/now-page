@@ -235,16 +235,16 @@ export const currentlyReading = {
   totalPages: 500, // = %40 ilerleme
 }
 
-// ── 04 · Dinlediklerim (gerçek Apple Music çalma listesi) ────────────────────
-// Sahte mini-player yerine gerçek, çalınabilir Apple Music embed'i. Genel
-// dinleme listem — koda özel değil. embedUrl iframe'e, openUrl ise
-// "Apple Music'te aç" linkine gider.
-export const currentlyListening = {
+// ── 04 · Dinlediklerim (Last.fm — gerçek "şu an / son çalınan") ──────────────
+// Apple Music çalışlarım NepTunes ile Last.fm'e scrobble ediliyor; kart bu
+// veriyi canlı çeker (bir şey çalıyorsa "Şu an çalıyor", yoksa "Son çalınan").
+// apiKey salt-okunur (sadece public veri) ve .env.local'dan gelir — repoya
+// girmez; canlı deploy için GitHub Actions secret'ı olarak da eklenir.
+export const lastfm = {
+  user: 'ahmetaksoy10',
+  apiKey: import.meta.env.VITE_LASTFM_API_KEY,
   label: 'Dinlediklerim',
-  note: 'Şu aralar en çok dinlediğim çalma listesi — günün her saati dönüyor, çoğu Türkçe. Aşağıdan doğrudan çalabilirsin.',
-  embedUrl:
-    'https://embed.music.apple.com/tr/playlist/t%C3%BCrk%C3%A7e/pl.u-PDb4034Feq4lZly?l=tr',
-  openUrl: 'https://music.apple.com/tr/playlist/t%C3%BCrk%C3%A7e/pl.u-PDb4034Feq4lZly?l=tr',
+  profileUrl: 'https://www.last.fm/user/ahmetaksoy10',
 }
 
 // ── 05 · Sistem Durumu (Enerji) ──────────────────────────────────────────────

@@ -1752,44 +1752,165 @@ img {
 }
 
 
-/* ── 12. DİNLEDİKLERİM (Apple Music embed) ─────────────────────────────────── */
+/* ── 12. DİNLEDİKLERİM (Last.fm — şu an / son çalınan) ──────────────────────── */
 
-/* Gerçek, çalınabilir Apple Music çalma listesi (sahte player kaldırıldı) */
-.music__note {
-  margin-bottom: 16px;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  color: var(--text-secondary);
+/* Şu an / son çalınan parça satırı: kapak + bilgi, tıklayınca Last.fm'e gider */
+.lastfm__now {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
 }
 
-/* Çerçeve: iframe köşelerini güvenle yuvarlar (Safari border-radius) + kart diline bağlar */
-.music__frame {
-  border: 1px solid var(--border);
+.lastfm__cover {
+  position: relative;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
   border-radius: var(--radius-md);
   overflow: hidden;
+  border: 1px solid var(--border);
   background: var(--surface-2);
+  color: var(--accent);
 }
 
-.music__embed {
-  display: block;
+.lastfm__cover img {
   width: 100%;
-  height: 200px;
-  border: 0;
+  height: 100%;
+  object-fit: cover;
 }
 
-.music__open {
+.lastfm__info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.lastfm__state {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 14px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Çalarken nabız atan nokta */
+.lastfm__pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+.lastfm__track {
+  font-size: 0.98rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: color 0.2s ease;
 }
 
-.music__open:hover {
+.lastfm__now:hover .lastfm__track {
   color: var(--accent);
+}
+
+.lastfm__artist {
+  font-size: 0.82rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Kapağın üstünde dans eden equalizer (yalnızca çalarken) */
+.lastfm__bars {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
+  padding: 9px;
+  background: rgba(8, 6, 4, 0.42);
+}
+
+.lastfm__bars span {
+  width: 3px;
+  height: 30%;
+  border-radius: 2px;
+  background: #fff;
+  animation: lastfm-eq 0.9s ease-in-out infinite;
+}
+.lastfm__bars span:nth-child(2) { animation-delay: 0.2s; }
+.lastfm__bars span:nth-child(3) { animation-delay: 0.4s; }
+.lastfm__bars span:nth-child(4) { animation-delay: 0.1s; }
+
+@keyframes lastfm-eq {
+  0%, 100% { height: 22%; }
+  50%      { height: 82%; }
+}
+
+/* Öncesinde çalınanlar: ince liste */
+.lastfm__recent {
+  list-style: none;
+  margin: 18px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.lastfm__recent li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.lastfm__recent-track {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lastfm__recent-artist {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+}
+
+/* Hata/anahtar yok durumu: kibarca Last.fm linkine düş */
+.lastfm__fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--text-tertiary);
+}
+
+.lastfm__fallback p {
+  font-size: 0.88rem;
+}
+
+.lastfm__fallback a {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
 }
 
 
@@ -3034,25 +3155,77 @@ img {
   line-height: 1.6;
 }
 
-.contact-form__footer {
+/* Hatalı alan: kırmızı kenar + altında küçük hata metni */
+.contact-form__input.is-error {
+  border-color: var(--danger);
+}
+
+.contact-form__error {
+  font-size: 0.76rem;
+  color: var(--danger);
+}
+
+/* Gönder butonu kartın ortasında */
+.contact-form__submit {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 18px;
+  justify-content: center;
+  margin-top: 22px;
 }
 
+.contact-form__submit .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Durum satırı: yükseklik sabit (mesaj gelince yerleşim zıplamaz) */
 .contact-form__status {
-  margin: 0;
+  min-height: 22px;
+  margin-top: 14px;
+  text-align: center;
   font-size: 0.85rem;
+  font-weight: 500;
 }
 
-.contact-form__status--ok {
+.contact-form__toast {
+  display: inline-block;
+}
+
+/* Başarı: belirir, bekler, kaybolur (hareket varsa); reduced-motion'da
+   statik kalıp zamanlayıcıyla gider (JS'teki setTimeout). */
+.contact-form__toast--ok {
   color: var(--success);
 }
 
-.contact-form__status--error {
+@media (prefers-reduced-motion: no-preference) {
+  .contact-form__toast--ok {
+    animation: toast-life 4s var(--ease-out) both;
+  }
+}
+
+.contact-form__toast--error {
   color: var(--danger);
+  animation: toast-in 0.3s var(--ease-out) both;
+}
+
+@keyframes toast-life {
+  0%   { opacity: 0; transform: translateY(6px); }
+  9%   { opacity: 1; transform: translateY(0); }
+  82%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-4px); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Kart dışında, altta ortalı, yan yana: e-posta kopyala + LinkedIn */
+.cta__links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
 }
 
 /* Telefonda isim/e-posta tek kolona iner */
