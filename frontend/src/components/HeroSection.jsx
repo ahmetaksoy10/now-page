@@ -38,7 +38,9 @@ function HeroSection() {
         {/* İsim manşette: sayfanın kime ait olduğu ilk saniyede netleşir */}
         <h1 className="hero__title">
           <span className="hero__title-line hero-enter" style={{ '--enter-delay': '70ms' }}>
-            Ahmet Aksoy<span className="hero__title-dot">.</span>
+            {/* İç span: üzerinden periyodik/hover'da altın ışık süpürmesi geçer */}
+            <span className="hero__title-name">Ahmet Aksoy</span>
+            <span className="hero__title-dot">.</span>
           </span>
           <span
             className="hero__title-line hero__title-line--serif hero-enter"

@@ -1,10 +1,22 @@
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 
 /**
+ * kartFareHareketi — İmleç parıltısı için kartın yerel imleç konumunu
+ * (--card-x / --card-y) CSS değişkenine yazar. Saf stil mutasyonu →
+ * React re-render'ı yok; .card__glow bu değişkenleri okuyup imleci izler.
+ */
+function kartFareHareketi(olay) {
+  const kart = olay.currentTarget
+  const r = kart.getBoundingClientRect()
+  kart.style.setProperty('--card-x', `${olay.clientX - r.left}px`)
+  kart.style.setProperty('--card-y', `${olay.clientY - r.top}px`)
+}
+
+/**
  * BentoCard — Bento grid'in ortak kart iskeleti.
  *
- * Tek Sorumluluk: grid'deki yerleşim (span), scroll-reveal girişi ve
- * kart üstündeki küçük etiket (card-label) burada yaşar; içerik
+ * Tek Sorumluluk: grid'deki yerleşim (span), scroll-reveal girişi, imleç
+ * parıltısı ve kart üstündeki küçük etiket (card-label) burada yaşar; içerik
  * component'leri yalnızca kendi içeriğine odaklanır.
  *
  *  span  → 12 kolonluk grid'de kaç kolon kaplayacağı (4, 5, 7, 12)
@@ -30,8 +42,11 @@ function BentoCard({
       className={`card bento bento--${span} reveal ${className}`.trim()}
       style={{ '--reveal-delay': `${delay}ms` }}
       aria-labelledby={labelId}
+      onMouseMove={kartFareHareketi}
       {...rest}
     >
+      {/* İmleci izleyen sıcak iç parıltı (hover'da belirir, dekoratif) */}
+      <span className="card__glow" aria-hidden="true" />
       {label && (
         <p className="card-label" id={labelId}>
           {label}

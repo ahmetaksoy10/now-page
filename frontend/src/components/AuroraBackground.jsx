@@ -162,6 +162,9 @@ function AuroraBackground() {
         <span className="aurora__blob aurora__blob--2" />
         <span className="aurora__blob aurora__blob--3" />
         <span className="aurora__blob aurora__blob--4" />
+        {/* Akan "kuzey ışıkları" şeritleri — bloblara dramatik hareket katar */}
+        <span className="aurora__ribbon aurora__ribbon--1" />
+        <span className="aurora__ribbon aurora__ribbon--2" />
       </div>
       {/* Süzülen parçacıklar */}
       <canvas className="aurora__particles" ref={canvasRef} />

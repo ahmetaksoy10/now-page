@@ -82,11 +82,38 @@ export const socialLinks = [
 // Hero'daki damga ve Footer aynı kaynaktan beslenir (tek doğruluk noktası).
 export const lastUpdated = '2026-06-17'
 
+// ── Hakkımda ─────────────────────────────────────────────────────────────────
+// Hero'nun kısa tanıtımının ötesinde: kim olduğum, nasıl çalıştığım, birkaç
+// insani gerçek. Sayfaya sıcaklık ve hikâye katar (işe alımcı "bu kişiyle
+// çalışmak nasıl" diye bakar). icon anahtarları About bileşeninde lucide'a eşlenir.
+export const about = {
+  lead: 'Kod yazmak benim için bir görev değil, çözmekten keyif aldığım bir bulmaca.',
+  paragraphs: [
+    'Balıkesir Üniversitesi’nde bilgisayar mühendisliği ikinci sınıf öğrencisiyim. ' +
+      'Beni asıl heyecanlandıran şey, kafamdaki bir fikrin ekranda çalışan bir şeye ' +
+      'dönüştüğü o an. Bu yüzden sürekli yeni bir şey deniyor, bozuyor ve yeniden yapıyorum.',
+    'Çalışma şeklim iki katmanlı: önce bir fikri hızlıca prototipe döküp gerçekten ' +
+      'işe yarıyor mu görüyorum, sonra detayları — temiz mimariyi, kullanıcının fark ' +
+      'etmeden hissettiği küçük dokunuşları — sabırla cilalıyorum. iOS’ta SwiftUI, ' +
+      'web’de React; ikisi arasında gidip gelmeyi seviyorum.',
+    'Kod yazmadığım zamanlarda Türkçe çalma listemle kahve içiyor, bir sonraki ' +
+      'seyahatin planını yapıyor ya da bir distopya romanına dalıyorum. Roma’dan ' +
+      'döneli aylar oldu ama etkisi hâlâ üzerimde — gezdiğim her yer projelerime sızıyor.',
+  ],
+  facts: [
+    { id: 'kahve', icon: 'coffee', text: 'Günde 3 fincan kahveyle çalışır' },
+    { id: 'platform', icon: 'code', text: 'iOS (SwiftUI) ↔ web (React) arası' },
+    { id: 'kitap', icon: 'book', text: 'Akşamları kurgu & distopya okur' },
+    { id: 'hedef', icon: 'target', text: 'Sıradaki hedef: Yaz 2026 stajı' },
+  ],
+}
+
 // ── Navigasyon (yapışkan mini menü) ──────────────────────────────────────────
 export const navLinks = [
   { id: 'odak', label: 'Odak', href: '#odak' },
   { id: 'projeler', label: 'Projeler', href: '#projeler' },
   { id: 'github', label: 'GitHub', href: '#github' },
+  { id: 'hakkimda', label: 'Hakkımda', href: '#hakkimda' },
   { id: 'yolculuk', label: 'Yolculuk', href: '#yolculuk' },
   { id: 'iletisim', label: 'İletişim', href: '#iletisim' },
 ]

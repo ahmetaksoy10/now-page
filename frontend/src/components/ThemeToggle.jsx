@@ -1,26 +1,28 @@
+import { useState } from 'react'
 import { Moon, Sun } from 'lucide-react'
-import { useTheme } from '../hooks/useTheme.js'
+import { mevcutTema, temaCevir } from '../utils/tema.js'
 
 /**
  * ThemeToggle — Sağ üst köşede sabit duran dark/light tema anahtarı.
  *
- * Erişilebilirlik: Buton ikonu görseldir; ekran okuyucular için durumun
- * ne yapacağını anlatan dinamik bir aria-label sağlanır.
+ * Tema değişimi `temaCevir` ile yapılır: View Transitions destekleyen
+ * tarayıcılarda tıklanan noktadan açılan dairesel bir geçiş oynar.
+ * İkonlar zaten [data-theme] ile CSS üzerinden döner; buradaki küçük state
+ * yalnızca aria-label'ı güncel tutmak (erişilebilirlik) içindir.
  */
 function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme()
-  const isDark = theme === 'dark'
+  const [tema, setTema] = useState(mevcutTema)
+  const isDark = tema === 'dark'
 
   return (
     <button
       type="button"
       className="theme-toggle"
-      onClick={toggleTheme}
+      onClick={(olay) => setTema(temaCevir({ x: olay.clientX, y: olay.clientY }))}
       aria-label={isDark ? 'Açık temaya geç' : 'Koyu temaya geç'}
       title={isDark ? 'Açık temaya geç' : 'Koyu temaya geç'}
     >
-      {/* İki ikon da DOM'da durur; aktif olan CSS ile döndürülerek gösterilir.
-          Bu sayede geçiş anında ikon "pop" etmez, yumuşakça döner. */}
+      {/* İki ikon da DOM'da durur; aktif olan CSS ile döndürülerek gösterilir. */}
       <Sun className="theme-toggle__icon theme-toggle__icon--sun" size={17} aria-hidden="true" />
       <Moon className="theme-toggle__icon theme-toggle__icon--moon" size={17} aria-hidden="true" />
     </button>

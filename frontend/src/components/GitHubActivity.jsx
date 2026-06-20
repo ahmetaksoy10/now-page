@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AlertCircle, ArrowUpRight, GitFork, Star, Users } from 'lucide-react'
 import { GitHubIcon } from './icons/BrandIcons.jsx'
 import { profile } from '../data/content.js'
@@ -36,48 +36,120 @@ const DIL_RENKLERI = {
 
 const dilRengi = (dil) => DIL_RENKLERI[dil] || 'var(--accent)'
 
-// Deterministik pseudo-random: indeksten 0–1 arası, saf (idempotent) değer üretir.
-// Math.random yerine bunu kullanıyoruz; böylece render saf kalır (React purity
-// kuralı) ve ızgara her render'da aynı organik desende olur. tohum, aynı indeksin
-// üç farklı özelliği için farklı çıktı vermesini sağlar.
-const sozdeRastgele = (indeks, tohum) => {
-  const x = Math.sin((indeks + 1) * tohum) * 43758.5453
-  return x - Math.floor(x)
+// Katkı haritası için ücretsiz, auth gerektirmeyen public API (CORS açık).
+// GitHub'ın resmi REST API'si katkı grafiği verisini vermez; bu servis
+// profil sayfasındaki gerçek heatmap'i JSON olarak döndürür.
+const KATKI_API = 'https://github-contributions-api.jogruber.de/v4'
+
+// Günleri haftalara böler: ilk günün haftanın gününe (0=Pazar) göre baştan
+// boşluk eklenir ki sütunlar GitHub'daki gibi doğru hizalansın.
+function haftalaraBol(gunler) {
+  const haftalar = []
+  let hafta = new Array(new Date(gunler[0].date).getDay()).fill(null)
+  for (const gun of gunler) {
+    hafta.push(gun)
+    if (hafta.length === 7) {
+      haftalar.push(hafta)
+      hafta = []
+    }
+  }
+  if (hafta.length) {
+    while (hafta.length < 7) hafta.push(null)
+    haftalar.push(hafta)
+  }
+  return haftalar
+}
+
+// Güncel seri: sondan başa ardışık katkılı gün sayısı. Bugün henüz 0 ise
+// seriyi bozmaz (dünden geriye sayar) — GitHub'ın "current streak" mantığı.
+function guncelSeri(gunler) {
+  let seri = 0
+  for (let i = gunler.length - 1; i >= 0; i--) {
+    if (gunler[i].count > 0) seri++
+    else if (i === gunler.length - 1) continue
+    else break
+  }
+  return seri
 }
 
 /**
- * KatkiIzgarasi — GitHub katkı grafiğini (contribution heatmap) andıran,
- * yanıp sönen kareler arka planı. Tamamen dekoratif (aria-hidden).
+ * KatkiHaritasi — Son bir yılın GERÇEK GitHub katkı ısı haritası.
  *
- * Kareler `useMemo` ile bir kez üretilir; her birine indekse bağlı (deterministik)
- * bir animasyon gecikmesi ve süresi verilir, böylece ızgara organik biçimde
- * "nefes alır". Animasyonun kendisi CSS'tedir (github-cell-pulse) — JS sadece
- * zamanlamayı dağıtır, kare başına render maliyeti sıfırdır.
+ * Kendi verisini bağımsız çeker (ana kart isteklerini bloklamaz); başarısız
+ * olursa sessizce gizlenir, kartın geri kalanı çalışmaya devam eder. Toplam
+ * katkı ve güncel seri veriden türetilir — elle yazılmaz.
  */
-function KatkiIzgarasi() {
-  const kareler = useMemo(
-    () =>
-      Array.from({ length: 110 }, (_, i) => ({
-        delay: (sozdeRastgele(i, 12.9898) * 4).toFixed(2),
-        duration: (2.5 + sozdeRastgele(i, 78.233) * 3).toFixed(2),
-        // Kareler farklı "yoğunluk" seviyelerinde başlasın (gerçek heatmap gibi)
-        seviye: Math.floor(sozdeRastgele(i, 39.425) * 4),
-      })),
-    [],
-  )
+function KatkiHaritasi({ username }) {
+  const [veri, setVeri] = useState(null)
+  const [durum, setDurum] = useState('loading')
+
+  useEffect(() => {
+    const iptal = new AbortController()
+    fetch(`${KATKI_API}/${username}?y=last`, { signal: iptal.signal })
+      .then((yanit) => {
+        if (!yanit.ok) throw new Error('katki-api')
+        return yanit.json()
+      })
+      .then((json) => {
+        setVeri(json)
+        setDurum('success')
+      })
+      .catch((hata) => {
+        if (hata.name !== 'AbortError') setDurum('error')
+      })
+    return () => iptal.abort()
+  }, [username])
+
+  // Hata/yükleme: sessizce gizle (üçüncü taraf servis; kart geri kalanı sağlam)
+  if (durum !== 'success' || !veri?.contributions?.length) return null
+
+  const gunler = veri.contributions
+  const haftalar = haftalaraBol(gunler)
+  const toplam = gunler.reduce((a, g) => a + g.count, 0)
+  const seri = guncelSeri(gunler)
 
   return (
-    <div className="github-grid" aria-hidden="true">
-      {kareler.map((kare, sira) => (
-        <span
-          key={sira}
-          className={`github-grid__cell github-grid__cell--l${kare.seviye}`}
-          style={{
-            animationDelay: `${kare.delay}s`,
-            animationDuration: `${kare.duration}s`,
-          }}
-        />
-      ))}
+    <div className="contrib">
+      <div className="contrib__head">
+        <p className="contrib__title">Son bir yılın katkıları</p>
+        <p className="contrib__stats">
+          <strong>{toplam}</strong> katkı · <strong>{seri}</strong> gün seri
+        </p>
+      </div>
+
+      <div className="contrib__grid-wrap">
+        <div
+          className="contrib__grid"
+          role="img"
+          aria-label={`Son bir yılda ${toplam} katkı, güncel seri ${seri} gün`}
+        >
+          {haftalar.map((hafta, i) => (
+            <div key={i} className="contrib__week">
+              {hafta.map((gun, j) => (
+                <span
+                  key={j}
+                  className={
+                    gun
+                      ? `contrib__day contrib__day--l${gun.level}`
+                      : 'contrib__day contrib__day--empty'
+                  }
+                  title={gun ? `${gun.date}: ${gun.count} katkı` : undefined}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="contrib__legend" aria-hidden="true">
+        <span>az</span>
+        <span className="contrib__day contrib__day--l0" />
+        <span className="contrib__day contrib__day--l1" />
+        <span className="contrib__day contrib__day--l2" />
+        <span className="contrib__day contrib__day--l3" />
+        <span className="contrib__day contrib__day--l4" />
+        <span>çok</span>
+      </div>
     </div>
   )
 }
@@ -209,9 +281,6 @@ function GitHubActivity() {
       labelId="github-baslik"
       className="github-card"
     >
-      {/* Animasyonlu katkı ızgarası: kartın arka planında nefes alır */}
-      <KatkiIzgarasi />
-
       {durum === 'loading' && <GitHubSkeleton />}
 
       {durum === 'error' && (
@@ -233,6 +302,7 @@ function GitHubActivity() {
       )}
 
       {durum === 'success' && kullanici && (
+        <>
         <div className="github-card__layout">
           {/* SOL: profil + istatistikler + dil dağılımı */}
           <div className="github-card__main">
@@ -369,6 +439,10 @@ function GitHubActivity() {
             </ul>
           </div>
         </div>
+
+        {/* Gerçek katkı ısı haritası (full-width, layout'un altında) */}
+        <KatkiHaritasi username={profile.githubUsername} />
+        </>
       )}
     </BentoCard>
   )

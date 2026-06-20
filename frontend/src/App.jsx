@@ -1,7 +1,6 @@
 import Navbar from './components/Navbar.jsx'
 import AuroraBackground from './components/AuroraBackground.jsx'
 import IntroOverlay from './components/IntroOverlay.jsx'
-import CommandPalette from './components/CommandPalette.jsx'
 import HeroSection from './components/HeroSection.jsx'
 import SkillCloud from './components/SkillCloud.jsx'
 import CurrentFocus from './components/CurrentFocus.jsx'
@@ -13,9 +12,10 @@ import LifeHighlight from './components/LifeHighlight.jsx'
 import ActiveProject from './components/ActiveProject.jsx'
 import LearningBacklog from './components/LearningBacklog.jsx'
 import Toolbox from './components/Toolbox.jsx'
-import MiniTerminal from './components/MiniTerminal.jsx'
 import GitHubActivity from './components/GitHubActivity.jsx'
+import About from './components/About.jsx'
 import Timeline from './components/Timeline.jsx'
+import SectionDivider from './components/SectionDivider.jsx'
 import ContactCta from './components/ContactCta.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import Footer from './components/Footer.jsx'
@@ -27,7 +27,7 @@ import Footer from './components/Footer.jsx'
  * "besteler" (composition root). Kartlar 12 kolonluk bir bento grid'e
  * yerleşir; her kart kendi span'ını BentoCard üzerinden bildirir.
  *
- * Bento ritmi (desktop):  7+5 → 5+7 → 7+5 → 12 → 4+4+4 → 12
+ * Akış: hero → yetenekler → "şu an" kartları → Hakkımda → Yolculuk → iletişim.
  * Mobilde tüm kartlar tek kolona akar (CSS media query).
  */
 function App() {
@@ -36,16 +36,13 @@ function App() {
       {/* Kısa açılış perdesi (oturumda bir kez, reduced-motion'da atlanır) */}
       <IntroOverlay />
 
-      {/* Komut paleti: ⌘K / Ctrl+K ya da navbar tetikleyicisiyle açılır */}
-      <CommandPalette />
-
       {/* Dekoratif arka plan: ince mühendislik grid'i + film greni */}
       <div className="page__background" aria-hidden="true">
         <div className="page__grid" />
         <div className="page__noise" />
       </div>
 
-      {/* Yaşayan aurora arka plan: yavaşça süzülen sıcak renk küreleri (saf CSS) */}
+      {/* Yaşayan aurora arka plan: süzülen sıcak küreler + şeritler (saf CSS) */}
       <AuroraBackground />
 
       <Navbar />
@@ -64,11 +61,16 @@ function App() {
           <ActiveProject />
           <LearningBacklog />
           <Toolbox />
-          <MiniTerminal />
           <GitHubActivity />
         </div>
 
+        <SectionDivider />
+
+        {/* Hikâye bloğu: önce kim olduğum, sonra buraya nasıl geldiğim */}
+        <About />
         <Timeline />
+
+        <SectionDivider />
 
         <ContactCta />
       </main>
