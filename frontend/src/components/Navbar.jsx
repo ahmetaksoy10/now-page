@@ -19,7 +19,7 @@ function Navbar() {
     <nav className="navbar" aria-label="Sayfa içi gezinme">
       {/* İsim, imza gibi: sayfanın sahibi her an görünür */}
       <a href="#top" className="navbar__brand" aria-label="Sayfa başına dön">
-        ahmet aksoy<span className="navbar__brand-dot">.</span>
+        Ahmet AKSOY<span className="navbar__brand-dot">.</span>
       </a>
 
       <div className="navbar__links">

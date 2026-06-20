@@ -1,5 +1,4 @@
-import { ArrowUpRight, Clock3, Crosshair, MapPin } from 'lucide-react'
-import { GitHubIcon, LinkedInIcon } from './icons/BrandIcons.jsx'
+import { Clock3, Crosshair, MapPin } from 'lucide-react'
 import { profile, lastUpdated } from '../data/content.js'
 import { useLocalTime } from '../hooks/useLocalTime.js'
 import CopyEmailButton from './CopyEmailButton.jsx'
@@ -39,7 +38,7 @@ function HeroSection() {
         <h1 className="hero__title">
           <span className="hero__title-line hero-enter" style={{ '--enter-delay': '70ms' }}>
             {/* İç span: üzerinden periyodik/hover'da altın ışık süpürmesi geçer */}
-            <span className="hero__title-name">Ahmet Aksoy</span>
+            <span className="hero__title-name">Ahmet AKSOY</span>
             <span className="hero__title-dot">.</span>
           </span>
           <span
@@ -56,26 +55,6 @@ function HeroSection() {
 
         <div className="hero__actions hero-enter" style={{ '--enter-delay': '300ms' }}>
           <CopyEmailButton variant="primary" />
-          <a
-            href="https://github.com/ahmetaksoy10"
-            className="btn btn--ghost"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <GitHubIcon size={15} aria-hidden="true" />
-            GitHub
-            <ArrowUpRight size={13} className="btn__arrow" aria-hidden="true" />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/ahmet-aksoy10"
-            className="btn btn--ghost"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <LinkedInIcon size={14} aria-hidden="true" />
-            LinkedIn
-            <ArrowUpRight size={13} className="btn__arrow" aria-hidden="true" />
-          </a>
         </div>
       </div>
 

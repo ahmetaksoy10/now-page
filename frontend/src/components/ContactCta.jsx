@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ArrowUpRight, Send } from 'lucide-react'
-import { LinkedInIcon } from './icons/BrandIcons.jsx'
+import { GitHubIcon, LinkedInIcon } from './icons/BrandIcons.jsx'
 import { contactCta } from '../data/content.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 import CopyEmailButton from './CopyEmailButton.jsx'
@@ -237,9 +237,19 @@ function ContactCta() {
         </div>
       </form>
 
-      {/* Kart dışında, altta ortalı, yan yana: e-posta kopyala + LinkedIn */}
+      {/* Kart dışında, altta ortalı, yan yana: e-posta kopyala + GitHub + LinkedIn */}
       <div className="cta__links">
         <CopyEmailButton variant="ghost" />
+        <a
+          href="https://github.com/ahmetaksoy10"
+          className="btn btn--ghost"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <GitHubIcon size={15} aria-hidden="true" />
+          GitHub
+          <ArrowUpRight size={13} className="btn__arrow" aria-hidden="true" />
+        </a>
         <a
           href="https://www.linkedin.com/in/ahmet-aksoy10"
           className="btn btn--ghost"

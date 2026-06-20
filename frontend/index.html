@@ -1,50 +1,44 @@
 <!doctype html>
 <html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Ahmet Aksoy — Şu an hayatımda neler olduğunu anlatan kişisel Now Page: odak noktam, öğrendiklerim, okuduklarım ve aktif projelerim."
-    />
-    <meta name="author" content="Ahmet Aksoy" />
-    <title>Şu An — Ahmet Aksoy</title>
 
-    <!--
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Ahmet AKSOY — Şu an hayatımda neler olduğunu anlatan kişisel Now Page: odak noktam, öğrendiklerim, okuduklarım ve aktif projelerim." />
+  <meta name="author" content="Ahmet AKSOY" />
+  <title>Şu An — Ahmet AKSOY</title>
+
+  <!--
       Sosyal paylaşım önizlemesi (Open Graph + Twitter Card). Link bir yere
       yapıştırıldığında başlık, açıklama ve görsel kartı görünür.
       NOT: URL'ler vite `base` ('/now-page/') ile uyumludur; deploy reposu
       farklıysa aşağıdaki mutlak adresleri ve vite.config base'ini güncelleyin.
     -->
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="tr_TR" />
-    <meta property="og:site_name" content="Ahmet Aksoy — Now Page" />
-    <meta property="og:title" content="Şu An — Ahmet Aksoy" />
-    <meta
-      property="og:description"
-      content="Şu an hayatımda neler olduğunu anlatan kişisel Now Page: odak noktam, öğrendiklerim, okuduklarım ve aktif projelerim."
-    />
-    <meta property="og:url" content="https://ahmetaksoy10.github.io/now-page/" />
-    <meta property="og:image" content="https://ahmetaksoy10.github.io/now-page/og-image.jpg" />
-    <meta property="og:image:width" content="512" />
-    <meta property="og:image:height" content="512" />
-    <meta property="og:image:alt" content="Ahmet Aksoy — Now Page önizleme görseli" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Şu An — Ahmet Aksoy" />
-    <meta
-      name="twitter:description"
-      content="Şu an hayatımda neler olduğunu anlatan kişisel Now Page."
-    />
-    <meta name="twitter:image" content="https://ahmetaksoy10.github.io/now-page/og-image.jpg" />
-    <meta name="twitter:image:alt" content="Ahmet Aksoy — Now Page önizleme görseli" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:site_name" content="Ahmet AKSOY — Now Page" />
+  <meta property="og:title" content="Şu An — Ahmet AKSOY" />
+  <meta property="og:description"
+    content="Şu an hayatımda neler olduğunu anlatan kişisel Now Page: odak noktam, öğrendiklerim, okuduklarım ve aktif projelerim." />
+  <meta property="og:url" content="https://ahmetaksoy10.github.io/now-page/" />
+  <meta property="og:image" content="https://ahmetaksoy10.github.io/now-page/og-image.jpg" />
+  <meta property="og:image:width" content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt" content="Ahmet AKSOY — Now Page önizleme görseli" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Şu An — Ahmet AKSOY" />
+  <meta name="twitter:description" content="Şu an hayatımda neler olduğunu anlatan kişisel Now Page." />
+  <meta name="twitter:image" content="https://ahmetaksoy10.github.io/now-page/og-image.jpg" />
+  <meta name="twitter:image:alt" content="Ahmet AKSOY — Now Page önizleme görseli" />
 
-    <!-- Yapısal veri (JSON-LD): arama motorlarına "bu bir kişi" bilgisini verir -->
-    <script type="application/ld+json">
+  <!-- Yapısal veri (JSON-LD): arama motorlarına "bu bir kişi" bilgisini verir -->
+  <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": "Ahmet Aksoy",
+        "name": "Ahmet AKSOY",
         "url": "https://ahmetaksoy10.github.io/now-page/",
         "image": "https://ahmetaksoy10.github.io/now-page/og-image.jpg",
         "jobTitle": "Bilgisayar Mühendisliği Öğrencisi",
@@ -60,41 +54,42 @@
       }
     </script>
 
-    <!--
+  <!--
       Tipografi: Inter, modern ürün arayüzlerinin (Linear, Vercel, Stripe) standart fontudur.
       `preconnect` ile font sunucusuna erken bağlantı kurarak ilk boyamayı (FCP) hızlandırıyoruz.
     -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Instrument Serif (italik): başlıklardaki editoryal vurgular için -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
-      rel="stylesheet"
-    />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Instrument Serif (italik): başlıklardaki editoryal vurgular için -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..800&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet" />
 
-    <!--
+  <!--
       Tema önyükleme (FOUC önleme): React yüklenmeden ÖNCE çalışan bu küçük script,
       kayıtlı temayı (veya sistem tercihini) <html> etiketine işler.
       Böylece koyu temalı bir kullanıcı, sayfa açılırken beyaz bir "flaş" görmez.
     -->
-    <script>
-      ;(function () {
-        try {
-          var stored = localStorage.getItem('now-page-theme')
-          var theme =
-            stored ||
-            (window.matchMedia('(prefers-color-scheme: light)').matches
-              ? 'light'
-              : 'dark')
-          document.documentElement.setAttribute('data-theme', theme)
-        } catch (e) {
-          document.documentElement.setAttribute('data-theme', 'dark')
-        }
-      })()
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <script>
+    ; (function () {
+      try {
+        var stored = localStorage.getItem('now-page-theme')
+        var theme =
+          stored ||
+          (window.matchMedia('(prefers-color-scheme: light)').matches
+            ? 'light'
+            : 'dark')
+        document.documentElement.setAttribute('data-theme', theme)
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark')
+      }
+    })()
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

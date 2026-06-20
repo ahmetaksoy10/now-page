@@ -106,7 +106,10 @@ function CurrentlyListening() {
   const calisiyor = parca['@attr']?.nowplaying === 'true'
   const kapak = kapakSec(parca.image)
   const sanatci = parca.artist?.['#text'] ?? parca.artist?.name ?? ''
-  const oncekiler = kalan.slice(0, 3)
+  // Çalan parça ayrıca scrobble olarak da dönebilir → "öncekiler"de tekrarını çıkar
+  const oncekiler = kalan
+    .filter((p) => !(p.name === parca.name && (p.artist?.['#text'] ?? '') === sanatci))
+    .slice(0, 3)
 
   return card(
     <>

@@ -56,10 +56,10 @@ export const romaGaleri = galeriYap(
 
 // ── Kimlik & Sosyal Medya ────────────────────────────────────────────────────
 export const profile = {
-  name: 'Ahmet Aksoy',
+  name: 'Ahmet AKSOY',
   role: 'Balıkesir Üniversitesi Bilgisayar Mühendisliği 2. sınıf öğrencisi',
   location: 'Karesi, Balıkesir',
-  email: 'a.aksoy1020@gmail.com',
+  email: 'ahmet.aksoy17@hotmail.com',
   photo: profilFoto,
   // GitHub API entegrasyonu bu kullanıcı adıyla canlı veri çeker.
   githubUsername: 'ahmetaksoy10',
@@ -73,7 +73,7 @@ export const profile = {
 export const socialLinks = [
   { id: 'github', label: 'GitHub profilim', url: 'https://github.com/ahmetaksoy10' },
   { id: 'linkedin', label: 'LinkedIn profilim', url: 'https://www.linkedin.com/in/ahmet-aksoy10' },
-  { id: 'mail', label: 'Bana e-posta gönder', url: 'mailto:a.aksoy1020@gmail.com' },
+  { id: 'mail', label: 'Bana e-posta gönder', url: 'mailto:ahmet.aksoy17@hotmail.com' },
 ]
 
 // ── Son güncelleme ───────────────────────────────────────────────────────────
@@ -265,7 +265,7 @@ export const lifeHighlight = {
     'TravelGuide ve Travio boşuna değil.',
   // Ana kare + küçük şerit: gerçek seyahat fotoğrafları
   photo: romaSelfie,
-  photoAlt: 'Ahmet Aksoy, Roma’da Kolezyum önünde',
+  photoAlt: 'Ahmet AKSOY, Roma’da Kolezyum önünde',
   gallery: [
     { src: romaKubbe, alt: 'Roma’da barok kubbeler' },
     { src: romaTapinak, alt: 'Villa Borghese’de göl kenarındaki antik tapınak' },
