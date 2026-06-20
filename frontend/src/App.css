@@ -471,15 +471,6 @@ img {
   to { transform: translateX(100%); }
 }
 
-@keyframes equalize {
-  0%, 100% { transform: scaleY(0.25); }
-  50%      { transform: scaleY(1); }
-}
-
-@keyframes spin-slow {
-  to { transform: rotate(360deg); }
-}
-
 
 /* ── 5. NAVBAR (cam hap menü) ──────────────────────────────────────────────── */
 
@@ -1761,158 +1752,44 @@ img {
 }
 
 
-/* ── 12. SES ARKA PLANIM (mini player) ─────────────────────────────────────── */
+/* ── 12. DİNLEDİKLERİM (Apple Music embed) ─────────────────────────────────── */
 
-.player__top {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.player__art {
-  flex-shrink: 0;
-  width: 54px;
-  height: 54px;
-  display: grid;
-  place-items: center;
-  border-radius: var(--radius-md);
-  background:
-    linear-gradient(140deg, var(--accent-soft), transparent 70%),
-    var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--accent);
-}
-
-.player__art-disc {
-  animation: spin-slow 7s linear infinite;
-}
-
-/* Duraklatınca tüm hareketli parçalar CSS ile donar */
-.player.is-paused .player__art-disc,
-.player.is-paused .player__equalizer span {
-  animation-play-state: paused;
-}
-
-.player.is-paused .player__equalizer {
-  opacity: 0.35;
-}
-
-.player__info {
-  min-width: 0;
-  flex: 1;
-}
-
-.player__state {
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 4px;
-}
-
-.player__track {
-  font-size: 0.9875rem;
-  font-weight: 650;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.player__artist {
-  font-size: 0.8125rem;
-  color: var(--text-tertiary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-top: 2px;
-}
-
-.player__equalizer {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 22px;
-  transition: opacity 0.3s ease;
-}
-
-.player__equalizer span {
-  width: 3px;
-  height: 100%;
-  border-radius: var(--radius-full);
-  background: var(--accent);
-  transform-origin: bottom;
-  animation: equalize 1.1s ease-in-out infinite;
-}
-
-.player__equalizer span:nth-child(2) { animation-delay: 0.18s; }
-.player__equalizer span:nth-child(3) { animation-delay: 0.36s; }
-.player__equalizer span:nth-child(4) { animation-delay: 0.1s; }
-
-.player__timeline {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: auto;
-  padding-top: 20px;
-}
-
-.progress--player {
-  flex: 1;
-}
-
-.player__time {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  color: var(--text-tertiary);
-}
-
-.player__controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 16px;
-}
-
-.player__button {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--border);
+/* Gerçek, çalınabilir Apple Music çalma listesi (sahte player kaldırıldı) */
+.music__note {
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  line-height: 1.6;
   color: var(--text-secondary);
-  background: var(--surface);
-  transition:
-    color 0.25s ease,
-    border-color 0.25s ease,
-    transform 0.25s var(--ease-out),
-    background-color 0.25s ease;
 }
 
-.player__button:hover {
-  color: var(--text-primary);
-  border-color: var(--border-strong);
-  transform: scale(1.07);
+/* Çerçeve: iframe köşelerini güvenle yuvarlar (Safari border-radius) + kart diline bağlar */
+.music__frame {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-2);
 }
 
-.player__button:active {
-  transform: scale(0.92);
+.music__embed {
+  display: block;
+  width: 100%;
+  height: 200px;
+  border: 0;
 }
 
-.player__button--primary {
-  width: 42px;
-  height: 42px;
-  background: var(--accent);
-  border-color: transparent;
-  color: var(--accent-contrast);
+.music__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
 }
 
-.player__button--primary:hover {
-  color: var(--accent-contrast);
-  background: color-mix(in srgb, var(--accent) 86%, #fff);
+.music__open:hover {
+  color: var(--accent);
 }
 
 
@@ -3079,12 +2956,114 @@ img {
   color: var(--text-secondary);
 }
 
-.cta__actions {
+/* ── İletişim formu (Formspree) ── */
+/* Ortalı blok, sola hizalı alanlar; glassmorphic kart dili. */
+.contact-form {
+  max-width: 580px;
+  margin: 34px auto 0;
+  text-align: left;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card), inset 0 1px 0 var(--card-inset);
+  padding: 26px;
+}
+
+.contact-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.contact-form__field {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+/* Satırdaki alanların kendi alt boşluğu yok (satır gap'i yetiyor) */
+.contact-form__row .contact-form__field {
+  margin-bottom: 0;
+}
+
+.contact-form__row + .contact-form__field {
+  margin-top: 14px;
+}
+
+.contact-form__label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.contact-form__input {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.contact-form__input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Odakta accent renkli kenar + yumuşak hale */
+.contact-form__input:focus {
+  outline: none;
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background: var(--surface-2);
+}
+
+.contact-form__textarea {
+  resize: vertical;
+  min-height: 112px;
+  line-height: 1.6;
+}
+
+.contact-form__footer {
+  display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 32px;
+  margin-top: 18px;
+}
+
+.contact-form__status {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.contact-form__status--ok {
+  color: var(--success);
+}
+
+.contact-form__status--error {
+  color: var(--danger);
+}
+
+/* Telefonda isim/e-posta tek kolona iner */
+@media (max-width: 560px) {
+  .contact-form__row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .contact-form__row .contact-form__field {
+    margin-bottom: 14px;
+  }
 }
 
 

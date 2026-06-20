@@ -1,6 +1,6 @@
 import { ArrowUpRight, Clock3, Crosshair, MapPin } from 'lucide-react'
 import { GitHubIcon, LinkedInIcon } from './icons/BrandIcons.jsx'
-import { profile, currentFocus, lastUpdated } from '../data/content.js'
+import { profile, lastUpdated } from '../data/content.js'
 import { useLocalTime } from '../hooks/useLocalTime.js'
 import CopyEmailButton from './CopyEmailButton.jsx'
 
@@ -115,7 +115,7 @@ function HeroSection() {
             <dt>
               <Crosshair size={13} aria-hidden="true" /> Şu anki odak
             </dt>
-            <dd>{currentFocus.tags[0]} ile hackathon</dd>
+            <dd>Travio · iOS geliştirme</dd>
           </div>
         </dl>
       </aside>

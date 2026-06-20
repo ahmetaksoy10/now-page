@@ -1,4 +1,4 @@
-import { Code2, GraduationCap, MapPin, Smartphone, Target } from 'lucide-react'
+import { Code2, GraduationCap, MapPin, Smartphone, Target, Trophy } from 'lucide-react'
 import { timeline } from '../data/content.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 
@@ -9,6 +9,7 @@ const IKONLAR = {
   smartphone: Smartphone,
   map: MapPin,
   target: Target,
+  trophy: Trophy,
 }
 
 /**

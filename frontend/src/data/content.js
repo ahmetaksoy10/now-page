@@ -171,10 +171,20 @@ export const timeline = [
     icon: 'map',
   },
   {
+    id: 'hackathon',
+    date: 'Haziran 2026',
+    title: 'OEE Dashboard — YZT x Trex Hackathonu',
+    text:
+      'YZT x Trex Hackathonu’nda 3 kişilik ekiple 4. olduk. FastAPI ve Pandas ile ' +
+      'devasa sensör verilerini işleyip, React (Vite/Tailwind) arayüzünde canlı ' +
+      '“What-if” simülasyonları sunan dinamik bir OEE Karar Destek Sistemi geliştirdik.',
+    icon: 'trophy',
+  },
+  {
     id: 'simdi',
     date: 'Haziran 2026',
     title: 'Şu an',
-    text: 'OEE Dashboard hackathonu, bu Now Page ve Yaz 2026 staj arayışı.',
+    text: 'Travio’ya odaklanma, bu Now Page ve Yaz 2026 staj arayışı.',
     icon: 'target',
   },
 ]
@@ -185,17 +195,19 @@ export const contactCta = {
   note:
     'Yaz 2026 staj dönemim için ekip arıyorum. React, Python/FastAPI veya ' +
     'iOS projelerinizde hem öğrenir hem değer katarım — bir kahve uzaklıktayım.',
+  // İletişim formu gönderimi (Formspree) — sayfa yenilenmeden fetch ile POST edilir
+  formAction: 'https://formspree.io/f/mdavqrjy',
 }
 
 // ── 01 · Ana Odak ────────────────────────────────────────────────────────────
 export const currentFocus = {
-  title: 'OEE Dashboard — Hackathon projesine yoğunlaşmak',
+  title: 'Travio — yapay zekâ destekli iOS seyahat asistanı',
   description:
-    'Endüstriyel üretim verilerini izleyen dashboard ekranları geliştiriyorum. ' +
-    'FastAPI tabanlı backend üzerinde "what-if" analiz modülleriyle üretim ' +
-    'senaryolarını simüle edip farklı durumları test ediyorum. Haziran ' +
-    'itibarıyla enerjimin büyük kısmı burada.',
-  tags: ['Python', 'FastAPI', 'What-if Analizi', 'Veri Odaklı İzleme'],
+    'Enerjimin büyük kısmını yeniden Travio’ya verdim. SwiftUI ile yazdığım bu ' +
+    'iOS uygulamasının kalbindeki Gemini AI asistanını derinleştiriyor, ödeme ve ' +
+    'abonelik altyapısını sağlamlaştırıyor, gün gün tatil planı üretimine yeni ' +
+    'özellikler ekliyorum.',
+  tags: ['SwiftUI', 'Gemini AI', 'Firebase', 'iOS Geliştirme'],
 }
 
 // ── 02 · Öğrenim Radarı ──────────────────────────────────────────────────────
@@ -223,15 +235,16 @@ export const currentlyReading = {
   totalPages: 500, // = %40 ilerleme
 }
 
-// ── 04 · Ses Arka Planı ──────────────────────────────────────────────────────
+// ── 04 · Dinlediklerim (gerçek Apple Music çalma listesi) ────────────────────
+// Sahte mini-player yerine gerçek, çalınabilir Apple Music embed'i. Genel
+// dinleme listem — koda özel değil. embedUrl iframe'e, openUrl ise
+// "Apple Music'te aç" linkine gider.
 export const currentlyListening = {
-  track: 'Kod Yazarken Çalanlar',
-  artist: 'Apple Music',
-  album: 'Türkçe Çalma Listesi',
-  // Mini player UI'ında gösterilen statik süre bilgileri
-  elapsed: '2:14',
-  duration: '3:47',
-  progress: 58, // yüzde cinsinden ilerleme
+  label: 'Dinlediklerim',
+  note: 'Şu aralar en çok dinlediğim çalma listesi — günün her saati dönüyor, çoğu Türkçe. Aşağıdan doğrudan çalabilirsin.',
+  embedUrl:
+    'https://embed.music.apple.com/tr/playlist/t%C3%BCrk%C3%A7e/pl.u-PDb4034Feq4lZly?l=tr',
+  openUrl: 'https://music.apple.com/tr/playlist/t%C3%BCrk%C3%A7e/pl.u-PDb4034Feq4lZly?l=tr',
 }
 
 // ── 05 · Sistem Durumu (Enerji) ──────────────────────────────────────────────

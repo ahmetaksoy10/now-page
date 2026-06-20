@@ -1,79 +1,44 @@
-import { useState } from 'react'
-import { Disc3, Pause, Play, SkipBack, SkipForward } from 'lucide-react'
+import { ArrowUpRight, Music2 } from 'lucide-react'
 import { currentlyListening } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 
 /**
- * CurrentlyListening — Zarif mini müzik çalar.
+ * CurrentlyListening — Gerçek, çalınabilir Apple Music çalma listesi kartı.
  *
- * Gerçek ses çalmaz ama ölü bir görsel de değildir:
- *  - Plak ikonu çalarken döner, equalizer çubukları dans eder.
- *  - Play/Pause gerçek state değiştirir; animasyonlar
- *    `animation-play-state` ile durur/başlar — JS stil hesaplamaz.
+ * Eski sahte mini-player'ın yerini alır: artık statik/uydurma veri yok,
+ * doğrudan Apple Music'in resmi embed player'ı gömülü. Genel dinleme listem
+ * (koda özel değil); ziyaretçi sayfayı terk etmeden çalabilir. Tüm içerik
+ * content.js'ten gelir (içerik ↔ sunum ayrımı).
  */
 function CurrentlyListening() {
-  const { track, artist, album, elapsed, duration, progress } = currentlyListening
-  const [caliyor, setCaliyor] = useState(true)
+  const { label, note, embedUrl, openUrl } = currentlyListening
 
   return (
-    <BentoCard
-      span={5}
-      label="Ses Arka Planım"
-      labelId="muzik-baslik"
-      className={`player ${caliyor ? 'is-playing' : 'is-paused'}`}
-    >
-      <div className="player__top">
-        <div className="player__art" aria-hidden="true">
-          <Disc3 size={26} className="player__art-disc" />
-        </div>
+    <BentoCard span={5} label={label} labelId="muzik-baslik" className="music">
+      <p className="music__note">{note}</p>
 
-        <div className="player__info">
-          <p className="player__state">{caliyor ? 'Şu an çalıyor' : 'Duraklatıldı'}</p>
-          <h2 className="player__track">{track}</h2>
-          <p className="player__artist">
-            {artist} — {album}
-          </p>
-        </div>
-
-        <div className="player__equalizer" aria-hidden="true">
-          <span /><span /><span /><span />
-        </div>
+      {/* Çerçeve iframe köşelerini güvenle yuvarlar (Safari iframe border-radius) */}
+      <div className="music__frame">
+        <iframe
+          className="music__embed"
+          title="Apple Music çalma listesi"
+          src={embedUrl}
+          allow="autoplay *; encrypted-media *;"
+          sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+          loading="lazy"
+        />
       </div>
 
-      <div className="player__timeline">
-        <span className="player__time">{elapsed}</span>
-        <div
-          className="progress progress--player"
-          role="progressbar"
-          aria-valuenow={progress}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-label="Parça ilerlemesi"
-        >
-          <span
-            className="progress__fill"
-            style={{ '--progress-value': `${progress}%` }}
-          />
-        </div>
-        <span className="player__time">{duration}</span>
-      </div>
-
-      <div className="player__controls">
-        <button type="button" className="player__button" aria-label="Önceki parça">
-          <SkipBack size={15} aria-hidden="true" />
-        </button>
-        <button
-          type="button"
-          className="player__button player__button--primary"
-          onClick={() => setCaliyor((deger) => !deger)}
-          aria-label={caliyor ? 'Duraklat' : 'Çal'}
-        >
-          {caliyor ? <Pause size={16} aria-hidden="true" /> : <Play size={16} aria-hidden="true" />}
-        </button>
-        <button type="button" className="player__button" aria-label="Sonraki parça">
-          <SkipForward size={15} aria-hidden="true" />
-        </button>
-      </div>
+      <a
+        className="music__open"
+        href={openUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Music2 size={14} aria-hidden="true" />
+        Apple Music&rsquo;te aç
+        <ArrowUpRight size={13} aria-hidden="true" />
+      </a>
     </BentoCard>
   )
 }
