@@ -58,7 +58,14 @@ function GalleryViewer({ images, startIndex = 0, autoAdvance = false }) {
         onMouseLeave={() => setDuraklat(false)}
       >
         {/* key={aktif}: her kare değişiminde giriş animasyonu tekrar oynar */}
-        <img key={aktif} src={gorsel.src} alt={gorsel.alt} className="gallery__image" />
+        <img
+          key={aktif}
+          src={gorsel.src}
+          alt={gorsel.alt}
+          className="gallery__image"
+          loading="lazy"
+          decoding="async"
+        />
 
         {toplam > 1 && (
           <>
@@ -107,7 +114,7 @@ function GalleryViewer({ images, startIndex = 0, autoAdvance = false }) {
               aria-label={`${sira + 1}. görsele git`}
               aria-current={sira === aktif}
             >
-              <img src={kare.src} alt="" loading="lazy" />
+              <img src={kare.src} alt="" loading="lazy" decoding="async" />
             </button>
           ))}
         </div>

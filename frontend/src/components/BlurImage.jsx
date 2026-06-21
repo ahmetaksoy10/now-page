@@ -25,6 +25,8 @@ function BlurImage({ className = '', onLoad, ...rest }) {
     <img
       ref={ref}
       className={`blur-img ${yuklendi ? 'is-loaded' : ''} ${className}`.trim()}
+      // decoding="async": kod çözme ana thread'i bloklamaz (caller override edebilir)
+      decoding="async"
       onLoad={(olay) => {
         setYuklendi(true)
         onLoad?.(olay)

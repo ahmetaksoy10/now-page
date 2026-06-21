@@ -314,6 +314,7 @@ function GitHubActivity() {
                 width="60"
                 height="60"
                 loading="lazy"
+                decoding="async"
               />
               <div className="github-card__profile-text">
                 <h2 className="github-card__name">

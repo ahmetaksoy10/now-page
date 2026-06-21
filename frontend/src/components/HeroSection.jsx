@@ -67,6 +67,8 @@ function HeroSection() {
             width="148"
             height="148"
             loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
           {/* Hafif eğik sticker: insan eli değmiş hissi veren detay */}
           <span className="hero__sticker">

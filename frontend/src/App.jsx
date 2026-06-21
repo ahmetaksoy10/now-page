@@ -1,6 +1,7 @@
 import Navbar from './components/Navbar.jsx'
 import AuroraBackground from './components/AuroraBackground.jsx'
 import IntroOverlay from './components/IntroOverlay.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 import HeroSection from './components/HeroSection.jsx'
 import SkillCloud from './components/SkillCloud.jsx'
 import CurrentFocus from './components/CurrentFocus.jsx'
@@ -51,18 +52,37 @@ function App() {
         <HeroSection />
         <SkillCloud />
 
-        <div className="bento-grid">
-          <CurrentFocus />
-          <EnergyStatus />
-          <CurrentlyListening />
-          <LearningRadar />
-          <CurrentlyReading />
-          <LifeHighlight />
-          <ActiveProject />
-          <LearningBacklog />
-          <Toolbox />
-          <GitHubActivity />
-        </div>
+        {/* Bento grid bir bütün olarak korunur; ayrıca dış API çağrısı yapan
+            kartlar (müzik, GitHub) kendi küçük sınırlarıyla da sarılır ki biri
+            çökerse yalnızca o kart fallback göstersin, diğerleri çalışsın. */}
+        <ErrorBoundary>
+          <div className="bento-grid">
+            <CurrentFocus />
+            <EnergyStatus />
+            <ErrorBoundary
+              compact
+              span={5}
+              title="Müzik kartı yüklenemedi"
+              message="Last.fm bölümü beklenmedik bir hata verdi."
+            >
+              <CurrentlyListening />
+            </ErrorBoundary>
+            <LearningRadar />
+            <CurrentlyReading />
+            <LifeHighlight />
+            <ActiveProject />
+            <LearningBacklog />
+            <Toolbox />
+            <ErrorBoundary
+              compact
+              span={12}
+              title="GitHub kartı yüklenemedi"
+              message="GitHub bölümü beklenmedik bir hata verdi."
+            >
+              <GitHubActivity />
+            </ErrorBoundary>
+          </div>
+        </ErrorBoundary>
 
         <SectionDivider />
 

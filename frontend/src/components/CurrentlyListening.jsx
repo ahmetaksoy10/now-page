@@ -116,7 +116,7 @@ function CurrentlyListening() {
       <a className="lastfm__now" href={parca.url} target="_blank" rel="noopener noreferrer">
         <span className={`lastfm__cover ${calisiyor ? 'is-playing' : ''}`}>
           {kapak ? (
-            <img src={kapak} alt="" loading="lazy" />
+            <img src={kapak} alt="" width="64" height="64" loading="lazy" decoding="async" />
           ) : (
             <Disc3 size={24} aria-hidden="true" />
           )}

@@ -1281,27 +1281,42 @@ img {
 
 /* ── 8e. BLUR-UP GÖRSEL (lazy-load) ────────────────────────────────────────── */
 
-/* Görsel yüklenene kadar bulanık + soluk; yüklenince netleşip belirir.
-   transform'a DOKUNULMAZ → kartların hover zoom/tilt geçişleri bozulmaz,
-   ama transform geçişini koruyarak o hover'ları akıcı tutarız. */
+/* Yüklenirken: shimmer'lı düşük-detay yer tutucu + bulanıklık (alan boş kalmaz);
+   yüklenince netleşerek belirir. transform'a DOKUNULMAZ → kartların hover
+   zoom/tilt geçişleri bozulmaz (transform geçişi korunur). */
 .blur-img {
-  opacity: 0;
-  filter: blur(12px);
+  background-color: var(--surface-2);
+  background-image: linear-gradient(
+    110deg,
+    transparent 25%,
+    var(--shimmer) 50%,
+    transparent 75%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: blur-img-shimmer 1.5s ease-in-out infinite;
+  filter: blur(10px);
   transition:
-    opacity 0.6s var(--ease-out),
     filter 0.7s var(--ease-out),
     transform 0.5s var(--ease-out);
 }
 
+/* Asıl görsel yüklenince: yer tutucu kalkar, netleşir */
 .blur-img.is-loaded {
-  opacity: 1;
+  background-image: none;
+  background-color: transparent;
+  animation: none;
   filter: blur(0);
 }
 
-/* Hareketi azalt: görsel anında net görünür (bulanık geçiş yok) */
+@keyframes blur-img-shimmer {
+  to { background-position: -220% 0; }
+}
+
+/* Hareketi azalt: görsel anında net, yer tutucu animasyonu yok */
 @media (prefers-reduced-motion: reduce) {
   .blur-img {
-    opacity: 1;
+    animation: none;
     filter: none;
   }
 }
@@ -1372,46 +1387,14 @@ img {
 }
 
 
-/* ── 8l. İSİMDE IŞIK SÜPÜRMESİ ─────────────────────────────────────────────── */
-
-/* Metin bir gradient'le doldurulur; ortadaki parlak bant background-position
-   kayınca isim üzerinde "süpürme" yapar. Nokta (.hero__title-dot) ayrı span
-   olduğu için amber kalır. */
+/* ── 8l. İSİM (hero başlığı) ────────────────────────────────────────────────
+   Eskiden background-clip:text + animasyonlu "ışık süpürmesi" vardı; ancak
+   Safari/WebKit, background-clip:text'i animasyonla birleştirince metni ara ara
+   KAYBOLTUYOR (bilinen WebKit bug'ı — Brave/Chromium'da sorun yok). İsim
+   sayfanın en kritik öğesi olduğu için efekti kaldırıp her tarayıcıda güvenle
+   görünen düz renge çevirdik. Amber vurgu .hero__title-dot'ta yaşıyor. */
 .hero__title-name {
-  background-image: linear-gradient(
-    100deg,
-    var(--text-primary) 0%,
-    var(--text-primary) 40%,
-    #fff5e0 50%,
-    var(--text-primary) 60%,
-    var(--text-primary) 100%
-  );
-  background-size: 250% 100%;
-  background-position: 150% 0;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: name-sheen 7s var(--ease-out) 1.4s infinite;
-}
-
-/* Hover'da daha sık süpürür */
-.hero__title-name:hover {
-  animation-duration: 2.4s;
-}
-
-@keyframes name-sheen {
-  0%   { background-position: 150% 0; }
-  22%  { background-position: -50% 0; }
-  100% { background-position: -50% 0; } /* uzun dinlenme: sweep seyrek tekrar eder */
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero__title-name {
-    animation: none;
-    -webkit-text-fill-color: var(--text-primary);
-    color: var(--text-primary);
-  }
+  color: var(--text-primary);
 }
 
 
@@ -3237,6 +3220,85 @@ img {
   .contact-form__row .contact-form__field {
     margin-bottom: 14px;
   }
+}
+
+
+/* ── 20b. ERROR BOUNDARY (hata fallback'i) ─────────────────────────────────── */
+
+/* Yalnızca ortalı yerleşim + çocuk stilleri; cam zemin/kenar `.card` sınıfından
+   gelir (compact varyantta bento hücresi de olur). */
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  padding: 44px 28px;
+}
+
+.error-boundary--compact {
+  padding: 26px;
+}
+
+.error-boundary__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--danger) 13%, transparent);
+  color: var(--danger);
+}
+
+.error-boundary--compact .error-boundary__icon {
+  width: 42px;
+  height: 42px;
+}
+
+.error-boundary__title {
+  font-size: 1.1rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.error-boundary--compact .error-boundary__title {
+  font-size: 0.95rem;
+}
+
+.error-boundary__message {
+  max-width: 42ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.error-boundary--compact .error-boundary__message {
+  font-size: 0.84rem;
+}
+
+.error-boundary__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 6px;
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.error-boundary__button:hover {
+  background: var(--accent);
+  color: var(--accent-contrast);
 }
 
 
