@@ -28,6 +28,9 @@ import subgravePano from '../assets/projects/subgrave1.png'
 import subgraveMezarlik from '../assets/projects/subgrave3.png'
 import subgraveDetay from '../assets/projects/subgrave2.png'
 import travelguidePano from '../assets/projects/travelguide3.png'
+import oeeHome from '../assets/projects/oee1.png'
+import oeeAlarmlar from '../assets/projects/oee2.png'
+import oeeDuruslar from '../assets/projects/oee3.png'
 
 // Galeri setleri: klasördeki TÜM görseller tek seferde, dosya adına göre
 // sıralı toplanır. Yeni ekran görüntüsü eklemek = dosyayı klasöre atmak;
@@ -48,6 +51,10 @@ const subgraveGaleri = galeriYap(
 const travelguideGaleri = galeriYap(
   import.meta.glob('../assets/projects/travelguide*.png', { eager: true, import: 'default' }),
   'TravelGuide ekran görüntüsü',
+)
+const oeeGaleri = galeriYap(
+  import.meta.glob('../assets/projects/oee*.png', { eager: true, import: 'default' }),
+  'OEE Dashboard ekran görüntüsü',
 )
 export const romaGaleri = galeriYap(
   import.meta.glob('../assets/roma/roma*.jpg', { eager: true, import: 'default' }),
@@ -386,6 +393,38 @@ export const otherProjects = [
       { src: travelguidePano, alt: 'TravelGuide ana ekranı — keşif yolculuğu panosu' },
     ],
     gallery: travelguideGaleri,
+  },
+  {
+    id: 'oee-dashboard',
+    name: 'OEE Dashboard',
+    status: 'Tamamlandı',
+    tagline: 'YZT x Trex Hackathonu’nda 4. olan OEE karar destek sistemi',
+    description:
+      'Fabrikalardaki devasa sensör verisini işleyip gerçek zamanlı OEE (Toplam ' +
+      'Ekipman Verimliliği) analizi ve canlı “What-if” simülasyonları sunan bir web ' +
+      'dashboard’u. 3 kişilik ekiple bir hafta sonunda çıkardık.',
+    longDescription:
+      'OEE Dashboard, YZT x Trex Hackathonu’nda 3 kişilik ekiple 4. olduğumuz ' +
+      'projemiz. Üretim hattındaki devasa sensör verisini FastAPI + Pandas ' +
+      'pipeline’ıyla işleyip; performans, kullanılabilirlik ve kalite metriklerini ' +
+      'ayrı ayrı görselleştiriyor. Kalbinde canlı bir “What-if” simülasyon motoru ' +
+      'var: parametreleri değiştirip OEE sonucunu anında görüyorsun. Sınırlı ' +
+      'hackathon süresinde uçtan uca çalışan bir prototip ortaya koyduk.',
+    features: [
+      'Devasa sensör verisi üzerinde gerçek zamanlı OEE hesaplama',
+      'Canlı “What-if” simülasyon motoru — parametreyi değiştir, sonucu anında gör',
+      'Performans, kullanılabilirlik ve kalite metriklerini ayrı ayrı görselleştirme',
+      'FastAPI + Pandas ile hızlı veri pipeline’ı',
+      'Sınırlı hackathon süresinde uçtan uca çalışan prototip',
+    ],
+    stack: ['Python', 'FastAPI', 'Pandas', 'React', 'Vite', 'Tailwind CSS'],
+    repoUrl: null, // repo şimdilik özel — yayınlanınca linki buraya ekleyin
+    screenshots: [
+      { src: oeeHome, alt: 'OEE Dashboard ana ekranı — genel verimlilik panosu' },
+      { src: oeeAlarmlar, alt: 'OEE Dashboard alarmlar ekranı' },
+      { src: oeeDuruslar, alt: 'OEE Dashboard duruşlar ekranı' },
+    ],
+    gallery: oeeGaleri,
   },
 ]
 

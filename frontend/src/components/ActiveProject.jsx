@@ -105,7 +105,7 @@ function ActiveProject() {
       {otherProjects.map((proje, sira) => (
         <BentoCard
           key={proje.id}
-          span={4}
+          span={6}
           delay={sira * 70}
           className="mini-project mini-project--clickable"
           labelId={`proje-${proje.id}`}

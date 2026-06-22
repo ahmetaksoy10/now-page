@@ -1578,13 +1578,15 @@ img {
 @media (min-width: 900px) {
   .bento--4  { grid-column: span 4; }
   .bento--5  { grid-column: span 5; }
+  .bento--6  { grid-column: span 6; } /* proje rafı: 4 kart = dengeli 2×2 */
   .bento--7  { grid-column: span 7; }
   .bento--12 { grid-column: span 12; }
 }
 
-/* Orta boy ekran: 4'lük raf kartları ikili akar */
+/* Orta boy ekran: 4'lük + 6'lık raf kartları ikili akar */
 @media (min-width: 640px) and (max-width: 899px) {
   .bento--4 { grid-column: span 6; }
+  .bento--6 { grid-column: span 6; }
   .bento-grid { grid-template-columns: repeat(12, 1fr); }
 }
 
@@ -3888,4 +3890,75 @@ img {
   .gallery__autobar {
     animation: none;
   }
+}
+
+
+/* ── 22. EASTER EGG'LER ────────────────────────────────────────────────────── */
+
+/* Konami konfeti yağmuru (EasterEgg.jsx) — pointer-events almaz, sayfayı tıkamaz */
+.konami {
+  position: fixed;
+  inset: 0;
+  z-index: 9997;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.konami__bit {
+  position: absolute;
+  top: -24px;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  animation-name: konami-fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes konami-fall {
+  to {
+    transform: translateY(106vh) rotate(var(--konami-rot, 360deg));
+    opacity: 0.15;
+  }
+}
+
+.konami__toast {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 22px;
+  border-radius: var(--radius-full);
+  background: var(--glass);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-card);
+  animation: konami-toast 0.5s var(--ease-out) both;
+}
+
+@keyframes konami-toast {
+  from { opacity: 0; transform: translateX(-50%) translateY(-12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Footer kahve sayacı (Footer.jsx) */
+.footer__made {
+  cursor: pointer;
+}
+
+.footer__coffee {
+  display: inline-block;
+  margin-left: 8px;
+  white-space: nowrap;
+  animation: coffee-pop 0.3s var(--ease-out);
+}
+
+@keyframes coffee-pop {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 1; transform: scale(1); }
 }

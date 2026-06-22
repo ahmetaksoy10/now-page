@@ -2,6 +2,7 @@ import Navbar from './components/Navbar.jsx'
 import AuroraBackground from './components/AuroraBackground.jsx'
 import IntroOverlay from './components/IntroOverlay.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
+import EasterEgg from './components/EasterEgg.jsx'
 import HeroSection from './components/HeroSection.jsx'
 import SkillCloud from './components/SkillCloud.jsx'
 import CurrentFocus from './components/CurrentFocus.jsx'
@@ -36,6 +37,9 @@ function App() {
     <div className="page" id="top">
       {/* Kısa açılış perdesi (oturumda bir kez, reduced-motion'da atlanır) */}
       <IntroOverlay />
+
+      {/* Gizli Konami kodu sürprizi (↑↑↓↓←→←→BA) */}
+      <EasterEgg />
 
       {/* Dekoratif arka plan: ince mühendislik grid'i + film greni */}
       <div className="page__background" aria-hidden="true">
