@@ -125,27 +125,6 @@ export const navLinks = [
   { id: 'iletisim', label: 'İletişim', href: '#iletisim' },
 ]
 
-// ── Skill cloud (etiket bulutu) — teknolojiler + kişilik karışımı ─────────────
-// weight: 1–3. Bulutta yazı boyutunu belirler (3 = en büyük/baskın yetenek).
-// kind: 'tech' nötr yetenek; 'fun' kişilik dokunuşu (farklı renk vurgusu alır).
-export const skills = [
-  { label: 'Python', weight: 3, kind: 'tech' },
-  { label: 'React', weight: 3, kind: 'tech' },
-  { label: 'SwiftUI', weight: 2, kind: 'tech' },
-  { label: 'FastAPI', weight: 2, kind: 'tech' },
-  { label: 'JavaScript', weight: 2, kind: 'tech' },
-  { label: 'CSS', weight: 2, kind: 'tech' },
-  { label: 'Git & GitHub', weight: 2, kind: 'tech' },
-  { label: 'SQLite', weight: 1, kind: 'tech' },
-  { label: 'Vite', weight: 1, kind: 'tech' },
-  { label: 'Figma', weight: 1, kind: 'tech' },
-  { label: 'Firebase', weight: 1, kind: 'tech' },
-  { label: 'Docker', weight: 1, kind: 'tech' },
-  { label: 'Bolca kahve', weight: 1, kind: 'fun' },
-  { label: 'Türkçe müzik', weight: 1, kind: 'fun' },
-  { label: 'Roma gezgini', weight: 1, kind: 'fun' },
-]
-
 // ── Zaman çizelgesi (Yolculuk) ───────────────────────────────────────────────
 // Kronolojik sırada okunur; her madde scroll'la kademeli belirir.
 export const timeline = [
@@ -217,32 +196,26 @@ export const currentFocus = {
   tags: ['SwiftUI', 'Gemini AI', 'Firebase', 'iOS Geliştirme'],
 }
 
-// ── 02 · Öğrenim Radarı ──────────────────────────────────────────────────────
-// level: 0–100 arası (radar çubuğunun doluluk oranı)
-// stage: badge üzerinde görünen kısa durum etiketi
-export const learningRadar = [
-  { id: 'python', name: 'Python & FastAPI', stage: 'Aktif', level: 85, icon: 'server' },
-  { id: 'react', name: 'React + Vite', stage: 'Derinleşiyorum', level: 78, icon: 'atom' },
-  { id: 'swiftui', name: 'SwiftUI', stage: 'Derinleşiyorum', level: 72, icon: 'smartphone' },
-  { id: 'sql', name: 'SQL & SQLite', stage: 'Aktif', level: 60, icon: 'database' },
-  { id: 'git', name: 'Git & GitHub', stage: 'Aktif', level: 70, icon: 'git' },
-  { id: 'docker', name: 'Docker', stage: 'Keşif', level: 15, icon: 'container' },
-]
-
-// ── 03 · Kütüphanem ──────────────────────────────────────────────────────────
+// ── 02 · Kütüphanem ──────────────────────────────────────────────────────────
+// meta: kitaba dair kısa, doğrulanabilir etiketler (tür · seri · yıl).
+// synopsis: kitabın ne anlattığı (objektif); reason: neden okuduğum (kişisel).
 export const currentlyReading = {
   title: 'Silo (Wool)',
   author: 'Hugh Howey',
   cover: siloKapak,
+  meta: ['Distopik bilim kurgu', 'Silo Serisi · 1. kitap', '2011'],
+  synopsis:
+    'Yeraltında yüzlerce kat derinleşen dev bir siloda, dış dünyanın zehirli ' +
+    'olduğuna inandırılmış bir toplumun katı düzenini ve bu düzene yönelen ilk ' +
+    'çatlakları anlatıyor.',
   reason:
-    'Yeraltındaki dev bir siloda geçen distopik bir hikâye. Gün boyu kod ' +
-    'yazdıktan sonra zihnimi bambaşka bir dünyaya taşıyor — kurgu, benim için ' +
-    'en iyi dinlenme şekli.',
+    'Gün boyu kod yazdıktan sonra zihnimi bambaşka bir dünyaya taşıyor — kurgu ' +
+    'benim için en iyi dinlenme şekli. Sırada serinin ikinci kitabı Shift var.',
   currentPage: 200,
   totalPages: 500, // = %40 ilerleme
 }
 
-// ── 04 · Dinlediklerim (Last.fm — gerçek "şu an / son çalınan") ──────────────
+// ── 03 · Dinlediklerim (Last.fm — gerçek "şu an / son çalınan") ──────────────
 // Apple Music çalışlarım NepTunes ile Last.fm'e scrobble ediliyor; kart bu
 // veriyi canlı çeker (bir şey çalıyorsa "Şu an çalıyor", yoksa "Son çalınan").
 // apiKey salt-okunur (sadece public veri) ve .env.local'dan gelir — repoya
@@ -254,14 +227,14 @@ export const lastfm = {
   profileUrl: 'https://www.last.fm/user/ahmetaksoy10',
 }
 
-// ── 05 · Sistem Durumu (Enerji) ──────────────────────────────────────────────
+// ── 04 · Sistem Durumu (Enerji) ──────────────────────────────────────────────
 export const energyStatus = {
   level: 75, // yüzde cinsinden enerji seviyesi
   context: 'Haziran 2026 · Final dönemi',
   note: 'Finaller yaklaşıyor ama kahve desteğiyle sistem ayakta.',
 }
 
-// ── 06 · Hayattan Bir Kare ───────────────────────────────────────────────────
+// ── 05 · Hayattan Bir Kare ───────────────────────────────────────────────────
 export const lifeHighlight = {
   date: 'Nisan 2026',
   category: 'Seyahat Günlüğü',
@@ -280,7 +253,7 @@ export const lifeHighlight = {
   ],
 }
 
-// ── 07 · Projeler ────────────────────────────────────────────────────────────
+// ── 06 · Projeler ────────────────────────────────────────────────────────────
 export const activeProject = {
   name: 'Şu An — Now Page',
   status: 'Aktif Geliştirme',
@@ -428,7 +401,7 @@ export const otherProjects = [
   },
 ]
 
-// ── 08 · Öğrenme Listesi (Backlog) ───────────────────────────────────────────
+// ── 07 · Öğrenme Listesi (Backlog) ───────────────────────────────────────────
 export const learningBacklog = [
   { id: 'git', label: 'Git ve GitHub temellerini öğrenmek', done: true },
   { id: 'docker', label: 'Docker temelleri & konteyner yapısını öğrenmek', done: false },
@@ -436,17 +409,4 @@ export const learningBacklog = [
   { id: 'book', label: 'Clean Architecture kitabını bitirmek', done: false },
   { id: 'portfolio', label: 'Kişisel portfolyo sitesini yayına almak', done: false },
   { id: 'oss', label: 'Açık kaynak bir projeye ilk katkımı yapmak', done: false },
-]
-
-// ── 09 · Araç Kutum ──────────────────────────────────────────────────────────
-// Günlük geliştirme rutininde kullanılan araçlar/ortam. "icon" anahtarı
-// component'teki lucide ikonuna eşlenir (içerik ↔ sunum ayrımı korunur).
-export const toolbox = [
-  { id: 'editor', label: 'Editör', tool: 'VS Code', icon: 'code' },
-  { id: 'ios', label: 'iOS', tool: 'Xcode', icon: 'app' },
-  { id: 'design', label: 'Tasarım', tool: 'Figma', icon: 'pen' },
-  { id: 'version', label: 'Versiyon', tool: 'Git & GitHub', icon: 'git' },
-  { id: 'db', label: 'Veritabanı', tool: 'SQLite', icon: 'database' },
-  { id: 'circuit', label: 'Devre', tool: 'Tinkercad', icon: 'cpu' },
-  { id: 'os', label: 'Sistem', tool: 'macOS', icon: 'laptop' },
 ]

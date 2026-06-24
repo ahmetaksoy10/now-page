@@ -9,7 +9,8 @@ import BlurImage from './BlurImage.jsx'
  * İlerleme yüzdesi sayfa sayısından türetilir, elle yazılmaz.
  */
 function CurrentlyReading() {
-  const { title, author, cover, reason, currentPage, totalPages } = currentlyReading
+  const { title, author, cover, meta, synopsis, reason, currentPage, totalPages } =
+    currentlyReading
   // İlerleme yüzdesi veriden türetilir — elle yazılmaz
   const ilerleme = Math.round((currentPage / totalPages) * 100)
 
@@ -28,7 +29,19 @@ function CurrentlyReading() {
           <h2 className="reading-card__title">{title}</h2>
           <p className="reading-card__author">{author}</p>
 
-          {/* Okuma sebebi: serif italik editorial alıntı */}
+          {/* Kitap künyesi: tür · seri · yıl (sayfa geneliyle aynı chip stili) */}
+          <ul className="chip-row reading-card__tags" aria-label="Kitap künyesi">
+            {meta.map((etiket) => (
+              <li key={etiket} className="chip chip--small">
+                {etiket}
+              </li>
+            ))}
+          </ul>
+
+          {/* Konu özeti: objektif, kitabın ne anlattığı */}
+          <p className="reading-card__synopsis">{synopsis}</p>
+
+          {/* Okuma sebebi: serif italik editorial alıntı (kişisel) */}
           <blockquote className="reading-card__reason">“{reason}”</blockquote>
         </div>
       </div>

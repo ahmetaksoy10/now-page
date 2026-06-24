@@ -1017,94 +1017,6 @@ img {
 }
 
 
-/* ── 8. SKILL CLOUD (yetenek bulutu) ───────────────────────────────────────── */
-
-/* Hero ile bento arasında nefes alan, ortalı yetenek bandı.
-   Eski sonsuz kayan şeridin yerini alır: sürekli hareket yerine sakin,
-   okunabilir; çipler bulut görünür olunca kademeli belirir, hover'da canlanır. */
-.skill-cloud-wrap {
-  margin-top: 60px;
-}
-
-.skill-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 11px 12px;
-  list-style: none;
-  margin: 0;
-  padding: 26px 8px;
-  border-block: 1px solid var(--border);
-}
-
-.skill-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 7px 15px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text-secondary);
-  font-family: var(--font-mono);
-  letter-spacing: 0.04em;
-  line-height: 1;
-  white-space: nowrap;
-  cursor: default;
-  /* Kademeli giriş başlangıcı: gizli + hafif aşağıda (bulut görününce düzelir).
-     Stagger yalnızca opacity'de — transform'a gecikme verilmez ki hover/çıkış
-     anında ve takılmadan çalışsın (gecikmeli transform "yapışık" hissettirir). */
-  opacity: 0;
-  transform: translateY(14px) scale(0.9);
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.32s var(--ease-out),
-    opacity 0.5s var(--ease-out) var(--chip-delay, 0ms);
-}
-
-/* Ağırlığa göre boyut: baskın yetenekler büyük, yan beceriler küçük */
-.skill-chip--w1 {
-  font-size: 0.74rem;
-}
-.skill-chip--w2 {
-  font-size: 0.86rem;
-  padding: 8px 17px;
-}
-.skill-chip--w3 {
-  font-size: 1rem;
-  padding: 9px 20px;
-  color: var(--text-primary);
-  border-color: var(--border-strong);
-}
-
-/* Kişilik etiketleri (kahve, müzik…): serif italik + sıcak accent ile ayrışır */
-.skill-chip--fun {
-  font-family: var(--font-serif);
-  font-style: italic;
-  letter-spacing: 0;
-  font-size: 0.92rem;
-  color: var(--accent);
-  border-color: var(--accent-border);
-  background: var(--accent-soft);
-}
-
-/* Hover: çip yükselir, accent'e geçer — "canlı" his */
-.skill-chip:hover {
-  color: var(--accent-contrast);
-  background: var(--accent);
-  border-color: var(--accent);
-  transform: translateY(-3px) scale(1.06);
-}
-
-/* Bulut görünür olunca çipler kademeli "pop" yapar */
-.skill-cloud.is-visible .skill-chip {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-
 /* ── 8c. ZAMAN ÇİZELGESİ (Yolculuk) ────────────────────────────────────────── */
 
 .timeline-section {
@@ -1899,107 +1811,6 @@ img {
 }
 
 
-/* ── 13. ÖĞRENİM RADARI ────────────────────────────────────────────────────── */
-
-.radar-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 28px;
-  row-gap: 6px;
-}
-
-.radar-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 9px 0;
-}
-
-.radar-row__icon {
-  flex-shrink: 0;
-  width: 30px;
-  height: 30px;
-  display: grid;
-  place-items: center;
-  border-radius: 9px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  transition: var(--transition-theme);
-}
-
-.radar-row:hover .radar-row__icon {
-  color: var(--accent);
-  border-color: var(--accent-border);
-  background: var(--accent-soft);
-}
-
-.radar-row__body {
-  flex: 1;
-  min-width: 0;
-}
-
-.radar-row__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.radar-row__name {
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.radar-row__stage {
-  font-size: 0.625rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--border);
-  color: var(--text-tertiary);
-  white-space: nowrap;
-}
-
-.radar-row__stage--derinlesiyorum {
-  color: var(--accent);
-  border-color: var(--accent-border);
-  background: var(--accent-soft);
-}
-
-.radar-row__stage--aktif {
-  color: var(--text-secondary);
-  background: var(--surface-2);
-}
-
-.radar-row__stage--kesif {
-  border-style: dashed;
-}
-
-.radar-row__meter {
-  height: 3px;
-  border-radius: var(--radius-full);
-  background: var(--surface-2);
-  overflow: hidden;
-}
-
-.radar-row__meter-fill {
-  display: block;
-  height: 100%;
-  width: 0;
-  border-radius: inherit;
-  background: var(--accent);
-  transition: width 1s var(--ease-out) 0.3s;
-}
-
-.reveal.is-visible .radar-row__meter-fill {
-  width: var(--meter-value, 0%);
-}
-
-
 /* ── 14. KÜTÜPHANEM ────────────────────────────────────────────────────────── */
 
 .reading-card__top {
@@ -2041,7 +1852,21 @@ img {
   margin-top: 3px;
 }
 
-/* Okuma sebebi: serif italik editoryal alıntı — dergi sayfası hissi */
+/* Kitap künyesi: tür · seri · yıl etiketleri */
+.reading-card__tags {
+  margin-top: 12px;
+}
+
+/* Konu özeti: normal (serif olmayan) okunur paragraf — kitabın ne anlattığı */
+.reading-card__synopsis {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin-top: 14px;
+}
+
+/* Okuma sebebi: serif italik editoryal alıntı (kişisel) — dergi sayfası hissi.
+   Sol accent şeridi synopsis'ten görsel olarak ayırır. */
 .reading-card__reason {
   font-family: var(--font-serif);
   font-style: italic;
@@ -2049,6 +1874,8 @@ img {
   line-height: 1.5;
   color: var(--text-secondary);
   margin-top: 14px;
+  padding-left: 14px;
+  border-left: 2px solid var(--accent-border);
 }
 
 .reading-card__progress {
@@ -2514,84 +2341,6 @@ img {
   color: var(--text-tertiary);
   text-decoration: line-through;
   text-decoration-color: var(--border-strong);
-}
-
-
-/* ── 17b. ARAÇ KUTUM ───────────────────────────────────────────────────────── */
-
-.toolbox-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-/* Tek araç: ikon + kategori/araç adı satırı */
-.toolbox-item {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 11px 13px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  background: var(--surface);
-  transition:
-    border-color 0.25s ease,
-    background-color 0.25s ease,
-    transform 0.3s var(--ease-out);
-}
-
-.toolbox-item:hover {
-  border-color: var(--accent-border);
-  background: var(--accent-soft);
-  transform: translateY(-2px);
-}
-
-.toolbox-item__icon {
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  display: grid;
-  place-items: center;
-  border-radius: var(--radius-sm);
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  transition: var(--transition-theme);
-}
-
-.toolbox-item:hover .toolbox-item__icon {
-  color: var(--accent);
-  border-color: var(--accent-border);
-  background: var(--accent-soft);
-}
-
-.toolbox-item__text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.toolbox-item__label {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-}
-
-.toolbox-item__tool {
-  font-size: 0.84rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* 7 araç, 2 kolon → son tek öğe tüm satırı kaplasın (boşluk kalmasın) */
-.toolbox-item:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
 }
 
 
@@ -3752,18 +3501,6 @@ img {
   .bento-grid {
     margin-top: 56px;
   }
-
-  .skill-cloud-wrap {
-    margin-top: 48px;
-  }
-}
-
-/* Dar tablet: radar tek kolon */
-@media (max-width: 680px) {
-  .radar-list {
-    grid-template-columns: 1fr;
-    row-gap: 2px;
-  }
 }
 
 /* Tablet ve altı: proje modal gövdesi tek kolona iner */
@@ -3847,11 +3584,6 @@ img {
   .github-card__stats {
     grid-template-columns: 1fr 1fr;
     gap: 14px 12px;
-  }
-
-  /* Araç kutusu telefonda tek kolon — adlar rahat sığsın */
-  .toolbox-grid {
-    grid-template-columns: 1fr;
   }
 
   .reading-card__top {

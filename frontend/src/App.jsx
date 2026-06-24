@@ -4,16 +4,13 @@ import IntroOverlay from './components/IntroOverlay.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
 import EasterEgg from './components/EasterEgg.jsx'
 import HeroSection from './components/HeroSection.jsx'
-import SkillCloud from './components/SkillCloud.jsx'
 import CurrentFocus from './components/CurrentFocus.jsx'
 import EnergyStatus from './components/EnergyStatus.jsx'
 import CurrentlyListening from './components/CurrentlyListening.jsx'
-import LearningRadar from './components/LearningRadar.jsx'
 import CurrentlyReading from './components/CurrentlyReading.jsx'
 import LifeHighlight from './components/LifeHighlight.jsx'
 import ActiveProject from './components/ActiveProject.jsx'
 import LearningBacklog from './components/LearningBacklog.jsx'
-import Toolbox from './components/Toolbox.jsx'
 import GitHubActivity from './components/GitHubActivity.jsx'
 import About from './components/About.jsx'
 import Timeline from './components/Timeline.jsx'
@@ -29,7 +26,7 @@ import Footer from './components/Footer.jsx'
  * "besteler" (composition root). Kartlar 12 kolonluk bir bento grid'e
  * yerleşir; her kart kendi span'ını BentoCard üzerinden bildirir.
  *
- * Akış: hero → yetenekler → "şu an" kartları → Hakkımda → Yolculuk → iletişim.
+ * Akış: hero → "şu an" kartları → Hakkımda → Yolculuk → iletişim.
  * Mobilde tüm kartlar tek kolona akar (CSS media query).
  */
 function App() {
@@ -54,7 +51,6 @@ function App() {
 
       <main className="page__content">
         <HeroSection />
-        <SkillCloud />
 
         {/* Bento grid bir bütün olarak korunur; ayrıca dış API çağrısı yapan
             kartlar (müzik, GitHub) kendi küçük sınırlarıyla da sarılır ki biri
@@ -71,12 +67,10 @@ function App() {
             >
               <CurrentlyListening />
             </ErrorBoundary>
-            <LearningRadar />
+            <LearningBacklog />
             <CurrentlyReading />
             <LifeHighlight />
             <ActiveProject />
-            <LearningBacklog />
-            <Toolbox />
             <ErrorBoundary
               compact
               span={12}

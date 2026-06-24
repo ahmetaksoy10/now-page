@@ -100,4 +100,3 @@ Uygulamanın mimarisinde tamamen istemci tarafı (Client-Side) ve tek sayfa uygu
 Bu proje **MIT Lisansı** ile lisanslanmıştır. Daha fazla bilgi için dosyaları inceleyebilir, kendi projelerinizde esinlenebilir veya kullanabilirsiniz.
 
 ---
-*Bu detaylı README dosyası, uygulamanın genel yapısını açıklamak üzere projenin kök dizininde konumlandırılmıştır.*
