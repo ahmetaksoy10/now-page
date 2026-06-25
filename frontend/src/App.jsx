@@ -2,7 +2,7 @@ import Navbar from './components/Navbar.jsx'
 import AuroraBackground from './components/AuroraBackground.jsx'
 import IntroOverlay from './components/IntroOverlay.jsx'
 import ErrorBoundary from './components/ErrorBoundary.jsx'
-import EasterEgg from './components/EasterEgg.jsx'
+import HackerTerminal from './components/HackerTerminal.jsx'
 import HeroSection from './components/HeroSection.jsx'
 import CurrentFocus from './components/CurrentFocus.jsx'
 import EnergyStatus from './components/EnergyStatus.jsx'
@@ -35,8 +35,9 @@ function App() {
       {/* Kısa açılış perdesi (oturumda bir kez, reduced-motion'da atlanır) */}
       <IntroOverlay />
 
-      {/* Gizli Konami kodu sürprizi (↑↑↓↓←→←→BA) */}
-      <EasterEgg />
+      {/* Gizli hacker terminali: Konami kodu (↑↑↓↓←→←→BA) ya da navbar ipucu
+          butonundaki "Terminali Aç" ile açılır; 3 mini oyun barındırır. */}
+      <HackerTerminal />
 
       {/* Dekoratif arka plan: ince mühendislik grid'i + film greni */}
       <div className="page__background" aria-hidden="true">

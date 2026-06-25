@@ -30,5 +30,6 @@
 @import './styles/github.css';      /* §18-19 GitHub canlı veri + skeleton */
 @import './styles/cta.css';         /* §20-21 Kapanış CTA + iletişim formu + footer */
 @import './styles/overlays.css';    /* §22 Modal & galeri (lightbox / proje detay) */
+@import './styles/terminal.css';    /* §25 Gizli hacker terminali + oyunlar + ipucu */
 @import './styles/responsive.css';  /* §23 Responsive override'lar (bileşenlerden SONRA) */
 @import './styles/motion.css';      /* §24 Hareketi azalt + easter egg'ler */

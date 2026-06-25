@@ -1,6 +1,7 @@
 import { navLinks } from '../data/content.js'
 import { useScrollSpy } from '../hooks/useScrollSpy.js'
 import ThemeToggle from './ThemeToggle.jsx'
+import HintButton from './HintButton.jsx'
 
 // İzlenecek bölüm id'leri, navLinks'ten türetilir (#odak → odak)
 const BOLUM_IDLERI = navLinks.map((l) => l.href.replace('#', ''))
@@ -38,6 +39,7 @@ function Navbar() {
         })}
       </div>
 
+      <HintButton />
       <ThemeToggle />
     </nav>
   )
