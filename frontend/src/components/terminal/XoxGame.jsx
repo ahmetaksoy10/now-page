@@ -1,21 +1,9 @@
 import { useEffect, useState } from 'react'
 
-/**
- * XoxGame — Terminal içinde yenilmez Tic-Tac-Toe (XOX).
- *
- * Kullanıcı X (ilk hamle), bilgisayar O. Bilgisayar hamlelerini Minimax
- * algoritmasıyla seçer → en kötü ihtimalle berabere kalır, asla yenilmez.
- * Tahta her hamleden sonra yeniden çizilir; 1-9 ile oynanır, E/H ile tekrar.
- */
 const KAZANAN_HATLAR = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6],
+  [0, 1, 2], [3, 4, 5], [6, 7, 8],
+  [0, 3, 6], [1, 4, 7], [2, 5, 8],
+  [0, 4, 8], [2, 4, 6],
 ]
 
 function kazanan(b) {
@@ -25,7 +13,6 @@ function kazanan(b) {
   return null
 }
 
-// Minimax: O maksimize eder (O kazanırsa +1), X minimize eder (X kazanırsa -1).
 function minimax(b, oyuncu) {
   const k = kazanan(b)
   if (k === 'O') return { skor: 1 }
@@ -43,25 +30,13 @@ function minimax(b, oyuncu) {
   return en
 }
 
-function tahtaCiz(b) {
-  const h = (i) => (b[i] ? b[i] : String(i + 1))
-  return (
-    `  ${h(0)} | ${h(1)} | ${h(2)}\n` +
-    ` ---+---+---\n` +
-    `  ${h(3)} | ${h(4)} | ${h(5)}\n` +
-    ` ---+---+---\n` +
-    `  ${h(6)} | ${h(7)} | ${h(8)}`
-  )
-}
-
 const BASLANGIC_MESAJ = 'Sıra sende (X). 1-9 ile oyna · çıkış: q'
 
 function XoxGame({ onExit }) {
   const [tahta, setTahta] = useState(() => Array(9).fill(''))
-  const [durum, setDurum] = useState('oyuncu') // 'oyuncu' | 'dusunuyor' | 'bitti'
+  const [durum, setDurum] = useState('oyuncu') 
   const [mesaj, setMesaj] = useState(BASLANGIC_MESAJ)
 
-  // Bilgisayarın hamlesi: gerçekçi his için 500–1000ms "düşünme" gecikmesi
   useEffect(() => {
     if (durum !== 'dusunuyor') return
     const id = setTimeout(
@@ -89,6 +64,7 @@ function XoxGame({ onExit }) {
   useEffect(() => {
     const tus = (e) => {
       if (e.key === 'Escape' || e.key === 'q' || e.key === 'Q') {
+        e.preventDefault()
         onExit('xox kapatıldı.')
         return
       }
@@ -98,6 +74,7 @@ function XoxGame({ onExit }) {
           setMesaj(BASLANGIC_MESAJ)
           setDurum('oyuncu')
         } else if (e.key === 'h' || e.key === 'H') {
+          e.preventDefault()
           onExit('xox kapatıldı.')
         }
         return
@@ -128,11 +105,22 @@ function XoxGame({ onExit }) {
     return () => window.removeEventListener('keydown', tus)
   }, [durum, tahta, onExit])
 
+  const renderCell = (i) => {
+    const v = tahta[i]
+    if (v === 'X') return <span className="term-x">X</span>
+    if (v === 'O') return <span className="term-o">O</span>
+    return <span className="term-empty">{i + 1}</span>
+  }
+
   return (
     <div className="term-game">
-      <pre className="term-game__screen term-game__screen--xox" aria-hidden="true">
-        {tahtaCiz(tahta)}
-      </pre>
+      <div className="term-game__screen term-game__screen--xox xox-board" aria-hidden="true">
+        <div className="xox-row">  {renderCell(0)} <span className="sep">|</span> {renderCell(1)} <span className="sep">|</span> {renderCell(2)}</div>
+        <div className="xox-sep"> ---+---+---</div>
+        <div className="xox-row">  {renderCell(3)} <span className="sep">|</span> {renderCell(4)} <span className="sep">|</span> {renderCell(5)}</div>
+        <div className="xox-sep"> ---+---+---</div>
+        <div className="xox-row">  {renderCell(6)} <span className="sep">|</span> {renderCell(7)} <span className="sep">|</span> {renderCell(8)}</div>
+      </div>
       <p className="term-game__status">{mesaj}</p>
     </div>
   )

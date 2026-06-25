@@ -1,21 +1,12 @@
 import { useEffect, useState } from 'react'
 
-/**
- * DinoGame — Terminal içinde metin tabanlı sonsuz koşu.
- *
- * Sabit boyutlu karakter ızgarası (<pre>) üzerine çizilir. Fizik (yerçekimi +
- * zıplama) sabit zaman adımıyla (accumulator) ilerler → ekran tazeleme hızından
- * bağımsız tutarlı. Engeller sağdan sola kayar, hız zamanla yavaşça artar.
- * Space/↑ zıplatır (havadayken tekrar zıplanamaz). Space ve ok tuşlarında
- * preventDefault → sayfa kaymaz. Durum state'te, her kare YENİ nesneyle güncellenir.
- */
 const GENISLIK = 50
 const YUKSEKLIK = 9
-const ZEMIN = YUKSEKLIK - 2 // dino'nun durduğu satır; son satır zemin çizgisi
+const ZEMIN = YUKSEKLIK - 2
 const DINO_X = 6
-const ADIM = 24 // ms sabit fizik adımı
-const YERCEKIMI = 0.05
-const ZIPLA = -0.62
+const ADIM = 24 
+const YERCEKIMI = 0.08
+const ZIPLA = -0.75
 
 function yeniOyun() {
   return {
@@ -23,18 +14,16 @@ function yeniOyun() {
     vy: 0,
     yerde: true,
     engeller: [{ x: GENISLIK + 6 }],
-    hiz: 0.45, // kolon / adım
+    hiz: 0.45, 
     mesafe: 0,
     skor: 0,
     bitti: false,
   }
 }
 
-// Tek fizik adımı — YENİ durum döndürür (saf)
 function adim(onceki) {
   const s = { ...onceki, engeller: onceki.engeller.map((e) => ({ ...e })) }
-  s.hiz = onceki.hiz + 0.0007 // zamanla hızlan
-  // Dikey fizik
+  s.hiz = onceki.hiz + 0.0015 
   s.dinoY = onceki.dinoY + onceki.vy
   s.vy = onceki.vy + YERCEKIMI
   if (s.dinoY >= ZEMIN) {
@@ -42,7 +31,6 @@ function adim(onceki) {
     s.vy = 0
     s.yerde = true
   }
-  // Engeller: kayma + çarpışma (kolonu geçtiği adımda yakala; hız >1 olsa da kaçmaz)
   for (const e of s.engeller) {
     const onc = e.x
     e.x -= s.hiz
@@ -62,13 +50,13 @@ function adim(onceki) {
 
 function ciz(s) {
   const grid = Array.from({ length: YUKSEKLIK }, () => Array(GENISLIK).fill(' '))
-  for (let x = 0; x < GENISLIK; x++) grid[YUKSEKLIK - 1][x] = '─' // zemin
+  for (let x = 0; x < GENISLIK; x++) grid[YUKSEKLIK - 1][x] = '▓' // Kalın zemin
   for (const e of s.engeller) {
     const x = Math.round(e.x)
-    if (x >= 0 && x < GENISLIK) grid[ZEMIN][x] = 'Ψ' // kaktüs
+    if (x >= 0 && x < GENISLIK) grid[ZEMIN][x] = '█' // Engeller kalın blok
   }
   const dy = Math.round(s.dinoY)
-  if (dy >= 0 && dy < YUKSEKLIK) grid[dy][DINO_X] = '█' // dino
+  if (dy >= 0 && dy < YUKSEKLIK) grid[dy][DINO_X] = '☻' // Dino'ya tatlı bir ikon
   return grid.map((r) => r.join('')).join('\n')
 }
 
@@ -81,7 +69,7 @@ function DinoGame({ onExit }) {
     let birikim = 0
     const dongu = (t) => {
       if (sonZaman == null) sonZaman = t
-      birikim = Math.min(birikim + (t - sonZaman), 200) // sekme arka plandayken patlamasın
+      birikim = Math.min(birikim + (t - sonZaman), 200) 
       sonZaman = t
       let adimSayisi = 0
       while (birikim >= ADIM) {
@@ -103,6 +91,7 @@ function DinoGame({ onExit }) {
     const tus = (e) => {
       if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') e.preventDefault()
       if (e.key === 'Escape' || e.key === 'q' || e.key === 'Q') {
+        e.preventDefault()
         onExit('dino kapatıldı.')
         return
       }
@@ -123,15 +112,25 @@ function DinoGame({ onExit }) {
     }
   }, [onExit])
 
+  const handleTouchStart = (e) => {
+      // e.preventDefault() sometimes causes passive event listener warning, but needed here for preventing scrolling.
+      // We will just use touch-action: none on the div.
+      setOyun((s) => {
+        if (s.bitti) return yeniOyun()
+        if (s.yerde) return { ...s, vy: ZIPLA, yerde: false }
+        return s
+      })
+  }
+
   return (
-    <div className="term-game">
-      <pre className="term-game__screen" aria-hidden="true">
+    <div className="term-game" onTouchStart={handleTouchStart} style={{ touchAction: 'none' }}>
+      <pre className="term-game__screen" aria-hidden="true" style={{ color: 'var(--t-accent)', textShadow: '0 0 5px var(--t-accent)' }}>
         {ciz(oyun)}
       </pre>
       <p className="term-game__status">
         {oyun.bitti
-          ? `GAME OVER — Skorun: ${oyun.skor} — Tekrar için R · çıkış: q`
-          : `Skor: ${oyun.skor}  ·  Zıpla: Space / ↑  ·  çıkış: q`}
+          ? `GAME OVER — Skorun: ${oyun.skor} — Tekrar için R veya dokun · çıkış: q`
+          : `Skor: ${oyun.skor} (Hız: ${Math.round(oyun.hiz * 100)}x)  ·  Zıpla: Dokun / Space / ↑  ·  çıkış: q`}
       </p>
     </div>
   )

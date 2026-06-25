@@ -1,15 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
-/**
- * SnakeGame — Terminal içinde ASCII yılan oyunu.
- *
- * Oyun durumu state'te tutulur; her tick'te fonksiyonel setState ile YENİ bir
- * durum üretilir (immutability → güvenilir re-render, ref'siz). Ok tuşları
- * sayfayı kaydırmasın diye preventDefault edilir.
- */
 const GENISLIK = 26
 const YUKSEKLIK = 16
-const TICK = 110 // ms
+const BASLANGIC_TICK = 130 // ms
 
 function rastgeleYem(yilan) {
   let p
@@ -32,10 +25,10 @@ function yeniOyun() {
     yem: rastgeleYem(yilan),
     skor: 0,
     bitti: false,
+    tick: BASLANGIC_TICK,
   }
 }
 
-// Bir adım ilerlet — YENİ durum nesnesi döndürür (saf; state'i mutasyona uğratmaz)
 function adim(onceki) {
   const s = {
     ...onceki,
@@ -52,6 +45,7 @@ function adim(onceki) {
   s.yilan.unshift(bas)
   if (bas.x === s.yem.x && bas.y === s.yem.y) {
     s.skor = onceki.skor + 10
+    s.tick = Math.max(40, s.tick - 3) // Progressive difficulty
     s.yem = rastgeleYem(s.yilan)
   } else {
     s.yilan.pop()
@@ -66,7 +60,7 @@ function ciz(s) {
     for (let x = 0; x < GENISLIK; x++) {
       if (s.yilan[0].x === x && s.yilan[0].y === y) satir += '█'
       else if (s.yilan.some((p) => p.x === x && p.y === y)) satir += '▓'
-      else if (s.yem.x === x && s.yem.y === y) satir += '◆'
+      else if (s.yem.x === x && s.yem.y === y) satir += '★'
       else satir += ' '
     }
     satirlar.push(satir + '│')
@@ -77,12 +71,14 @@ function ciz(s) {
 
 function SnakeGame({ onExit }) {
   const [oyun, setOyun] = useState(yeniOyun)
+  const touchStart = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     const oyunTuslari = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ']
     const tus = (e) => {
-      if (oyunTuslari.includes(e.key)) e.preventDefault() // sayfa kaymasın
+      if (oyunTuslari.includes(e.key)) e.preventDefault()
       if (e.key === 'Escape' || e.key === 'q' || e.key === 'Q') {
+        e.preventDefault()
         onExit('snake kapatıldı.')
         return
       }
@@ -94,33 +90,75 @@ function SnakeGame({ onExit }) {
       }
       setOyun((s) => {
         if (s.bitti) {
-          return e.key === 'r' || e.key === 'R' ? yeniOyun() : s
+          if (e.key === 'r' || e.key === 'R') return yeniOyun()
+          return s
         }
         const y = yonler[e.key]
-        // 180° geri dönüş engellenir (kendine anında çarpmasın)
         if (y && !(y.x === -s.yon.x && y.y === -s.yon.y)) return { ...s, sonraki: y }
         return s
       })
     }
     window.addEventListener('keydown', tus)
-    const id = setInterval(() => {
-      setOyun((s) => (s.bitti ? s : adim(s)))
-    }, TICK)
-    return () => {
-      window.removeEventListener('keydown', tus)
-      clearInterval(id)
-    }
+    return () => window.removeEventListener('keydown', tus)
   }, [onExit])
 
+  useEffect(() => {
+    if (oyun.bitti) return
+    const id = setInterval(() => {
+      setOyun((s) => (s.bitti ? s : adim(s)))
+    }, oyun.tick)
+    return () => clearInterval(id)
+  }, [oyun.bitti, oyun.tick])
+
+  const handleTouchStart = (e) => {
+    touchStart.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY
+    }
+  }
+
+  const handleTouchEnd = (e) => {
+    if (oyun.bitti) {
+       setOyun(yeniOyun())
+       return
+    }
+    const touchEnd = {
+        x: e.changedTouches[0].clientX,
+        y: e.changedTouches[0].clientY
+    }
+    const dx = touchEnd.x - touchStart.current.x
+    const dy = touchEnd.y - touchStart.current.y
+    const absDx = Math.abs(dx)
+    const absDy = Math.abs(dy)
+
+    if (Math.max(absDx, absDy) > 30) {
+        setOyun(s => {
+            let y = null
+            if (absDx > absDy) {
+                y = dx > 0 ? {x: 1, y: 0} : {x: -1, y: 0}
+            } else {
+                y = dy > 0 ? {x: 0, y: 1} : {x: 0, y: -1}
+            }
+            if (y && !(y.x === -s.yon.x && y.y === -s.yon.y)) return { ...s, sonraki: y }
+            return s
+        })
+    }
+  }
+
   return (
-    <div className="term-game">
-      <pre className="term-game__screen" aria-hidden="true">
-        {ciz(oyun)}
+    <div className="term-game" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ touchAction: 'none' }}>
+      <pre className="term-game__screen" aria-hidden="true" style={{ color: 'var(--t-accent)', textShadow: '0 0 5px var(--t-accent)' }}>
+        {ciz(oyun).split('★').map((part, index, arr) => (
+          <span key={index}>
+            {part}
+            {index < arr.length - 1 && <span className="term-o">★</span>}
+          </span>
+        ))}
       </pre>
       <p className="term-game__status">
         {oyun.bitti
           ? `Yılan oyununu bitirdin! Skor: ${oyun.skor} — Tekrar için R · çıkış: q`
-          : `Skor: ${oyun.skor}  ·  Yön: ok tuşları  ·  çıkış: q`}
+          : `Skor: ${oyun.skor} (Hız: ${Math.round(1000/oyun.tick)}x) · Yön: kaydır/ok tuşları · çıkış: q`}
       </p>
     </div>
   )

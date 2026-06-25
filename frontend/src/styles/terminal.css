@@ -2,21 +2,23 @@
 
 /* Terminal kendi koyu "dünyasını" kurar; renkleri site temasından bağımsız
    --t-* değişkenleriyle gelir, 'theme' komutu bu seti değiştirir. */
-#terminal-screen {
+/* Terminal Overlay (Blurred background) */
+.terminal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 10000;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9999;
   display: flex;
-  flex-direction: column;
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  background: var(--t-bg);
-  color: var(--t-fg);
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  animation: term-ac 0.32s var(--ease-out);
+}
 
+.terminal--yesil {
   /* Varsayılan: yeşil */
-  --t-bg: #050806;
+  --t-bg: rgba(5, 8, 6, 0.45);
   --t-fg: #46d765;
   --t-dim: #2c8a42;
   --t-bright: #c6ffd2;
@@ -24,8 +26,29 @@
   --t-hata: #ff6b5e;
 }
 
+#terminal-screen {
+  position: relative;
+  width: 90vw;
+  max-width: 900px;
+  height: 80vh;
+  max-height: 700px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  background: var(--t-bg);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  color: var(--t-fg);
+  border-radius: 10px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 0 1px color-mix(in srgb, var(--t-fg) 20%, transparent);
+  overflow: hidden;
+  animation: term-ac 0.32s var(--ease-out);
+}
+
 .terminal--amber {
-  --t-bg: #0b0600;
+  --t-bg: rgba(11, 6, 0, 0.45);
   --t-fg: #ffb24d;
   --t-dim: #a96f1f;
   --t-bright: #ffe7bd;
@@ -34,7 +57,7 @@
 }
 
 .terminal--mavi {
-  --t-bg: #00060d;
+  --t-bg: rgba(0, 6, 13, 0.45);
   --t-fg: #5fcaff;
   --t-dim: #2c7aa1;
   --t-bright: #d2efff;
@@ -96,6 +119,72 @@
   }
 }
 
+/* CRT Bombesi (Curvature) & Chromatic Aberration */
+.crt-curve {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  border-radius: inherit;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9);
+}
+
+.chromatic-aberration {
+  text-shadow: 1.5px 0 1px rgba(255,0,0,0.4), -1.5px 0 1px rgba(0,255,255,0.4);
+}
+
+/* Matrix Background */
+.matrix-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.12;
+}
+.matrix-column {
+  position: absolute;
+  top: -100%;
+  width: 1.5em;
+  text-align: center;
+  color: var(--t-accent);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  animation: fall linear infinite;
+  text-shadow: 0 0 5px var(--t-accent);
+}
+@keyframes fall {
+  to { top: 100%; }
+}
+
+/* Glitch Transition Overlay */
+.hacker-transition-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  text-align: center;
+}
+.hacker-transition-content h2 {
+  animation: glitch 0.2s infinite;
+  text-shadow: 2px 0 var(--t-accent), -2px 0 var(--t-dim);
+}
+@keyframes glitch {
+  0% { transform: translate(0) }
+  20% { transform: translate(-3px, 2px) }
+  40% { transform: translate(-3px, -2px) }
+  60% { transform: translate(3px, 2px) }
+  80% { transform: translate(3px, -2px) }
+  100% { transform: translate(0) }
+}
+
 /* Üst bar */
 .terminal__bar {
   position: relative;
@@ -105,19 +194,36 @@
   gap: 12px;
   padding: 12px 18px;
   border-bottom: 1px solid color-mix(in srgb, var(--t-fg) 22%, transparent);
+  cursor: grab;
+  background: rgba(0,0,0,0.3);
+}
+
+.terminal__bar:active {
+  cursor: grabbing;
 }
 
 .terminal__dots {
   display: inline-flex;
-  gap: 7px;
+  gap: 8px;
 }
 
-.terminal__dots i {
-  width: 11px;
-  height: 11px;
+.mac-btn {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--t-fg) 35%, transparent);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s;
 }
+
+.mac-btn:hover {
+  opacity: 0.8;
+}
+
+.mac-btn--close { background: #ff5f56; }
+.mac-btn--minimize { background: #ffbd2e; }
+.mac-btn--maximize { background: #27c93f; }
 
 .terminal__title {
   flex: 1;
@@ -126,23 +232,7 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--t-dim);
-}
-
-.terminal__close {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  border: 1px solid color-mix(in srgb, var(--t-fg) 30%, transparent);
-  background: transparent;
-  color: var(--t-fg);
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.terminal__close:hover {
-  background: color-mix(in srgb, var(--t-fg) 16%, transparent);
-  color: var(--t-bright);
+  pointer-events: none;
 }
 
 /* Çıktı alanı: kaydırılabilir, CRT parıltısı için hafif text-shadow */
@@ -214,6 +304,20 @@
   font-size: inherit;
   caret-color: var(--t-fg);
   text-shadow: 0 0 6px color-mix(in srgb, var(--t-fg) 45%, transparent);
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1.2em;
+  background-color: var(--t-fg);
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+  margin-left: 4px;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* Oyun ekranı */
