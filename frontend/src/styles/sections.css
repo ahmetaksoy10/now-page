@@ -1,0 +1,454 @@
+/* ── 8c. ZAMAN ÇİZELGESİ (Yolculuk) ────────────────────────────────────────── */
+
+.timeline-section {
+  margin-top: 92px;
+  scroll-margin-top: 92px; /* navbar altına kayıp gizlenmesin */
+}
+
+.timeline-section__header {
+  margin-bottom: 32px;
+}
+
+.timeline-section__title {
+  margin: 8px 0 0;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.timeline-section__title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.timeline {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Sol dikey ray: noktaların merkezinden geçer, aşağı doğru soluklaşır */
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(var(--accent-border), var(--border) 55%, transparent);
+}
+
+.timeline__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 18px;
+  padding-bottom: 30px;
+}
+
+.timeline__item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline__node {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--glass);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.timeline__content {
+  padding-top: 1px;
+}
+
+.timeline__date {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.timeline__title {
+  margin: 5px 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.timeline__text {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+
+/* ── 8d. AÇILIŞ PERDESİ (Intro overlay) ────────────────────────────────────── */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  transition:
+    transform 0.8s var(--ease-out),
+    opacity 0.8s var(--ease-out);
+}
+
+/* Perde yukarı kayıp sayfayı açar */
+.intro--leaving {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.intro__name {
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  opacity: 0;
+  transform: translateY(18px);
+  animation: intro-rise 0.8s var(--ease-out) 0.1s forwards;
+}
+
+.intro__tag {
+  margin-top: 6px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  color: var(--accent);
+  opacity: 0;
+  transform: translateY(14px);
+  animation: intro-rise 0.8s var(--ease-out) 0.28s forwards;
+}
+
+.intro__line {
+  width: 0;
+  height: 2px;
+  margin-top: 22px;
+  background: var(--accent);
+  border-radius: 2px;
+  animation: intro-line 0.9s var(--ease-out) 0.5s forwards;
+}
+
+@keyframes intro-rise {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes intro-line {
+  from { width: 0; }
+  to   { width: 120px; }
+}
+
+
+/* ── 8e. BLUR-UP GÖRSEL (lazy-load) ────────────────────────────────────────── */
+
+/* Yüklenirken: shimmer'lı düşük-detay yer tutucu + bulanıklık (alan boş kalmaz);
+   yüklenince netleşerek belirir. transform'a DOKUNULMAZ → kartların hover
+   zoom/tilt geçişleri bozulmaz (transform geçişi korunur). */
+.blur-img {
+  background-color: var(--surface-2);
+  background-image: linear-gradient(
+    110deg,
+    transparent 25%,
+    var(--shimmer) 50%,
+    transparent 75%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: blur-img-shimmer 1.5s ease-in-out infinite;
+  filter: blur(10px);
+  transition:
+    filter 0.7s var(--ease-out),
+    transform 0.5s var(--ease-out);
+}
+
+/* Asıl görsel yüklenince: yer tutucu kalkar, netleşir */
+.blur-img.is-loaded {
+  background-image: none;
+  background-color: transparent;
+  animation: none;
+  filter: blur(0);
+}
+
+@keyframes blur-img-shimmer {
+  to { background-position: -220% 0; }
+}
+
+/* Hareketi azalt: görsel anında net, yer tutucu animasyonu yok */
+@media (prefers-reduced-motion: reduce) {
+  .blur-img {
+    animation: none;
+    filter: none;
+  }
+}
+
+
+/* ── 8f. SON GÜNCELLEME DAMGASI (hero) ─────────────────────────────────────── */
+
+.hero__eyebrow-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-bottom: 22px;
+}
+
+/* Satır içine alındığı için eyebrow'un kendi alt boşluğu sıfırlanır */
+.hero__eyebrow-row .hero__eyebrow {
+  margin-bottom: 0;
+}
+
+.hero__stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 11px 4px 9px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* Nabız atan yeşil nokta: sayfanın canlı/güncel olduğunu söyler */
+.hero__stamp-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+
+/* ── 8j. KONFETİ (e-posta kopyalama ödülü) ─────────────────────────────────── */
+
+.confetti {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.confetti__bit {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  animation: confetti-fly 0.85s var(--ease-out) forwards;
+}
+
+/* Dışa doğru uçar, yerçekimiyle hafif düşer, dönerek küçülüp solar */
+@keyframes confetti-fly {
+  0%   { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), calc(var(--dy) + 36px)) rotate(var(--rot)) scale(0.3); opacity: 0; }
+}
+
+
+/* ── 8l. İSİM (hero başlığı) ────────────────────────────────────────────────
+   Eskiden background-clip:text + animasyonlu "ışık süpürmesi" vardı; ancak
+   Safari/WebKit, background-clip:text'i animasyonla birleştirince metni ara ara
+   KAYBOLTUYOR (bilinen WebKit bug'ı — Brave/Chromium'da sorun yok). İsim
+   sayfanın en kritik öğesi olduğu için efekti kaldırıp her tarayıcıda güvenle
+   görünen düz renge çevirdik. Amber vurgu .hero__title-dot'ta yaşıyor. */
+.hero__title-name {
+  color: var(--text-primary);
+}
+
+
+/* ── 8m. BÖLÜM AYRAÇLARI ───────────────────────────────────────────────────── */
+
+.section-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 72px 0;
+}
+
+/* İki çizgi merkezden dışa doğru çizilir (görünür olunca scaleX 0→1) */
+.section-divider__line {
+  height: 1px;
+  flex: 1;
+  max-width: 260px;
+  transform: scaleX(0);
+  transition: transform 0.9s var(--ease-out);
+}
+
+.section-divider__line--left {
+  background: linear-gradient(90deg, transparent, var(--border-strong));
+  transform-origin: right;
+}
+
+.section-divider__line--right {
+  background: linear-gradient(90deg, var(--border-strong), transparent);
+  transform-origin: left;
+}
+
+.section-divider.is-visible .section-divider__line {
+  transform: scaleX(1);
+}
+
+/* Ortadaki ✦ süsü: çizgiler açılırken yumuşakça belirir */
+.section-divider__mark {
+  color: var(--accent);
+  font-size: 0.8rem;
+  opacity: 0;
+  transform: scale(0.4) rotate(-45deg);
+  transition:
+    opacity 0.5s ease 0.25s,
+    transform 0.6s var(--ease-out) 0.25s;
+}
+
+.section-divider.is-visible .section-divider__mark {
+  opacity: 1;
+  transform: scale(1) rotate(0);
+}
+
+
+/* ── 8n. TEMA GEÇİŞİ (View Transitions) ────────────────────────────────────── */
+
+/* Varsayılan çapraz solmayı kapat; yeni temayı tıklanan noktadan daire olarak
+   aç (eski tema altta kalır). Desteklemeyen tarayıcıda bu kurallar yok sayılır. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  z-index: 1;
+  animation: vt-circle 0.5s var(--ease-out);
+}
+
+@keyframes vt-circle {
+  from { clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 50%)); }
+  to   { clip-path: circle(var(--vt-r, 75%) at var(--vt-x, 50%) var(--vt-y, 50%)); }
+}
+
+
+/* ── 8o. HAKKIMDA ──────────────────────────────────────────────────────────── */
+
+.about {
+  margin-top: 24px;
+  scroll-margin-top: 92px; /* navbar altına kayıp gizlenmesin */
+}
+
+.about__header {
+  margin-bottom: 30px;
+}
+
+/* Serif italik dev alıntı: bölümün manşeti */
+.about__lead {
+  margin-top: 12px;
+  max-width: 28ch;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.5rem, 3.2vw, 2.3rem);
+  line-height: 1.18;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.about__body {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.about__prose {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.about__paragraph {
+  max-width: 64ch;
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+/* Sağ panel: kısa "gerçekler" — ikonlu satırlar */
+.about__facts {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.about__fact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.86rem;
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+
+.about__fact-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* Telefonda tek kolon: prose üstte, gerçekler altta */
+@media (max-width: 760px) {
+  .about__body {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+}
+
+

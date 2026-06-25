@@ -24,8 +24,8 @@
     content="Şu an hayatımda neler olduğunu anlatan kişisel Now Page: odak noktam, öğrendiklerim, okuduklarım ve aktif projelerim." />
   <meta property="og:url" content="https://ahmetaksoy10.github.io/now-page/" />
   <meta property="og:image" content="https://ahmetaksoy10.github.io/now-page/og-image.jpg" />
-  <meta property="og:image:width" content="512" />
-  <meta property="og:image:height" content="512" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Ahmet AKSOY — Now Page önizleme görseli" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Şu An — Ahmet AKSOY" />
@@ -88,8 +88,10 @@
 </head>
 
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
+  <!-- #root içeriği build-zamanı prerender ile doldurulur (bkz. prerender.mjs);
+       dev sunucusunda boş kalır ve createRoot mount eder. -->
+  <div id="root"><!--app-html--></div>
+  <script type="module" src="/src/entry-client.jsx"></script>
 </body>
 
 </html>

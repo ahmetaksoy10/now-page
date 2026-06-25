@@ -15,14 +15,23 @@ const saatBicimi = new Intl.DateTimeFormat('tr-TR', {
  * Neden hook? Saat state'i yalnızca onu gösteren küçük component'i
  * yeniden çizer; sayfanın geri kalanı her saniye render OLMAZ.
  * Cleanup fonksiyonu interval'i temizler — bellek sızıntısı yok.
+ *
+ * SSR/hydration: İlk değer sunucu ve istemcide AYNI olmalı (yoksa "şu an"
+ * her ortamda farklı → hydration uyumsuzluğu). Bu yüzden başlangıçta yer
+ * tutucu gösterilir; gerçek saat yalnızca mount sonrası (istemci) yazılır.
  */
 export function useLocalTime() {
-  const [simdi, setSimdi] = useState(() => new Date())
+  const [simdi, setSimdi] = useState(null)
 
   useEffect(() => {
+    // Hydration guard: gerçek saat yalnızca mount sonrası yazılır ki sunucu ve
+    // istemcinin İLK render'ı (yer tutucu) eşleşsin. setState-in-effect bu SSR
+    // deseninin doğası gereğidir (React dokümanlarının önerdiği yol).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSimdi(new Date())
     const sayac = setInterval(() => setSimdi(new Date()), 1000)
     return () => clearInterval(sayac)
   }, [])
 
-  return saatBicimi.format(simdi)
+  return simdi ? saatBicimi.format(simdi) : '··:··:··'
 }

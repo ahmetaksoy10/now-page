@@ -1,0 +1,161 @@
+/* ── 23. RESPONSIVE TASARIM ────────────────────────────────────────────────── */
+
+/* Geniş tablet ve altı: hero tek kolona iner */
+@media (max-width: 899px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: clamp(104px, 14vh, 140px);
+  }
+
+  /* Yan panel: avatar solda, bilgiler sağda yatay düzen */
+  .hero__side {
+    justify-self: start;
+    max-width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 26px;
+  }
+
+  .hero__facts {
+    flex: 1;
+  }
+
+  .project-card__columns {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  /* GitHub kartı tek kolona iner; repolar bölümü alta geçer */
+  .github-card__layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .github-card__side {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding-left: 0;
+    padding-top: 20px;
+  }
+
+  .bento-grid {
+    margin-top: 56px;
+  }
+}
+
+/* Tablet ve altı: proje modal gövdesi tek kolona iner */
+@media (max-width: 760px) {
+  .project-modal__body {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+}
+
+/* Telefon */
+@media (max-width: 560px) {
+  .page__content {
+    padding: 0 18px;
+  }
+
+  .navbar {
+    padding: 5px 6px 5px 11px;
+    /* Ekrandan taşmayı engelle: hap her zaman viewport'a sığar */
+    max-width: calc(100vw - 16px);
+  }
+
+  /* Marka + tema sabit; linkler dar ekranda yatay kayar (hap kırpılmaz).
+     min-width:0 olmadan flex çocuğu içeriğinin altına küçülemez → scroll çalışmaz. */
+  .navbar__links {
+    min-width: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .navbar__links::-webkit-scrollbar {
+    display: none; /* Webkit: kaydırma çubuğunu gizle */
+  }
+
+  .navbar__link {
+    white-space: nowrap;
+  }
+
+  /* Modal: küçük ekranda nefes alanı daralır */
+  .modal {
+    padding: 12px;
+  }
+
+  .project-modal {
+    padding: 22px;
+  }
+
+  .project-modal__name {
+    font-size: 1.45rem;
+  }
+
+  .gallery__thumb {
+    width: 52px;
+    height: 52px;
+  }
+
+  .navbar__brand {
+    font-size: 0.92rem;
+    margin-right: 5px;
+  }
+
+  .navbar__link {
+    font-size: 0.72rem;
+    padding: 6px 6px;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    margin-left: 4px;
+  }
+
+  /* Mobilde navbar linkleri daha yüksek dokunma hedefi alır */
+  .navbar__link {
+    padding-block: 9px;
+  }
+
+  .card {
+    padding: 22px;
+  }
+
+  /* Yan panel tekrar dikey: avatar üstte, bilgiler altta */
+  .hero__side {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+  }
+
+  .hero__sticker {
+    left: -6px;
+  }
+
+  .hero__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* İstatistikler telefonda 2×2 ızgaraya iner (4'lü tek satır sıkışmasın) */
+  .github-card__stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 12px;
+  }
+
+  .reading-card__top {
+    gap: 16px;
+  }
+
+  .footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
+

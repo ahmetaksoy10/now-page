@@ -1,0 +1,344 @@
+/* ── 2. RESET & TEMEL KURALLAR ─────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--text-primary);
+  /* Inter'in OpenType incelikleri: ürün tipografisi hissi */
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
+  transition: var(--transition-theme);
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Erişilebilirlik: klavye odağı her zaman görünür */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Navbar sabit olduğu için bölüm linkleri menünün altına hizalanır */
+#odak,
+#projeler,
+#github,
+#iletisim {
+  scroll-margin-top: 96px;
+}
+
+/* Ekran okuyucuya özel gizli metin */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* ── 3. SAYFA İSKELETİ & ARKA PLAN ─────────────────────────────────────────── */
+
+.page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: clip; /* yatay taşmaları (aurora küreleri vb.) keser */
+}
+
+.page__content {
+  width: 100%;
+  max-width: 1104px;
+  margin-inline: auto;
+  padding: 0 28px;
+  flex: 1;
+}
+
+.page__background {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── Aurora arka plan: yaşayan, bulanık renk küreleri (saf CSS) ─────────────
+   Eski Three.js sahnesinin yerini alır: sıfır JS/GPU yükü, yalnızca
+   transform + opacity animasyonu. Renkler accent paletinden gelir → tema
+   ile otomatik uyumlu. CSS grid+noise katmanının (z:-2) üstünde, içeriğin
+   arkasında (z:-1) durur; pointer-events:none → fare olayları sayfaya geçer. */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  /* Açılışta yumuşak görünme */
+  animation: aurora-in 1.8s var(--ease-out) both;
+}
+
+/* Küre alanı: fare takibi + scroll parallax JS ile buraya tek transform
+   olarak uygulanır (küre drift'i içte, ayrı katmanda → çakışmaz). */
+.aurora__field {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+/* Süzülen parçacık canvas'ı: alanın üstünde, ince bir derinlik katmanı */
+.aurora__particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.aurora__blob {
+  position: absolute;
+  border-radius: 50%;
+  /* 80px blur: doygun renkle birlikte "düz" değil, hacimli okunur; 100px'e
+     göre daha hafif (ilk boyamada GPU yükü düşük → scroll daha akıcı). */
+  filter: blur(80px);
+  will-change: transform;
+}
+
+/* Dört küre: farklı renk, konum, boyut ve ritimle bağımsız süzülür —
+   böylece desen asla tekrar etmez, "yaşayan" hissi verir. */
+.aurora__blob--1 {
+  width: 640px;
+  height: 640px;
+  top: -240px;
+  left: 50%;
+  margin-left: -360px;
+  background: radial-gradient(circle, var(--aurora-a) 0%, transparent 68%);
+  animation: aurora-drift-1 24s ease-in-out infinite alternate;
+}
+
+.aurora__blob--2 {
+  width: 540px;
+  height: 540px;
+  top: 4%;
+  right: -150px;
+  background: radial-gradient(circle, var(--aurora-b) 0%, transparent 68%);
+  animation: aurora-drift-2 29s ease-in-out infinite alternate;
+}
+
+.aurora__blob--3 {
+  width: 580px;
+  height: 580px;
+  bottom: -240px;
+  left: -150px;
+  background: radial-gradient(circle, var(--aurora-c) 0%, transparent 68%);
+  animation: aurora-drift-3 27s ease-in-out infinite alternate;
+}
+
+.aurora__blob--4 {
+  width: 460px;
+  height: 460px;
+  bottom: 6%;
+  right: 4%;
+  background: radial-gradient(circle, var(--aurora-b) 0%, transparent 68%);
+  animation: aurora-drift-4 33s ease-in-out infinite alternate;
+}
+
+/* Akan "kuzey ışıkları" şeritleri: uzun, bulanık, eğik gradient bantlar.
+   Alanın içinde olduğu için fare/scroll parallax'ından da etkilenir. */
+.aurora__ribbon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150%;
+  height: 220px;
+  border-radius: 50%;
+  filter: blur(60px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--aurora-b),
+    var(--aurora-a),
+    transparent
+  );
+}
+
+.aurora__ribbon--1 {
+  opacity: 0.55;
+  animation: ribbon-flow-1 22s ease-in-out infinite alternate;
+}
+
+.aurora__ribbon--2 {
+  opacity: 0.4;
+  animation: ribbon-flow-2 28s ease-in-out infinite alternate;
+}
+
+@keyframes ribbon-flow-1 {
+  from { transform: translate(-50%, -64%) rotate(-22deg) scaleX(0.9); }
+  to   { transform: translate(-50%, -40%) rotate(-8deg) scaleX(1.15); }
+}
+
+@keyframes ribbon-flow-2 {
+  from { transform: translate(-50%, -34%) rotate(10deg) scaleX(1.12); }
+  to   { transform: translate(-50%, -60%) rotate(22deg) scaleX(0.9); }
+}
+
+@keyframes aurora-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Her küre farklı yön/hız/ölçekte "nefes alır" — senkron olmamaları kilit.
+   Hareket eskisinden biraz daha geniş, ama yavaş ve yumuşak (göz yormaz). */
+@keyframes aurora-drift-1 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(90px, 70px, 0) scale(1.16); }
+}
+
+@keyframes aurora-drift-2 {
+  from { transform: translate3d(0, 0, 0) scale(1.06); }
+  to   { transform: translate3d(-100px, 60px, 0) scale(0.92); }
+}
+
+@keyframes aurora-drift-3 {
+  from { transform: translate3d(0, 0, 0) scale(0.94); }
+  to   { transform: translate3d(110px, -70px, 0) scale(1.14); }
+}
+
+@keyframes aurora-drift-4 {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-80px, -60px, 0) scale(1.1); }
+}
+
+/* Hareketi azalt: küreler/şeritler durur ama yumuşak renk zemini korunur */
+@media (prefers-reduced-motion: reduce) {
+  .aurora {
+    animation: none;
+  }
+  .aurora__blob,
+  .aurora__ribbon {
+    animation: none;
+  }
+}
+
+
+/* İnce mühendislik grid'i: üstte belirgin, aşağıda mask ile kaybolur */
+.page__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 76px 76px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 55% at 50% 0%, #000 35%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 55% at 50% 0%, #000 35%, transparent 78%);
+}
+
+/* Film greni: SVG turbulence dokusuyla "basılı sayfa" hissi */
+.page__noise {
+  position: absolute;
+  inset: 0;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+
+/* ── 4. ANİMASYON SİSTEMİ ──────────────────────────────────────────────────── */
+
+/* Scroll-reveal: JS sadece .is-visible ekler, gerisi CSS'in işi.
+   Sinematik giriş: kart alttan yükselirken hafifçe büyür ve minik bir 3D
+   eğimden düzelir — "ekran açılıyor" hissi. Yalnızca opacity + transform
+   animasyonu (GPU katmanında) → ilk scroll'da bile pürüzsüz, kasma yok.
+   (Eski filter: blur geçişi her karede pahalıydı; kaldırıldı.) */
+.reveal {
+  opacity: 0;
+  transform: perspective(1200px) translateY(38px) scale(0.97) rotateX(5deg);
+  transform-origin: center top;
+  transition:
+    opacity 0.7s var(--ease-out),
+    transform 0.8s var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: perspective(1200px) translateY(0) scale(1) rotateX(0deg);
+}
+
+/* Bento grid'de aynı anda görünen kartlar dalga dalga gelsin:
+   her kolon konumuna küçük bir ek gecikme — "şelale" koreografisi.
+   (Inline --reveal-delay verilmemiş kartlar için; verilenler kendi değerini korur.) */
+@media (min-width: 900px) {
+  .bento-grid > .bento:nth-child(2n) {
+    transition-delay: calc(var(--reveal-delay, 0ms) + 90ms);
+  }
+  .bento-grid > .bento:nth-child(3n) {
+    transition-delay: calc(var(--reveal-delay, 0ms) + 60ms);
+  }
+}
+
+/* Hero giriş: sayfa yüklenince kademeli yükselme */
+.hero-enter {
+  opacity: 0;
+  animation: fade-up 0.9s var(--ease-out) forwards;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Nabız atan canlı durum noktası */
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 45%, transparent); }
+  70%  { box-shadow: 0 0 0 7px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes shimmer-sweep {
+  to { transform: translateX(100%); }
+}
+
+

@@ -1,0 +1,369 @@
+/* ── 22. MODAL & GALERİ ────────────────────────────────────────────────────── */
+
+/* Modal animasyonları */
+@keyframes modal-backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modal-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gallery-fade {
+  from {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Tam ekran kaplayan sahne: ortalanmış panel + karartılmış arka plan */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, #05040a 72%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  animation: modal-backdrop-in 0.3s ease forwards;
+}
+
+/* Panel: arka planın üstünde yüzer, yaylanarak girer */
+.modal__panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  animation: modal-panel-in 0.5s var(--ease-out) forwards;
+}
+
+.modal__panel:focus {
+  outline: none;
+}
+
+.modal--project .modal__panel {
+  max-width: 920px;
+}
+
+.modal--lightbox .modal__panel {
+  max-width: 1000px;
+  background: var(--glass);
+  padding: 16px;
+}
+
+/* Kapatma düğmesi: panelin sağ üstünde sabit durur */
+.modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s var(--ease-out),
+    background-color 0.25s ease;
+}
+
+.modal__close:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+  transform: rotate(90deg);
+}
+
+/* ── Galeri (proje modal + lightbox ortak) ── */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gallery__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  /* Dikey (telefon) ve yatay görseller aynı sahnede dengeli dursun */
+  min-height: 280px;
+  max-height: min(64dvh, 560px);
+}
+
+.gallery__image {
+  max-width: 100%;
+  max-height: min(64dvh, 560px);
+  object-fit: contain;
+  /* Her kare değişiminde yeniden oynar (component'te key={aktif} ile) */
+  animation: gallery-fade 0.4s var(--ease-out);
+}
+
+/* Proje detayında galeri kısalır ki "Proje Hakkında" ve "Öne Çıkanlar"
+   bilgileri kaydırmadan, ilk bakışta görünsün */
+.modal--project .gallery__stage {
+  min-height: 200px;
+  max-height: min(38dvh, 340px);
+}
+
+.modal--project .gallery__image {
+  max-height: min(38dvh, 340px);
+}
+
+/* Otomatik geçiş ilerleme çizgisi: sahnenin altında soldan sağa dolar */
+.gallery__autobar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 0;
+  background: var(--accent);
+  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+  animation: gallery-autobar var(--auto-duration, 3000ms) linear forwards;
+}
+
+@keyframes gallery-autobar {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+/* İleri/geri okları: sahnenin kenarlarında yüzer */
+.gallery__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-strong);
+  transition: background-color 0.25s ease, transform 0.25s var(--ease-out);
+}
+
+.gallery__nav:hover {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: transparent;
+}
+
+.gallery__nav--prev { left: 12px; }
+.gallery__nav--next { right: 12px; }
+
+.gallery__nav--prev:hover { transform: translateY(-50%) scale(1.08); }
+.gallery__nav--next:hover { transform: translateY(-50%) scale(1.08); }
+
+/* Sayaç: "3 / 9" — sahnenin altında ortada */
+.gallery__counter {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-primary);
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+}
+
+/* Küçük resim şeridi: yatay kaydırılabilir */
+.gallery__thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+
+.gallery__thumb {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 9px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  opacity: 0.55;
+  cursor: pointer;
+  transition: opacity 0.25s ease, border-color 0.25s ease, transform 0.25s var(--ease-out);
+}
+
+.gallery__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery__thumb:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+.gallery__thumb.is-active {
+  opacity: 1;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+/* ── Proje detay modal içeriği ── */
+.project-modal {
+  padding: 26px 30px 30px;
+}
+
+.project-modal__header {
+  margin-bottom: 16px;
+  padding-right: 44px; /* kapatma düğmesine yer aç */
+}
+
+.project-modal__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.project-modal__title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.project-modal__name {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.project-modal__tagline {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+}
+
+/* Hikâye + özellikler: iki kolon, galeri altında */
+.project-modal__body {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 30px;
+  margin-top: 18px;
+}
+
+.project-modal__section-title {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+
+.project-modal__section-title:not(:first-child) {
+  margin-top: 22px;
+}
+
+.project-modal__description {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.project-modal__links {
+  margin-top: 24px;
+}
+
+.project-modal__private {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-strong);
+}
+
+/* Öne çıkanlar paneli: ayrı zeminde, accent imli liste */
+.project-modal__features {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  align-self: start;
+}
+
+.project-modal__feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.project-modal__feature-list li {
+  position: relative;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  padding-left: 22px;
+  line-height: 1.5;
+}
+
+.project-modal__feature-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform: rotate(45deg);
+}
+
+

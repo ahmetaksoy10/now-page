@@ -1,0 +1,175 @@
+/* ── 7. HERO ───────────────────────────────────────────────────────────────── */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 56px;
+  align-items: center;
+  padding-top: clamp(120px, 17vh, 176px);
+}
+
+.hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 22px;
+}
+
+.hero__eyebrow::before {
+  content: '—';
+  color: var(--accent);
+  margin-right: 10px;
+}
+
+/* Dev display tipografisi: isim manşette, Inter + serif italik karışımı */
+.hero__title {
+  font-size: clamp(2.9rem, 6.4vw, 4.8rem);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 26px;
+}
+
+.hero__title-line {
+  display: block;
+}
+
+.hero__title-dot {
+  color: var(--accent);
+}
+
+/* İkinci satır: Instrument Serif italik — insan eli değmiş editoryal vurgu */
+.hero__title-line--serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.62em; /* isim büyük, motto zarif */
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  margin-top: 10px;
+}
+
+.hero__intro {
+  max-width: 54ch;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+.hero__intro strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Sağ kolon: avatar + canlı bilgi paneli */
+.hero__side {
+  justify-self: end;
+  width: 100%;
+  max-width: 296px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hero__portrait {
+  position: relative;
+  width: fit-content;
+}
+
+.hero__portrait img {
+  width: 148px;
+  height: 148px;
+  border-radius: 34px;
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-card);
+  object-fit: cover;
+  background: var(--surface-2);
+}
+
+/* Hafif eğik sticker: "insan eli değmiş" hissi veren detay */
+.hero__sticker {
+  position: absolute;
+  bottom: -12px;
+  left: -14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-card);
+  transform: rotate(-5deg);
+  transition: transform 0.35s var(--ease-out);
+}
+
+.hero__portrait:hover .hero__sticker {
+  transform: rotate(-1deg) translateY(-2px);
+}
+
+.hero__sticker-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+/* Canlı bilgi paneli: konum + işleyen saat + odak */
+.hero__facts {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  padding: 4px 18px;
+}
+
+.hero__fact {
+  padding: 12px 0;
+}
+
+.hero__fact + .hero__fact {
+  border-top: 1px solid var(--border);
+}
+
+.hero__fact dt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 3px;
+}
+
+.hero__fact dt svg {
+  color: var(--accent);
+}
+
+.hero__fact dd {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* Saniyede bir işleyen saat: mono font, sabit genişlikli rakamlar */
+.hero__fact-clock {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+

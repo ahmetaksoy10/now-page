@@ -11,25 +11,33 @@ import { profile } from '../data/content.js'
  *  1. Oturumda bir kez — sessionStorage ile; aynı sekmede tekrar gezerken
  *     kullanıcıyı her seferinde bekletmez.
  *  2. Hareketi azalt — `prefers-reduced-motion` varsa perde hiç gösterilmez.
- *  3. FOUC yok — başlangıç durumu senkron (lazy initializer) belirlenir,
- *     gerekiyorsa hiç render edilmez (boş bir flaş oluşmaz).
+ *  3. SSR/hydration — sunucu ve istemci ilk render'ı AYNI olmalı: ikisi de
+ *     perdeyi "açık" çizer (deterministik). Tarayıcıya özel karar (tekrar
+ *     gezildi mi / hareket azaltıldı mı) yalnızca mount sonrası effect'te
+ *     verilir; window/sessionStorage render sırasında okunmaz (SSR güvenli).
  *
  * Dekoratiftir (aria-hidden): içerik zaten sayfada; ekran okuyucu tekrarlamaz.
  */
 function IntroOverlay() {
-  const [durum, setDurum] = useState(() => {
+  // Başlangıç sabit: sunucu + istemci ilk render'ı "açık" → hydration uyumlu.
+  const [durum, setDurum] = useState('acik')
+
+  // Mount sonrası (yalnızca istemci): tekrar gezen / reduced-motion kullanıcıda
+  // perdeyi hemen kaldır; ilk ziyarette kısa açılış animasyonunu çalıştır.
+  useEffect(() => {
     const azalt = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const gorulmus = sessionStorage.getItem('now-page-intro') === '1'
-    return azalt || gorulmus ? 'gizli' : 'acik'
-  })
-
-  // Açık → kısa bekleme sonrası perdeyi kapatmaya başla
-  useEffect(() => {
-    if (durum !== 'acik') return
+    if (azalt || gorulmus) {
+      // Hydration guard: perde kararı tarayıcıya özeldir (sessionStorage/reduced-motion),
+      // yalnızca mount sonrası verilir; ilk render sunucu+istemcide 'acik' olarak eşleşir.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDurum('gizli')
+      return
+    }
     sessionStorage.setItem('now-page-intro', '1')
     const zamanlayici = setTimeout(() => setDurum('kapaniyor'), 1150)
     return () => clearTimeout(zamanlayici)
-  }, [durum])
+  }, [])
 
   // Kapanış (perde kayma) animasyonu bitince DOM'dan tamamen kaldır
   useEffect(() => {

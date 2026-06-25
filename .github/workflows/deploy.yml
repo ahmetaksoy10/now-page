@@ -35,6 +35,15 @@ jobs:
         run: npm ci
         working-directory: ./frontend
 
+      # Kalite kapısı: lint veya test başarısızsa deploy edilmez (bozuk kod canlıya çıkmaz)
+      - name: Lint
+        run: npm run lint
+        working-directory: ./frontend
+
+      - name: Test
+        run: npm run test
+        working-directory: ./frontend
+
       - name: Build project
         run: npm run build
         working-directory: ./frontend

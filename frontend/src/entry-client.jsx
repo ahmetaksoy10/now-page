@@ -1,16 +1,24 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, hydrateRoot } from 'react-dom/client'
 import App from './App.jsx'
-// Tüm tasarım sistemi tek bir ustalıkla yazılmış CSS dosyasında toplanır (bkz. App.css).
+// Tüm tasarım sistemi tek bir indeks CSS'inde toplanır (bkz. App.css → styles/).
 import './App.css'
 
-// StrictMode: Geliştirme aşamasında olası yan etki (side effect) hatalarını
-// erken yakalamak için React'in önerdiği sarmalayıcı. Production build'i etkilemez.
-createRoot(document.getElementById('root')).render(
+const root = document.getElementById('root')
+const app = (
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
 )
+
+// Production'da index.html build-zamanı prerender edilmiştir (statik içerik
+// #root içinde hazır) → hydrateRoot mevcut DOM'u "canlandırır". Dev sunucusunda
+// prerender YOKtur (boş kök) → createRoot ile normal mount yapılır.
+if (import.meta.env.PROD) {
+  hydrateRoot(root, app)
+} else {
+  createRoot(root).render(app)
+}
 
 // ── Konsol easter egg: kaynağı merak edip konsolu açan geliştiricilere selam ──
 console.log(

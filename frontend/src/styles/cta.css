@@ -1,0 +1,325 @@
+/* ── 20. KAPANIŞ CTA ───────────────────────────────────────────────────────── */
+
+.cta {
+  margin-top: 120px;
+  text-align: center;
+}
+
+.cta__label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 18px;
+}
+
+.cta__label::before {
+  content: '✱';
+  color: var(--accent);
+  margin-right: 8px;
+}
+
+.cta__title {
+  font-size: clamp(2.6rem, 6vw, 4.3rem);
+  font-weight: 720;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+/* Vurgu kelimesi: serif italik amber — sayfanın imza dokunuşu */
+.cta__title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+
+.cta__title-dot {
+  color: var(--accent);
+}
+
+.cta__note {
+  max-width: 52ch;
+  margin: 20px auto 0;
+  font-size: 0.975rem;
+  color: var(--text-secondary);
+}
+
+/* ── İletişim formu (Formspree) ── */
+/* Ortalı blok, sola hizalı alanlar; glassmorphic kart dili. */
+.contact-form {
+  max-width: 580px;
+  margin: 34px auto 0;
+  text-align: left;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card), inset 0 1px 0 var(--card-inset);
+  padding: 26px;
+}
+
+.contact-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.contact-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 14px;
+}
+
+/* Satırdaki alanların kendi alt boşluğu yok (satır gap'i yetiyor) */
+.contact-form__row .contact-form__field {
+  margin-bottom: 0;
+}
+
+.contact-form__row + .contact-form__field {
+  margin-top: 14px;
+}
+
+.contact-form__label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.contact-form__input {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.contact-form__input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Odakta accent renkli kenar + yumuşak hale */
+.contact-form__input:focus {
+  outline: none;
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background: var(--surface-2);
+}
+
+.contact-form__textarea {
+  resize: vertical;
+  min-height: 112px;
+  line-height: 1.6;
+}
+
+/* Hatalı alan: kırmızı kenar + altında küçük hata metni */
+.contact-form__input.is-error {
+  border-color: var(--danger);
+}
+
+.contact-form__error {
+  font-size: 0.76rem;
+  color: var(--danger);
+}
+
+/* Gönder butonu kartın ortasında */
+.contact-form__submit {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.contact-form__submit .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Durum satırı: yükseklik sabit (mesaj gelince yerleşim zıplamaz) */
+.contact-form__status {
+  min-height: 22px;
+  margin-top: 14px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.contact-form__toast {
+  display: inline-block;
+}
+
+/* Başarı: belirir, bekler, kaybolur (hareket varsa); reduced-motion'da
+   statik kalıp zamanlayıcıyla gider (JS'teki setTimeout). */
+.contact-form__toast--ok {
+  color: var(--success);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .contact-form__toast--ok {
+    animation: toast-life 4s var(--ease-out) both;
+  }
+}
+
+.contact-form__toast--error {
+  color: var(--danger);
+  animation: toast-in 0.3s var(--ease-out) both;
+}
+
+@keyframes toast-life {
+  0%   { opacity: 0; transform: translateY(6px); }
+  9%   { opacity: 1; transform: translateY(0); }
+  82%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-4px); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Kart dışında, altta ortalı, yan yana: e-posta kopyala + LinkedIn */
+.cta__links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+/* Telefonda isim/e-posta tek kolona iner */
+@media (max-width: 560px) {
+  .contact-form__row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .contact-form__row .contact-form__field {
+    margin-bottom: 14px;
+  }
+}
+
+
+/* ── 20b. ERROR BOUNDARY (hata fallback'i) ─────────────────────────────────── */
+
+/* Yalnızca ortalı yerleşim + çocuk stilleri; cam zemin/kenar `.card` sınıfından
+   gelir (compact varyantta bento hücresi de olur). */
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  padding: 44px 28px;
+}
+
+.error-boundary--compact {
+  padding: 26px;
+}
+
+.error-boundary__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--danger) 13%, transparent);
+  color: var(--danger);
+}
+
+.error-boundary--compact .error-boundary__icon {
+  width: 42px;
+  height: 42px;
+}
+
+.error-boundary__title {
+  font-size: 1.1rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.error-boundary--compact .error-boundary__title {
+  font-size: 0.95rem;
+}
+
+.error-boundary__message {
+  max-width: 42ch;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.error-boundary--compact .error-boundary__message {
+  font-size: 0.84rem;
+}
+
+.error-boundary__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 6px;
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.error-boundary__button:hover {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+
+/* ── 21. FOOTER ────────────────────────────────────────────────────────────── */
+
+.footer {
+  margin-top: 96px;
+  border-top: 1px solid var(--border);
+  padding: 26px 28px 40px;
+}
+
+.footer__inner {
+  max-width: 1104px;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footer__credit,
+.footer__made {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+}
+
+.footer__updated {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+}
+
+.footer__updated time {
+  color: var(--text-secondary);
+}
+
+

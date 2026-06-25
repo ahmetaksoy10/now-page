@@ -170,7 +170,7 @@ export const timeline = [
     id: 'simdi',
     date: 'Haziran 2026',
     title: 'Şu an',
-    text: 'Travio’ya odaklanma, bu Now Page ve Yaz 2026 staj arayışı.',
+    text: 'Travio’yu derinleştirmek, bu Now Page ve sıradaki büyük adıma hazırlanmak.',
     icon: 'target',
   },
 ]
@@ -179,8 +179,8 @@ export const timeline = [
 export const contactCta = {
   label: 'Bir sonraki adım',
   note:
-    'Yaz 2026 staj dönemim için ekip arıyorum. React, Python/FastAPI veya ' +
-    'iOS projelerinizde hem öğrenir hem değer katarım — bir kahve uzaklıktayım.',
+    'Staj dönemim için ekip arıyorum. React, Python/FastAPI veya iOS ' +
+    'projelerinizde hem öğrenir hem değer katarım — bir kahve uzaklıktayım.',
   // İletişim formu gönderimi (Formspree) — sayfa yenilenmeden fetch ile POST edilir
   formAction: 'https://formspree.io/f/mdavqrjy',
 }
@@ -331,7 +331,7 @@ export const otherProjects = [
       'iOS 17 Observation framework (@Observable) + SwiftData kalıcılığı',
     ],
     stack: ['SwiftUI', 'SwiftData', 'Swift Charts', 'AppIntents'],
-    repoUrl: null, // repo şimdilik özel — yayınlanınca linki buraya ekleyin
+    repoUrl: 'https://github.com/ahmetaksoy10/subgrave-app',
     screenshots: [
       { src: subgravePano, alt: 'Subgrave ana panosu — abonelik özetleri' },
       { src: subgraveMezarlik, alt: 'Subgrave mezarlık ekranı — iptal edilen abonelikler' },
@@ -391,7 +391,7 @@ export const otherProjects = [
       'Sınırlı hackathon süresinde uçtan uca çalışan prototip',
     ],
     stack: ['Python', 'FastAPI', 'Pandas', 'React', 'Vite', 'Tailwind CSS'],
-    repoUrl: null, // repo şimdilik özel — yayınlanınca linki buraya ekleyin
+    repoUrl: 'https://github.com/ahmetaksoy10/hackathon_26',
     screenshots: [
       { src: oeeHome, alt: 'OEE Dashboard ana ekranı — genel verimlilik panosu' },
       { src: oeeAlarmlar, alt: 'OEE Dashboard alarmlar ekranı' },

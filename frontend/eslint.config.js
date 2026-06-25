@@ -5,9 +5,11 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'dist-server']),
+
+  // Uygulama kaynağı: tarayıcı ortamı + React kuralları
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['src/**/*.{js,jsx}'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -17,5 +19,13 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+  },
+
+  // Yapılandırma + build script'leri: Node ortamı (process, Buffer, console…).
+  // React/refresh kuralları uygulanmaz (bunlar bileşen değil, araç dosyalarıdır).
+  {
+    files: ['vite.config.js', 'eslint.config.js', 'scripts/**/*.{js,mjs}', 'prerender.mjs'],
+    extends: [js.configs.recommended],
+    languageOptions: { globals: globals.node },
   },
 ])

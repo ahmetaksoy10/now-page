@@ -1,0 +1,419 @@
+/* ── 18. GITHUB CANLI VERİ ─────────────────────────────────────────────────── */
+
+/* Kart: iç parıltı (card__glow) ve heatmap kaydırması köşelerde taşmasın */
+.github-card {
+  overflow: hidden;
+}
+
+/* İki kolonlu yerleşim: solda profil/diller, sağda repolar */
+.github-card__layout {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 30px;
+}
+
+/* Grid kolonlarının içeriği (uzun repo adları, çizgiler) taşmasın */
+.github-card__main,
+.github-card__side {
+  min-width: 0;
+}
+
+.github-card__side {
+  border-left: 1px solid var(--border);
+  padding-left: 28px;
+}
+
+/* ── Gerçek katkı ısı haritası (jogruber API'sinden) ── */
+.contrib {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.contrib__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-bottom: 12px;
+}
+
+.contrib__title {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.contrib__stats {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+}
+
+.contrib__stats strong {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+/* Dar ekranda yatay kaydırılır (heatmap doğası gereği geniştir) */
+.contrib__grid-wrap {
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.contrib__grid {
+  display: flex;
+  gap: 3px;
+  min-width: min-content;
+}
+
+.contrib__week {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.contrib__day {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  background: var(--surface-2);
+}
+
+.contrib__day--empty {
+  background: transparent;
+}
+
+/* Seviyeler: accent rengi giderek doygunlaşır (her iki temada çalışır) */
+.contrib__day--l0 { background: var(--surface-2); }
+.contrib__day--l1 { background: color-mix(in srgb, var(--accent) 28%, transparent); }
+.contrib__day--l2 { background: color-mix(in srgb, var(--accent) 52%, transparent); }
+.contrib__day--l3 { background: color-mix(in srgb, var(--accent) 76%, transparent); }
+.contrib__day--l4 { background: var(--accent); }
+
+.contrib__legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  margin-top: 8px;
+  font-size: 0.66rem;
+  color: var(--text-tertiary);
+}
+
+.contrib__legend .contrib__day {
+  width: 10px;
+  height: 10px;
+}
+
+/* ── Profil satırı ── */
+.github-card__profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.github-card__avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  flex-shrink: 0;
+}
+
+.github-card__profile-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.github-card__name {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 1.1rem;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+}
+
+.github-card__login {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--text-tertiary);
+}
+
+.github-card__bio {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  margin-top: 3px;
+}
+
+/* Profili ziyaret butonu: hover'da amber'e döner, ok kayar */
+.github-card__visit {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 11px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  background: var(--surface);
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    background-color 0.25s ease,
+    transform 0.3s var(--ease-out);
+}
+
+.github-card__visit:hover {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  transform: translateY(-2px);
+}
+
+.github-card__visit-arrow {
+  transition: transform 0.3s var(--ease-out);
+}
+
+.github-card__visit:hover .github-card__visit-arrow {
+  transform: translate(1px, -1px);
+}
+
+/* ── İstatistik şeridi (4'lü) ── */
+.github-card__stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 15px 2px;
+  margin: 18px 0;
+}
+
+.github-card__stat dt {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.github-card__stat dt svg {
+  color: var(--accent);
+}
+
+.github-card__stat dd {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-top: 4px;
+}
+
+/* ── Dil dağılımı ── */
+.lang-dist__title,
+.github-card__side-title {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+
+/* Tek satırlık renkli dağılım çubuğu (stacked bar) */
+.lang-dist__bar {
+  display: flex;
+  height: 9px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--surface-2);
+  gap: 2px;
+}
+
+.lang-dist__segment {
+  width: 0;
+  background: var(--seg-color);
+  border-radius: 2px;
+  /* Kart görünür olunca her dilim kademeli olarak gerçek genişliğine açılır */
+  transition: width 0.9s var(--ease-out);
+  transition-delay: var(--seg-delay, 0ms);
+}
+
+.reveal.is-visible .lang-dist__segment {
+  width: var(--seg-width, 0%);
+}
+
+/* Lejant: renk noktası + dil adı + yüzde */
+.lang-dist__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 14px;
+}
+
+.lang-dist__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.lang-dist__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.lang-dist__pct {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+
+/* ── Öne çıkan repolar ── */
+.github-card__repos {
+  display: flex;
+  flex-direction: column;
+}
+
+.github-card__repos li + li {
+  border-top: 1px solid var(--border);
+}
+
+.repo-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 11px 10px;
+  margin: 0 -10px;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.25s ease, transform 0.25s var(--ease-out);
+}
+
+.repo-row:hover {
+  background: var(--surface-2);
+  transform: translateX(3px);
+}
+
+.repo-row__name {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.repo-row__description {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.repo-row__meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.repo-row__language,
+.repo-row__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.repo-row__language-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ── Skeleton / hata yerleşimi ── */
+.github-card__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.github-card__error svg {
+  flex-shrink: 0;
+  color: var(--danger);
+  margin-top: 2px;
+}
+
+.github-card__error a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+
+/* ── 19. SKELETON LOADING (shimmer) ────────────────────────────────────────── */
+
+.skeleton {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, var(--shimmer), transparent);
+  animation: shimmer-sweep 1.5s ease-in-out infinite;
+}
+
+.skeleton--avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.skeleton--line {
+  height: 13px;
+  border-radius: var(--radius-full);
+}
+
+.skeleton--line + .skeleton--line {
+  margin-top: 9px;
+}
+
+/* Stat iskeletleri grid hücresini doldurur — sabit genişlik + margin
+   yeni grid layout'ta taşıp üst üste biniyordu; grid gap zaten boşluğu verir. */
+.skeleton--stat {
+  width: 100%;
+  height: 44px;
+}
+
+.skeleton--repo {
+  height: 56px;
+}
+
+.skeleton--repo + .skeleton--repo {
+  margin-top: 10px;
+}
+
+
