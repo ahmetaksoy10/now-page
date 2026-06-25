@@ -309,9 +309,9 @@ export const lastfm = {
 
 // ── 04 · Sistem Durumu (Enerji) ──────────────────────────────────────────────
 export const energyStatus = {
-  level: 75, // yüzde cinsinden enerji seviyesi
-  context: 'Haziran 2026 · Final dönemi',
-  note: 'Finaller yaklaşıyor ama kahve desteğiyle sistem ayakta.',
+  level: 85, // yüzde cinsinden enerji seviyesi
+  context: 'Haziran 2026 · Yaz Mesaisi',
+  note: 'Finallerin stresini attık, şimdi yeni projelere ve geliştirme süreçlerine derinlemesine dalma vakti. Motivasyon oldukça yüksek!',
 }
 
 // ── 05 · Hayattan Bir Kare ───────────────────────────────────────────────────
@@ -390,7 +390,7 @@ export const otherProjects = [
   {
     id: 'subgrave',
     name: 'Subgrave',
-    status: 'Geliştiriliyor',
+    status: 'Tamamlandı',
     tagline: '"Abonelik Mezarlığı" metaforuyla abonelik takibi',
     description:
       '"Abonelik Mezarlığı" metaforuyla abonelik takibi: kullanılmayan ' +
