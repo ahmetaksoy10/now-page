@@ -40,14 +40,17 @@ const YARDIM = `kullanılabilir komutlar:
 
 const WHOAMI = `[+] HEDEF PROFİL: AHMET AKSOY
 ──────────────────────────────────────────────────
-[ kimlik ]     => Full-Stack Developer & Tech Enthusiast
+[ kimlik ]     => iOS Developer & Apple Ecosystem Enthusiast
 [ konum ]      => Balıkesir / Dünya
-[ statü ]      => Intern / Junior
-[ diller ]     => JavaScript, TypeScript, Swift, Python
-[ silahlar ]   => React, Next.js, SwiftUI, Node.js
-[ motivasyon ] => Sürekli öğren, boz, daha iyisini yap.
-[ not ]        => "Eğer bir sistem çalışıyorsa, onu daha
-                  iyi çalışacak şekilde tekrar kurarım."
+[ statü ]      => Intern / Junior iOS Developer
+[ diller ]     => Swift, Objective-C, C++, JavaScript
+[ silahlar ]   => SwiftUI, UIKit, CoreData, Combine, Xcode
+[ mimari ]     => MVVM, VIPER, Clean Architecture
+[ vizyon ]     => Pixel-perfect UI ve native performans.
+[ motivasyon ] => Apple HIG (Human Interface Guidelines)
+                  benim için sadece bir kural değil, sanattır.
+[ not ]        => "Kodlarım sadece hatasız derlenmekle kalmaz, 
+                  kullanıcıya akıcı bir Apple deneyimi yaşatır."
 ──────────────────────────────────────────────────`
 
 const LS = `dino.exe    snake.sh    xox.ai    readme.txt
@@ -59,13 +62,13 @@ oyunları dene → snake · dino · xox
 çıkış için 'exit' veya Esc.`
 
 function neofetch(tema) {
-  return `    █████╗      now//os neofetch
-   ██╔══██╗     ──────────────────────
-   ███████║     kullanıcı : ahmet@now-page
-   ██╔══██║     kabuk     : vite 8 · react 19
-   ██║  ██║     tema      : ${tema}
-   ╚═╝  ╚═╝     çalışma   : 13g 3sa 12dk
-                diller    : swift · js · python`
+  return ` █████╗       now//os neofetch
+██╔══██╗      ──────────────────────
+███████║      kullanıcı : ahmet@now-page
+██╔══██║      kabuk     : vite 8 · react 19
+██║  ██║      tema      : ${tema}
+╚═╝  ╚═╝      çalışma   : 13g 3sa 12dk
+              diller    : swift · js · python`
 }
 
 // Matrix yağmuru componenti
@@ -97,7 +100,6 @@ const MatrixRain = ({ tema }) => {
       columns = canvas.width / fontSize
       rainDrops = []
       for (let x = 0; x < columns; x++) {
-        // Start randomly above the screen so it falls/slides organically
         rainDrops[x] = Math.floor(Math.random() * -60)
       }
     }
@@ -140,8 +142,9 @@ const MatrixRain = ({ tema }) => {
 
 function HackerTerminal() {
   const [acik, setAcik] = useState(false)
-  const [mod, setMod] = useState('komut') // 'komut' | 'boot' | 'hack' | 'snake' | 'dino' | 'xox'
+  const [mod, setMod] = useState('komut') // 'komut' | 'boot' | 'snake' | 'dino' | 'xox'
   const [girisEkrani, setGirisEkrani] = useState(false)
+  const [kapaniyor, setKapaniyor] = useState(false)
   const [satirlar, setSatirlar] = useState([])
   const [girdi, setGirdi] = useState('')
   const [tema, setTema] = useState('yesil')
@@ -170,7 +173,7 @@ function HackerTerminal() {
     setSatirlar((s) => [...s, { metin, sinif, id: Date.now() + Math.random() }])
   }, [])
 
-  // Boot animasyonu
+  // Boot animasyonu — rastgele gecikmelerle gerçek boot hissi
   const botBaslat = useCallback(() => {
     temizleZamanlayicilar()
     setMod('boot')
@@ -180,15 +183,21 @@ function HackerTerminal() {
       { metin: '[ boot: now//os 2.6 başlatılıyor... ]', sinif: 'sis' },
       { metin: '[ çekirdek modülleri yükleniyor ✓ ]', sinif: 'sis' },
       { metin: '[ ağ arayüzü hazır ✓ ]', sinif: 'sis' },
+      { metin: '[ güvenlik duvarı aktif ✓ ]', sinif: 'sis' },
       { metin: BANNER, sinif: 'art' },
       { metin: '>> GİZLİ MOD AÇILDI — SİSTEME GİRİŞ YAPILDI <<', sinif: 'basari' },
       { metin: "komutları görmek için 'help' yazıp Enter'a bas.", sinif: '' },
     ]
+
+    let toplam = 0
     adimlar.forEach((a, i) => {
+      // Banner için uzun bekleme, diğerleri rastgele kısa gecikmeler
+      const gecikme = i === 4 ? 350 : (80 + Math.random() * 120)
+      toplam += gecikme
       const id = setTimeout(() => {
         setSatirlar((s) => [...s, { ...a, id: Date.now() + i }])
         if (i === adimlar.length - 1) setMod('komut')
-      }, 100 * (i + 1)) // Daha hızlı açılış
+      }, toplam)
       zamanlayicilar.current.push(id)
     })
   }, [temizleZamanlayicilar])
@@ -200,16 +209,21 @@ function HackerTerminal() {
       setAcik(true)
       setPos({ x: 0, y: 0 })
       botBaslat()
-    }, 1200)
+    }, 1800) // Sinematik intro için biraz daha uzun
   }, [botBaslat])
 
+  // CRT kapanma animasyonu ile kapat
   const kapat = useCallback(() => {
     temizleZamanlayicilar()
-    setAcik(false)
-    setGirisEkrani(false)
-    setMod('komut')
-    setSatirlar([])
-    setGirdi('')
+    setKapaniyor(true)
+    setTimeout(() => {
+      setAcik(false)
+      setGirisEkrani(false)
+      setKapaniyor(false)
+      setMod('komut')
+      setSatirlar([])
+      setGirdi('')
+    }, 500) // CRT-off animasyon süresi
   }, [temizleZamanlayicilar])
 
   // ── Açılış: Konami + custom event
@@ -410,11 +424,11 @@ function HackerTerminal() {
   if (!acik && !girisEkrani) return null
 
   return (
-    <div className={`terminal-overlay terminal--${tema}`} onClick={handleWrapperClick}>
+    <div className={`terminal-overlay terminal--${tema}${kapaniyor ? ' terminal-overlay--closing' : ''}`} onClick={handleWrapperClick}>
       <MatrixRain tema={tema} />
       <div
         id="terminal-screen"
-        className={`terminal terminal--${tema}`}
+        className={`terminal terminal--${tema}${kapaniyor ? ' terminal--closing' : ''}`}
         role="dialog"
         aria-modal="true"
         style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
@@ -425,8 +439,16 @@ function HackerTerminal() {
 
         {girisEkrani ? (
           <div className="hacker-transition-content">
-            <h2>GİZLİ MOD AKTİF</h2>
+            <h2>ACCESS GRANTED</h2>
+            <div className="intro-progress">
+              <div className="intro-progress__bar" />
+            </div>
             <p>SİSTEME SIZILIYOR...</p>
+            <div className="intro-lines">
+              <span>[ 0x7F4A ] auth_bypass.init()</span>
+              <span>[ 0x8C2D ] kernel_hook.inject()</span>
+              <span>[ 0xA1E9 ] firewall.dissolve()</span>
+            </div>
           </div>
         ) : (
           <>
@@ -465,7 +487,6 @@ function HackerTerminal() {
                   autoCapitalize="off"
                   aria-label="Komut girişi"
                 />
-                <span className="typewriter-cursor" style={{ display: 'none' }}></span>
               </div>
             )}
           </>

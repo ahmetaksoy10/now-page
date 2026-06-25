@@ -2,49 +2,15 @@
 
 /* Terminal kendi koyu "dünyasını" kurar; renkleri site temasından bağımsız
    --t-* değişkenleriyle gelir, 'theme' komutu bu seti değiştirir. */
-/* Terminal Overlay (Blurred background) */
-.terminal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
 
+/* ── Tema Renk Paletleri ─────────────────────────────────────────────────── */
 .terminal--yesil {
-  /* Varsayılan: yeşil */
   --t-bg: rgba(5, 8, 6, 0.45);
   --t-fg: #46d765;
   --t-dim: #2c8a42;
   --t-bright: #c6ffd2;
   --t-accent: #74ff90;
   --t-hata: #ff6b5e;
-}
-
-#terminal-screen {
-  position: relative;
-  width: 90vw;
-  max-width: 900px;
-  height: 80vh;
-  max-height: 700px;
-  z-index: 10000;
-  display: flex;
-  flex-direction: column;
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  background: var(--t-bg);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  color: var(--t-fg);
-  border-radius: 10px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 0 1px color-mix(in srgb, var(--t-fg) 20%, transparent);
-  overflow: hidden;
-  animation: term-ac 0.32s var(--ease-out);
 }
 
 .terminal--amber {
@@ -65,19 +31,107 @@
   --t-hata: #ff7a8a;
 }
 
+/* ── Terminal Overlay (Arka plan karartma + blur) ─────────────────────────── */
+.terminal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: overlay-in 0.4s ease-out;
+}
+
+.terminal-overlay--closing {
+  animation: overlay-out 0.5s ease-in forwards;
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes overlay-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Terminal Penceresi ──────────────────────────────────────────────────── */
+#terminal-screen {
+  position: relative;
+  width: 90vw;
+  max-width: 900px;
+  height: 80vh;
+  max-height: 700px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  background: var(--t-bg);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  color: var(--t-fg);
+  border-radius: 10px;
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.8),
+    0 0 0 1px color-mix(in srgb, var(--t-fg) 20%, transparent),
+    0 0 60px -10px color-mix(in srgb, var(--t-fg) 15%, transparent);
+  overflow: hidden;
+  animation: term-ac 0.32s var(--ease-out);
+  /* Tema değişiminde yumuşak geçiş */
+  transition:
+    color 0.4s ease,
+    background 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+/* CRT Kapanma animasyonu */
+#terminal-screen.terminal--closing {
+  animation: crt-off 0.45s ease-in forwards;
+}
+
 @keyframes term-ac {
   from {
     opacity: 0;
-    transform: scale(1.02);
+    transform: scale(0.95);
   }
-
   to {
     opacity: 1;
     transform: scale(1);
   }
 }
 
-/* CRT tarama çizgileri + hafif titreşim (dekoratif, tıklamayı geçirir) */
+@keyframes crt-off {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  40% {
+    opacity: 1;
+    transform: scaleY(0.005) scaleX(1.1);
+    filter: brightness(3);
+  }
+  70% {
+    opacity: 0.6;
+    transform: scaleY(0.005) scaleX(0.3);
+    filter: brightness(4);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0) scaleX(0);
+    filter: brightness(0);
+  }
+}
+
+/* ── CRT Efektleri ───────────────────────────────────────────────────────── */
+
+/* Tarama çizgileri + hafif titreşim */
 .terminal__scanlines {
   position: absolute;
   inset: 0;
@@ -92,7 +146,6 @@
 }
 
 .terminal__scanlines::after {
-  /* köşeleri karartan CRT vinyeti */
   content: '';
   position: absolute;
   inset: 0;
@@ -100,26 +153,13 @@
 }
 
 @keyframes term-flicker {
-
-  0%,
-  100% {
-    opacity: 0.85;
-  }
-
-  48% {
-    opacity: 0.92;
-  }
-
-  50% {
-    opacity: 0.7;
-  }
-
-  52% {
-    opacity: 0.9;
-  }
+  0%, 100% { opacity: 0.85; }
+  48%      { opacity: 0.92; }
+  50%      { opacity: 0.7;  }
+  52%      { opacity: 0.9;  }
 }
 
-/* CRT Bombesi (Curvature) & Chromatic Aberration */
+/* CRT Bombesi (Curvature) */
 .crt-curve {
   position: absolute;
   inset: 0;
@@ -129,37 +169,12 @@
   box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9);
 }
 
+/* Kromatik sapma */
 .chromatic-aberration {
   text-shadow: 1.5px 0 1px rgba(255,0,0,0.4), -1.5px 0 1px rgba(0,255,255,0.4);
 }
 
-/* Matrix Background */
-.matrix-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: 0.12;
-}
-.matrix-column {
-  position: absolute;
-  top: -100%;
-  width: 1.5em;
-  text-align: center;
-  color: var(--t-accent);
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  white-space: pre-wrap;
-  word-break: break-all;
-  animation: fall linear infinite;
-  text-shadow: 0 0 5px var(--t-accent);
-}
-@keyframes fall {
-  to { top: 100%; }
-}
-
-/* Glitch Transition Overlay */
+/* ── Giriş Ekranı (Sinematik Intro) ──────────────────────────────────────── */
 .hacker-transition-content {
   position: relative;
   z-index: 10;
@@ -169,23 +184,82 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
-  font-size: 1.5rem;
   text-align: center;
-}
-.hacker-transition-content h2 {
-  animation: glitch 0.2s infinite;
-  text-shadow: 2px 0 var(--t-accent), -2px 0 var(--t-dim);
-}
-@keyframes glitch {
-  0% { transform: translate(0) }
-  20% { transform: translate(-3px, 2px) }
-  40% { transform: translate(-3px, -2px) }
-  60% { transform: translate(3px, 2px) }
-  80% { transform: translate(3px, -2px) }
-  100% { transform: translate(0) }
+  gap: 20px;
 }
 
-/* Üst bar */
+.hacker-transition-content h2 {
+  font-size: 1.8rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--t-accent);
+  animation: glitch 0.15s infinite;
+  text-shadow:
+    2px 0 var(--t-accent),
+    -2px 0 var(--t-dim),
+    0 0 20px color-mix(in srgb, var(--t-accent) 60%, transparent);
+}
+
+.hacker-transition-content p {
+  font-size: 0.85rem;
+  color: var(--t-dim);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+/* Intro progress bar */
+.intro-progress {
+  width: 240px;
+  height: 3px;
+  background: color-mix(in srgb, var(--t-fg) 15%, transparent);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.intro-progress__bar {
+  height: 100%;
+  width: 0%;
+  background: var(--t-accent);
+  box-shadow: 0 0 12px var(--t-accent);
+  border-radius: 2px;
+  animation: progress-fill 1.6s ease-in-out forwards;
+}
+
+@keyframes progress-fill {
+  0%   { width: 0%;  }
+  20%  { width: 15%; }
+  45%  { width: 40%; }
+  60%  { width: 55%; }
+  80%  { width: 85%; }
+  100% { width: 100%; }
+}
+
+/* Intro ASCII lines */
+.intro-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.7rem;
+  color: var(--t-dim);
+  opacity: 0;
+  animation: intro-fade 0.6s 0.3s ease-out forwards;
+}
+
+@keyframes intro-fade {
+  to { opacity: 0.6; }
+}
+
+@keyframes glitch {
+  0%   { transform: translate(0)           }
+  20%  { transform: translate(-3px, 2px)    }
+  40%  { transform: translate(-3px, -2px)   }
+  60%  { transform: translate(3px, 2px)     }
+  80%  { transform: translate(3px, -2px)    }
+  100% { transform: translate(0)            }
+}
+
+/* ── Üst Bar ─────────────────────────────────────────────────────────────── */
 .terminal__bar {
   position: relative;
   z-index: 3;
@@ -196,6 +270,7 @@
   border-bottom: 1px solid color-mix(in srgb, var(--t-fg) 22%, transparent);
   cursor: grab;
   background: rgba(0,0,0,0.3);
+  transition: border-color 0.4s ease, background 0.4s ease;
 }
 
 .terminal__bar:active {
@@ -214,14 +289,15 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, filter 0.2s;
 }
 
 .mac-btn:hover {
   opacity: 0.8;
+  filter: brightness(1.2);
 }
 
-.mac-btn--close { background: #ff5f56; }
+.mac-btn--close    { background: #ff5f56; }
 .mac-btn--minimize { background: #ffbd2e; }
 .mac-btn--maximize { background: #27c93f; }
 
@@ -233,9 +309,10 @@
   text-transform: uppercase;
   color: var(--t-dim);
   pointer-events: none;
+  transition: color 0.4s ease;
 }
 
-/* Çıktı alanı: kaydırılabilir, CRT parıltısı için hafif text-shadow */
+/* ── Çıktı Alanı ─────────────────────────────────────────────────────────── */
 .terminal__output {
   position: relative;
   z-index: 1;
@@ -244,11 +321,38 @@
   padding: 18px 20px;
   line-height: 1.5;
   text-shadow: 0 0 6px color-mix(in srgb, var(--t-fg) 45%, transparent);
+  transition: text-shadow 0.4s ease;
 }
 
+/* Custom scrollbar — tema rengine uygun, ince */
+.terminal__output::-webkit-scrollbar {
+  width: 6px;
+}
+
+.terminal__output::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.terminal__output::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--t-fg) 25%, transparent);
+  border-radius: 3px;
+}
+
+.terminal__output::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--t-fg) 40%, transparent);
+}
+
+/* Firefox scrollbar */
+.terminal__output {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--t-fg) 25%, transparent) transparent;
+}
+
+/* ── Satır Stilleri ──────────────────────────────────────────────────────── */
 .term__line {
   white-space: pre-wrap;
   word-break: break-word;
+  transition: color 0.4s ease;
 }
 
 .term__line--art {
@@ -277,7 +381,7 @@
   text-shadow: 0 0 9px color-mix(in srgb, var(--t-hata) 45%, transparent);
 }
 
-/* Komut satırı (prompt + input) */
+/* ── Komut Satırı (Prompt + Input) ───────────────────────────────────────── */
 .terminal__promptrow {
   position: relative;
   z-index: 3;
@@ -286,11 +390,13 @@
   gap: 10px;
   padding: 12px 20px 18px;
   border-top: 1px solid color-mix(in srgb, var(--t-fg) 18%, transparent);
+  transition: border-color 0.4s ease;
 }
 
 .terminal__prompt {
   color: var(--t-accent);
   white-space: nowrap;
+  transition: color 0.4s ease;
 }
 
 .terminal__input {
@@ -304,23 +410,10 @@
   font-size: inherit;
   caret-color: var(--t-fg);
   text-shadow: 0 0 6px color-mix(in srgb, var(--t-fg) 45%, transparent);
+  transition: color 0.4s ease, caret-color 0.4s ease;
 }
 
-.typewriter-cursor {
-  display: inline-block;
-  width: 8px;
-  height: 1.2em;
-  background-color: var(--t-fg);
-  vertical-align: middle;
-  animation: blink 1s step-end infinite;
-  margin-left: 4px;
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-/* Oyun ekranı */
+/* ── Oyun Ekranları ──────────────────────────────────────────────────────── */
 .term-game {
   text-align: center;
   padding: 6px 0 2px;
@@ -341,7 +434,6 @@
   line-height: 1.35;
 }
 
-/* XOX tahtası: monospace hizalı satırlar + renkli X/O (oyuncu vs yapay zeka) */
 .xox-board {
   display: inline-block;
   font-family: var(--font-mono);
@@ -368,6 +460,7 @@
 .term-o {
   color: var(--t-hata);
   font-weight: 700;
+  text-shadow: 0 0 8px color-mix(in srgb, var(--t-hata) 50%, transparent);
 }
 
 .term-empty {
@@ -380,7 +473,7 @@
   font-size: 0.82rem;
 }
 
-/* Telefon: terminal yazısı biraz küçülsün ki oyun ızgaraları taşmasın */
+/* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 560px) {
   #terminal-screen {
     font-size: 0.74rem;
@@ -440,7 +533,6 @@
     opacity: 0;
     transform: translateY(-6px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -500,13 +592,16 @@
 
 /* Hareketi azalt: titreşim/açılış animasyonlarını kapat */
 @media (prefers-reduced-motion: reduce) {
-
   #terminal-screen,
   .hint__popover {
     animation: none;
   }
 
   .terminal__scanlines {
+    animation: none;
+  }
+
+  .hacker-transition-content h2 {
     animation: none;
   }
 }
