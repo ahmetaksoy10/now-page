@@ -68,25 +68,29 @@ function ActiveProject() {
             </ul>
 
             <div className="project-card__links">
-              <a
-                href={repoUrl}
-                className="text-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <GitHubIcon size={14} aria-hidden="true" />
-                Kaynak Kod
-                <ArrowUpRight size={13} className="text-link__arrow" aria-hidden="true" />
-              </a>
-              <a
-                href={liveUrl}
-                className="text-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Canlı Demo
-                <ArrowUpRight size={13} className="text-link__arrow" aria-hidden="true" />
-              </a>
+              {repoUrl && (
+                <a
+                  href={repoUrl}
+                  className="text-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <GitHubIcon size={14} aria-hidden="true" />
+                  Kaynak Kod
+                  <ArrowUpRight size={13} className="text-link__arrow" aria-hidden="true" />
+                </a>
+              )}
+              {liveUrl && (
+                <a
+                  href={liveUrl}
+                  className="text-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Canlı Demo
+                  <ArrowUpRight size={13} className="text-link__arrow" aria-hidden="true" />
+                </a>
+              )}
             </div>
           </div>
 

@@ -47,31 +47,7 @@
   opacity: 1;
 }
 
-/* Köşe filigranı: karta dair temayı sessizce fısıldayan, çok soluk büyük ikon.
-   Sağ alt köşeden hafifçe taşar; .card'ın overflow:hidden'ı yuvarlak köşede kırpar.
-   z-index:-1 → cam zeminin üstünde ama içeriğin altında (card__glow ile aynı katman).
-   Dekoratiftir (aria-hidden); hover'da azıcık belirginleşir. */
-.card__sticker {
-  position: absolute;
-  right: -10px;
-  bottom: -16px;
-  z-index: -1;
-  color: var(--text-primary);
-  opacity: 0.06;
-  transform: rotate(-8deg);
-  pointer-events: none;
-  transition: opacity 0.4s ease;
-}
 
-.card__sticker svg {
-  width: 92px;
-  height: 92px;
-  stroke-width: 1.5; /* ince çizgili lucide ikonları, dolgulu octocat'le benzer ağırlıkta okusun */
-}
-
-.card:hover .card__sticker {
-  opacity: 0.1;
-}
 
 /* Kart etiketi: sol üstte, küçük mono başlık. Bu bölümler bir SIRA değil
    (frontend-design: yapısal işaret içeriğe dair gerçek bir şey kodlamalı),

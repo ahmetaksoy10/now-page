@@ -169,15 +169,15 @@ export const about = {
   lead: 'Kod yazmak benim için bir görev değil, çözmekten keyif aldığım bir bulmaca.',
   paragraphs: [
     'Balıkesir Üniversitesi’nde bilgisayar mühendisliği ikinci sınıf öğrencisiyim. ' +
-      'Beni asıl heyecanlandıran şey, kafamdaki bir fikrin ekranda çalışan bir şeye ' +
-      'dönüştüğü o an. Bu yüzden sürekli yeni bir şey deniyor, bozuyor ve yeniden yapıyorum.',
+    'Beni asıl heyecanlandıran şey, kafamdaki bir fikrin ekranda çalışan bir şeye ' +
+    'dönüştüğü o an. Bu yüzden sürekli yeni bir şey deniyor, bozuyor ve yeniden yapıyorum.',
     'Çalışma şeklim iki katmanlı: önce bir fikri hızlıca prototipe döküp gerçekten ' +
-      'işe yarıyor mu görüyorum, sonra detayları — temiz mimariyi, kullanıcının fark ' +
-      'etmeden hissettiği küçük dokunuşları — sabırla cilalıyorum. iOS’ta SwiftUI, ' +
-      'web’de React; ikisi arasında gidip gelmeyi seviyorum.',
+    'işe yarıyor mu görüyorum, sonra detayları — temiz mimariyi, kullanıcının fark ' +
+    'etmeden hissettiği küçük dokunuşları — sabırla cilalıyorum. iOS’ta SwiftUI, ' +
+    'web’de React; ikisi arasında gidip gelmeyi seviyorum.',
     'Kod yazmadığım zamanlarda Türkçe çalma listemle kahve içiyor, bir sonraki ' +
-      'seyahatin planını yapıyor ya da bir distopya romanına dalıyorum. Roma’dan ' +
-      'döneli aylar oldu ama etkisi hâlâ üzerimde — gezdiğim her yer projelerime sızıyor.',
+    'seyahatin planını yapıyor ya da bir distopya romanına dalıyorum. Roma’dan ' +
+    'döneli aylar oldu ama etkisi hâlâ üzerimde — gezdiğim her yer projelerime sızıyor.',
   ],
   facts: [
     { id: 'kahve', icon: 'coffee', text: 'Günde 3 fincan kahveyle çalışır' },
@@ -260,6 +260,7 @@ export const contactCta = {
 // ── 01 · Ana Odak ────────────────────────────────────────────────────────────
 export const currentFocus = {
   title: 'Travio — yapay zekâ destekli iOS seyahat asistanı',
+  shortTitle: 'Travio-İOS Geliştirme',
   description:
     'Enerjimin büyük kısmını yeniden Travio’ya verdim. SwiftUI ile yazdığım bu ' +
     'iOS uygulamasının kalbindeki Gemini AI asistanını derinleştiriyor, ödeme ve ' +
@@ -348,7 +349,6 @@ export const activeProject = {
   ],
   stack: ['React', 'Vite', 'Vanilla CSS', 'GitHub API'],
   repoUrl: 'https://github.com/ahmetaksoy10/now-page',
-  liveUrl: 'https://ahmetaksoy10.github.io/now-page/',
 }
 
 // Raftaki diğer projeler:

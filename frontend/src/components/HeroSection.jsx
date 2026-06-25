@@ -97,7 +97,7 @@ function HeroSection() {
               <Crosshair size={13} aria-hidden="true" /> Şu anki odak
             </dt>
             {/* Tek doğruluk noktası: odak başlığı content.js'teki currentFocus'tan gelir */}
-            <dd>{currentFocus.title}</dd>
+            <dd>{currentFocus.shortTitle}</dd>
           </div>
         </dl>
       </aside>
