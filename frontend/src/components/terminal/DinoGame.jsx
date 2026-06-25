@@ -112,7 +112,7 @@ function DinoGame({ onExit }) {
     }
   }, [onExit])
 
-  const handleTouchStart = (e) => {
+  const handleTouchStart = () => {
       // e.preventDefault() sometimes causes passive event listener warning, but needed here for preventing scrolling.
       // We will just use touch-action: none on the div.
       setOyun((s) => {

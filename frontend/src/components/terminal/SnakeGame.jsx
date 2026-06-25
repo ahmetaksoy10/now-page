@@ -133,12 +133,9 @@ function SnakeGame({ onExit }) {
 
     if (Math.max(absDx, absDy) > 30) {
         setOyun(s => {
-            let y = null
-            if (absDx > absDy) {
-                y = dx > 0 ? {x: 1, y: 0} : {x: -1, y: 0}
-            } else {
-                y = dy > 0 ? {x: 0, y: 1} : {x: 0, y: -1}
-            }
+            const y = absDx > absDy 
+                ? (dx > 0 ? {x: 1, y: 0} : {x: -1, y: 0}) 
+                : (dy > 0 ? {x: 0, y: 1} : {x: 0, y: -1})
             if (y && !(y.x === -s.yon.x && y.y === -s.yon.y)) return { ...s, sonraki: y }
             return s
         })

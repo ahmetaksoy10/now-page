@@ -59,14 +59,13 @@ oyunları dene → snake · dino · xox
 çıkış için 'exit' veya Esc.`
 
 function neofetch(tema) {
-  return `       /\\               now//os neofetch
-      /  \\              ──────────────────────
-     / /\\ \\             kullanıcı : ahmet@now-page
-    / /  \\ \\            kabuk     : vite 8 · react 19
-   / /____\\ \\           tema      : ${tema}
-  / /______\\ \\          çalışma   : 13g 3sa 12dk
- / /        \\ \\         diller    : swift · js · python
- \\/          \\/         `
+  return `    █████╗      now//os neofetch
+   ██╔══██╗     ──────────────────────
+   ███████║     kullanıcı : ahmet@now-page
+   ██╔══██║     kabuk     : vite 8 · react 19
+   ██║  ██║     tema      : ${tema}
+   ╚═╝  ╚═╝     çalışma   : 13g 3sa 12dk
+                diller    : swift · js · python`
 }
 
 // Matrix yağmuru componenti
@@ -266,7 +265,7 @@ function HackerTerminal() {
   }, [satirlar, mod])
 
   // Auto focus
-  const handleWrapperClick = useCallback((e) => {
+  const handleWrapperClick = useCallback(() => {
     if (window.getSelection().toString().length === 0 && mod === 'komut') {
       inputRef.current?.focus()
     }
