@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Images, MapPin, Plane } from 'lucide-react'
+import { Maximize2, MapPin, Plane } from 'lucide-react'
 import { lifeHighlight, romaGaleri } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 import BlurImage from './BlurImage.jsx'
@@ -10,21 +10,15 @@ import GalleryViewer from './GalleryViewer.jsx'
  * LifeHighlight — "Hayattan Bir Kare": gerçek fotoğraflı kartpostal.
  *
  * Ana kare (Kolezyum önünde selfie) + üç karelik mini film şeridi.
- * Herhangi bir fotoğrafa tıklayınca, Roma gezisinin 9 karesinin tamamı
- * tam ekran lightbox galeride açılır (o kareden başlayarak).
+ * Herhangi bir fotoğrafa tıklayınca, Roma gezisinin 9 karesinin tamamı tam ekran
+ * lightbox galeride açılır: 1. kareden başlar ve projelerdeki gibi kendi kendine
+ * (3 sn'de bir) ilerler — fareyle üstüne gelince durur.
  */
 function LifeHighlight() {
   const { date, category, title, description, photo, photoAlt, gallery } = lifeHighlight
 
-  // Lightbox'ın hangi kareden açılacağını tutar; null ise kapalı.
-  const [acikIndex, setAcikIndex] = useState(null)
-
-  // Ana fotoğraf galerinin 1. karesi (roma2); şerit kareleri sırasıyla devam eder.
-  // Tıklanan görselin tüm galerideki konumunu bularak lightbox'ı oradan başlatırız.
-  const lightboxAc = (kaynak) => {
-    const bulunan = romaGaleri.findIndex((kare) => kare.src === kaynak)
-    setAcikIndex(bulunan === -1 ? 0 : bulunan)
-  }
+  // Galeri açık mı? Lightbox her zaman 1. kareden, slayt gösterisi gibi başlar.
+  const [galeriAcik, setGaleriAcik] = useState(false)
 
   return (
     <BentoCard
@@ -39,29 +33,29 @@ function LifeHighlight() {
           <Plane size={16} />
         </span>
 
-        {/* Ana kare: tıklayınca tüm galeriyi açar */}
+        {/* Ana kare: tıklayınca tüm galeriyi (slayt gösterisi) açar */}
         <button
           type="button"
           className="postcard__photo-button"
-          onClick={() => lightboxAc(photo)}
+          onClick={() => setGaleriAcik(true)}
           aria-label="Roma fotoğraf galerisini aç"
         >
           <BlurImage src={photo} alt={photoAlt} className="postcard__photo" loading="lazy" />
-          {/* Hover'da beliren galeri ipucu */}
+          {/* Hover'da beliren "detaylar için tıkla" ipucu (projelerdeki gibi) */}
           <span className="postcard__photo-hint" aria-hidden="true">
-            <Images size={15} />
-            {romaGaleri.length} fotoğraf
+            <Maximize2 size={15} />
+            Detayları gör
           </span>
         </button>
 
-        {/* Mini film şeridi: her kare kendi konumundan galeriyi açar */}
+        {/* Mini film şeridi: her kare de aynı galeriyi açar */}
         <div className="postcard__strip">
           {gallery.map((kare) => (
             <button
               key={kare.src}
               type="button"
               className="postcard__strip-button"
-              onClick={() => lightboxAc(kare.src)}
+              onClick={() => setGaleriAcik(true)}
               aria-label={`${kare.alt} — galeride aç`}
             >
               <BlurImage
@@ -70,6 +64,10 @@ function LifeHighlight() {
                 className="postcard__strip-photo"
                 loading="lazy"
               />
+              {/* Hover'da beliren büyüteç: kare de tıklanabilir */}
+              <span className="postcard__strip-hint" aria-hidden="true">
+                <Maximize2 size={14} />
+              </span>
             </button>
           ))}
         </div>
@@ -84,18 +82,18 @@ function LifeHighlight() {
         <p className="postcard__description">{description}</p>
       </div>
 
-      {/* Tam ekran lightbox: Roma'nın 9 karesi, tıklanan kareden başlar */}
+      {/* Tam ekran lightbox: Roma'nın 9 karesi, 1. kareden başlar + otomatik geçiş */}
       <Modal
-        open={acikIndex !== null}
-        onClose={() => setAcikIndex(null)}
+        open={galeriAcik}
+        onClose={() => setGaleriAcik(false)}
         labelledBy="roma-lightbox-baslik"
         variant="modal--lightbox"
       >
         <h2 id="roma-lightbox-baslik" className="visually-hidden">
           Roma seyahati fotoğraf galerisi
         </h2>
-        {acikIndex !== null && (
-          <GalleryViewer images={romaGaleri} startIndex={acikIndex} />
+        {galeriAcik && (
+          <GalleryViewer images={romaGaleri} startIndex={0} autoAdvance />
         )}
       </Modal>
     </BentoCard>

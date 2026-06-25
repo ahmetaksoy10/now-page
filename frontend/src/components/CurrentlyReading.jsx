@@ -1,4 +1,4 @@
-import { BookOpen, Star } from 'lucide-react'
+import { Star } from 'lucide-react'
 import { currentlyReading } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 import BlurImage from './BlurImage.jsx'
@@ -28,7 +28,7 @@ function CurrentlyReading() {
   const ilerleme = Math.round((currentPage / totalPages) * 100)
 
   return (
-    <BentoCard span={7} label="Kütüphanem" labelId="kitap-baslik" sticker={BookOpen}>
+    <BentoCard span={7} label="Kütüphanem" labelId="kitap-baslik">
       <div className="reading-card__top">
         {/* Gerçek kapak: alt yazı zaten kitabı tanıttığı için dekoratif sayılır */}
         <BlurImage

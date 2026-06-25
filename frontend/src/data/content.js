@@ -61,56 +61,74 @@ const oeeGaleri = galeriYap(
 const romaKunye = {
   roma1: {
     title: 'Kolezyum',
+    location: 'Piazza del Colosseo, Roma',
     description:
       'Flavian Amfitiyatrosu (MS 70–80). ~50 bin kişilik, dünyanın en büyük antik ' +
-      'amfitiyatrosu; cephesindeki üç kat kemer sırasıyla Dor, İon ve Korint düzenini taşır.',
+      'amfitiyatrosu; cephesindeki üç kat kemer sırasıyla Dor, İon ve Korint düzenini ' +
+      'taşır. Gladyatör oyunlarına ev sahipliği yapan bu dev yapı, Roma mühendisliğinin ' +
+      'hâlâ ayakta duran simgesi.',
   },
   roma2: {
     title: 'Kolezyum’un önünde',
-    description: 'Roma’nın simgesi devasa amfitiyatronun hemen dibinde bir kare.',
+    location: 'Kolezyum, Roma',
+    description:
+      'Roma’nın simgesi devasa amfitiyatronun hemen dibinde bir kare. Taşların ve ' +
+      'kemerlerin gerçek ölçeğini ancak yanında durunca kavrıyorsun.',
   },
   roma3: {
     title: 'Konstantin Takı',
+    location: 'Arco di Costantino, Roma',
     description:
-      'Arco di Costantino (MS 315). Kolezyum’un yanındaki üç gözlü zafer takı; ' +
-      'İmparator Konstantin’in Milvius Köprüsü zaferi anısına dikildi, kabartmalarının ' +
-      'çoğu daha eski anıtlardan devşirilmiştir.',
+      'Arco di Costantino (MS 315). Kolezyum’un yanındaki üç gözlü zafer takı; İmparator ' +
+      'Konstantin’in Milvius Köprüsü zaferi anısına dikildi. Kabartmalarının çoğu daha ' +
+      'eski anıtlardan devşirilmiş — adeta taştan bir “antik kolaj”.',
   },
   roma4: {
     title: 'Eski mahalle sokağı',
+    location: 'Trastevere, Roma',
     description:
       'Roma’nın eski mahalle dokusu: daracık arnavut kaldırımı, oker sıvalı evler, ahşap ' +
-      'panjurlar ve dökme demir sokak feneri — Trastevere’yi andıran sakin bir ara sokak.',
+      'panjurlar ve dökme demir sokak feneri. Turist kalabalığından uzak, Trastevere’yi ' +
+      'andıran sakin bir ara sokak.',
   },
   roma5: {
     title: 'İkiz kiliselerin kubbeleri',
+    location: 'Foro di Traiano, Roma',
     description:
       'Trajan Forumu yanındaki “ikiz kiliseler” — Santa Maria di Loreto ve Santissimo Nome ' +
-      'di Maria. Kurşun kaplı kubbelerdeki yuvarlak pencereler (oculi) Roma barok mimarisinin izi.',
+      'di Maria. Neredeyse aynı görünen kurşun kaplı kubbelerdeki yuvarlak pencereler (oculi) ' +
+      'Roma barok mimarisinin izini taşır.',
   },
   roma6: {
     title: 'Tevere Nehri',
+    location: 'Tevere kıyısı, Roma',
     description:
       'Tiber (Tevere) Nehri ve ağaçlı rıhtımı; arkada nehri aşan çok kemerli taş köprülerden ' +
-      'biri. Antik çağdan beri kenti boydan boya kesen bu nehir Roma’nın hayat damarı.',
+      'biri. Antik çağdan beri kenti boydan boya kesen bu nehir, Roma’nın hayat damarı olmuş.',
   },
   roma7: {
     title: 'Villa Borghese gölü',
+    location: 'Villa Borghese, Roma',
     description:
-      'Villa Borghese parkındaki yapay göl; arkada Asklepios Tapınağı ve kürek teknesi kiralayan ' +
-      'ziyaretçiler. Roma’nın en büyük peyzaj bahçelerinden birinde dingin bir mola.',
+      'Villa Borghese parkındaki yapay göl; arkada Asklepios Tapınağı, suda kürek çeken ' +
+      'ziyaretçiler. Roma’nın en büyük peyzaj bahçelerinden birinde, şehrin gürültüsünden ' +
+      'uzak dingin bir mola.',
   },
   roma8: {
     title: 'Asklepios Tapınağı',
+    location: 'Villa Borghese, Roma',
     description:
-      'Tempio di Esculapio (1785–92). Villa Borghese gölündeki adacıkta yükselen, İon düzeninde ' +
-      'sütunlu neoklasik bir bahçe tapınağı; alınlığında sağlık tanrısı Asklepios’a adanışı yazar.',
+      'Tempio di Esculapio (1785–92). Villa Borghese gölündeki adacıkta yükselen, İon ' +
+      'düzeninde sütunlu neoklasik bir bahçe tapınağı; alınlığında sağlık tanrısı ' +
+      'Asklepios’a adanışı yazar.',
   },
   roma9: {
     title: 'Altare della Patria',
+    location: 'Piazza Venezia, Roma',
     description:
-      'Vittoriano. İtalya’nın birliğini ve ilk kralı II. Vittorio Emanuele’yi anan devasa beyaz ' +
-      'mermer anıt; tepesinde tunç quadriga’lar, ortada kralın atlı heykeli. Piazza Venezia’da yükselir.',
+      'Vittoriano. İtalya’nın birliğini ve ilk kralı II. Vittorio Emanuele’yi anan devasa ' +
+      'beyaz mermer anıt; tepesinde tunç quadriga’lar, ortada kralın atlı heykeli. ' +
+      'Görkemiyle Piazza Venezia’ya hâkim.',
   },
 }
 
@@ -129,6 +147,7 @@ export const romaGaleri = Object.keys(romaModulleri)
       alt: kunye.title ? `${kunye.title} — Roma` : 'Roma seyahatinden kare',
       title: kunye.title,
       description: kunye.description,
+      location: kunye.location,
     }
   })
 

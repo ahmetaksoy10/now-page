@@ -13,7 +13,7 @@ function EnergyStatus() {
   const { level, context, note } = energyStatus
 
   return (
-    <BentoCard span={5} label="Sistem Durumu" labelId="enerji-baslik" sticker={Zap}>
+    <BentoCard span={5} label="Sistem Durumu" labelId="enerji-baslik">
       <div className="energy-card__head">
         <p className="energy-card__context">{context}</p>
         <p className="energy-card__percent">

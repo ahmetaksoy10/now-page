@@ -235,6 +235,16 @@
   color: var(--text-secondary);
 }
 
+/* Konum satırı: 📍 emoji + yer adı, accent renginde mono */
+.gallery__caption-loc {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--accent);
+}
+
 /* Küçük resim şeridi: yatay kaydırılabilir */
 .gallery__thumbs {
   display: flex;

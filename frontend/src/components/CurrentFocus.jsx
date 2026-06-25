@@ -28,7 +28,6 @@ function CurrentFocus() {
       label="Ana Odak"
       labelId="odak-baslik"
       className="focus-card"
-      sticker={Crosshair}
     >
       <div ref={kartRef} onMouseMove={fareyiIzle} className="focus-card__surface">
         <div className="focus-card__icon" aria-hidden="true">

@@ -106,11 +106,14 @@ function GalleryViewer({ images, startIndex = 0, autoAdvance = false }) {
       {/* Kare açıklaması: yalnızca künyeli galerilerde (ör. Roma) görünür;
           proje ekran görüntülerinde title/description olmadığı için gizli kalır.
           `aktif` değişince içerik kendiliğinden güncellenir. */}
-      {(gorsel.title || gorsel.description) && (
+      {(gorsel.title || gorsel.description || gorsel.location) && (
         <figcaption className="gallery__caption">
           {gorsel.title && <span className="gallery__caption-title">{gorsel.title}</span>}
           {gorsel.description && (
             <span className="gallery__caption-text">{gorsel.description}</span>
+          )}
+          {gorsel.location && (
+            <span className="gallery__caption-loc">📍 {gorsel.location}</span>
           )}
         </figcaption>
       )}

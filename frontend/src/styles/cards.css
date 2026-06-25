@@ -564,6 +564,7 @@
 }
 
 .postcard__strip-button {
+  position: relative;
   flex: 1;
   min-width: 0;
   padding: 0;
@@ -584,6 +585,25 @@
 
 .postcard__strip-button:hover .postcard__strip-photo {
   transform: scale(1.08) rotate(-1deg);
+}
+
+/* Şerit karesi hover'ında beliren büyüteç katmanı: kare de tıklanabilir sinyali */
+.postcard__strip-hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--glass) 65%, transparent);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.postcard__strip-button:hover .postcard__strip-hint,
+.postcard__strip-button:focus-visible .postcard__strip-hint {
+  opacity: 1;
 }
 
 .postcard__meta {
