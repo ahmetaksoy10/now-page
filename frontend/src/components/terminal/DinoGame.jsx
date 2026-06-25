@@ -112,23 +112,17 @@ function DinoGame({ onExit }) {
     }
   }, [onExit])
 
-  const handleTouchStart = () => {
-      setOyun((s) => {
-        if (s.bitti) return yeniOyun()
-        if (s.yerde) return { ...s, vy: ZIPLA, yerde: false }
-        return s
-      })
-  }
+
 
   return (
-    <div className="term-game" onTouchStart={handleTouchStart} style={{ touchAction: 'none' }}>
+    <div className="term-game">
       <pre className="term-game__screen" aria-hidden="true" style={{ color: 'var(--t-accent)', textShadow: '0 0 5px var(--t-accent)' }}>
         {ciz(oyun)}
       </pre>
       <p className="term-game__status">
         {oyun.bitti
-          ? `GAME OVER — Skorun: ${oyun.skor} — Tekrar için R veya dokun · çıkış: q`
-          : `Skor: ${oyun.skor} (Hız: ${Math.round(oyun.hiz * 100)}x)  ·  Zıpla: Dokun / Space / ↑  ·  çıkış: q`}
+          ? `GAME OVER — Skorun: ${oyun.skor} — Tekrar için R · çıkış: q`
+          : `Skor: ${oyun.skor} (Hız: ${Math.round(oyun.hiz * 100)}x)  ·  Zıpla: Space / ↑  ·  çıkış: q`}
       </p>
     </div>
   )

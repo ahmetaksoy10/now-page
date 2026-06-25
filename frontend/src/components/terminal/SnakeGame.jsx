@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 
 const GENISLIK = 26
 const YUKSEKLIK = 16
@@ -71,7 +71,6 @@ function ciz(s) {
 
 function SnakeGame({ onExit }) {
   const [oyun, setOyun] = useState(yeniOyun)
-  const touchStart = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     const oyunTuslari = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ']
@@ -110,40 +109,10 @@ function SnakeGame({ onExit }) {
     return () => clearInterval(id)
   }, [oyun.bitti, oyun.tick])
 
-  const handleTouchStart = (e) => {
-    touchStart.current = {
-        x: e.touches[0].clientX,
-        y: e.touches[0].clientY
-    }
-  }
 
-  const handleTouchEnd = (e) => {
-    if (oyun.bitti) {
-       setOyun(yeniOyun())
-       return
-    }
-    const touchEnd = {
-        x: e.changedTouches[0].clientX,
-        y: e.changedTouches[0].clientY
-    }
-    const dx = touchEnd.x - touchStart.current.x
-    const dy = touchEnd.y - touchStart.current.y
-    const absDx = Math.abs(dx)
-    const absDy = Math.abs(dy)
-
-    if (Math.max(absDx, absDy) > 30) {
-        setOyun(s => {
-            const y = absDx > absDy 
-                ? (dx > 0 ? {x: 1, y: 0} : {x: -1, y: 0}) 
-                : (dy > 0 ? {x: 0, y: 1} : {x: 0, y: -1})
-            if (y && !(y.x === -s.yon.x && y.y === -s.yon.y)) return { ...s, sonraki: y }
-            return s
-        })
-    }
-  }
 
   return (
-    <div className="term-game" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd} style={{ touchAction: 'none' }}>
+    <div className="term-game">
       <pre className="term-game__screen" aria-hidden="true" style={{ color: 'var(--t-accent)', textShadow: '0 0 5px var(--t-accent)' }}>
         {ciz(oyun).split('★').map((part, index, arr) => (
           <span key={index}>
@@ -155,7 +124,7 @@ function SnakeGame({ onExit }) {
       <p className="term-game__status">
         {oyun.bitti
           ? `Yılan oyununu bitirdin! Skor: ${oyun.skor} — Tekrar için R · çıkış: q`
-          : `Skor: ${oyun.skor} (Hız: ${Math.round(1000/oyun.tick)}x) · Yön: kaydır/ok tuşları · çıkış: q`}
+          : `Skor: ${oyun.skor} (Hız: ${Math.round(1000/oyun.tick)}x) · Yön: Ok tuşları · çıkış: q`}
       </p>
     </div>
   )
