@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowUpRight, Send } from 'lucide-react'
+import { Send } from 'lucide-react'
 import { GitHubIcon, LinkedInIcon } from './icons/BrandIcons.jsx'
 import { contactCta, socialLinks } from '../data/content.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
