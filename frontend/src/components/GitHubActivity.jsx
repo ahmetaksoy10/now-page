@@ -225,6 +225,7 @@ function GitHubActivity() {
       label="GitHub — Canlı Veri"
       labelId="github-baslik"
       className="github-card"
+      sticker={GitHubIcon}
     >
       {durum === 'loading' && <GitHubSkeleton />}
 

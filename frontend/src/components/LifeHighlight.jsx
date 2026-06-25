@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Images, Plane } from 'lucide-react'
+import { Images, MapPin, Plane } from 'lucide-react'
 import { lifeHighlight, romaGaleri } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 import BlurImage from './BlurImage.jsx'
@@ -77,7 +77,10 @@ function LifeHighlight() {
         <p className="postcard__meta">
           {date} · {category}
         </p>
-        <h2 className="postcard__title">{title}</h2>
+        <h2 className="postcard__title">
+          <MapPin size={17} className="postcard__title-pin" aria-hidden="true" />
+          {title}
+        </h2>
         <p className="postcard__description">{description}</p>
       </div>
 

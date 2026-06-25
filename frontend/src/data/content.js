@@ -155,10 +155,11 @@ export const socialLinks = [
 ]
 
 // ── Son güncelleme ───────────────────────────────────────────────────────────
-// Now-page'in en önemli sinyali: sayfanın CANLI olduğu. Bu tarih elle, içeriği
-// her gerçekten güncellediğinde değiştirilir (sayfanın açıldığı an değil).
-// Hero'daki damga ve Footer aynı kaynaktan beslenir (tek doğruluk noktası).
-export const lastUpdated = '2026-06-17'
+// Now-page'in en önemli sinyali: sayfanın CANLI olduğu. Bu tarih artık elle değil,
+// son git commit'inden otomatik gelir (vite.config.js `define` → __GIT_DATE__),
+// böylece her yayında kendiliğinden güncellenir. Hero'daki damga ve Footer aynı
+// kaynaktan beslenir (tek doğruluk noktası).
+export const lastUpdated = __GIT_DATE__
 
 // ── Hakkımda ─────────────────────────────────────────────────────────────────
 // Hero'nun kısa tanıtımının ötesinde: kim olduğum, nasıl çalıştığım, birkaç
@@ -275,13 +276,20 @@ export const currentlyReading = {
   author: 'Hugh Howey',
   cover: siloKapak,
   meta: ['Distopik bilim kurgu', 'Silo Serisi · 1. kitap', '2011'],
+  // Kitabın ruhunu yansıtan kısa alıntı (epigraf)
+  quote: '"Bilgi tehlikelidir. Bu yüzden saklanır."',
   synopsis:
-    'Yeraltında yüzlerce kat derinleşen dev bir siloda, dış dünyanın zehirli ' +
-    'olduğuna inandırılmış bir toplumun katı düzenini ve bu düzene yönelen ilk ' +
-    'çatlakları anlatıyor.',
+    'Yeraltında yüzlerce kat derinleşen dev bir siloda, dış dünyanın ölümcül ' +
+    'derecede zehirli olduğuna inandırılmış bir toplumun katı düzenini anlatıyor. ' +
+    'Baş karakter Juliette, yasak soruları soran herkesin başına geleni merak ' +
+    'etmeye başlayınca her şey değişir.',
   reason:
-    'Gün boyu kod yazdıktan sonra zihnimi bambaşka bir dünyaya taşıyor — kurgu ' +
-    'benim için en iyi dinlenme şekli. Sırada serinin ikinci kitabı Shift var.',
+    'Gün boyu kod yazdıktan sonra zihnimi bambaşka bir dünyaya taşıyor. ' +
+    'Distopyanın en iyi yanı gerçekçi olması — "bilgi neden tehlikeli sayılır" ' +
+    'sorusu silodan çok daha geniş bir yere işaret ediyor.',
+  rating: 4, // 5 üzerinden kişisel değerlendirme
+  ratingNote: 'Yavaş açılan ama bırakamayanlardan.',
+  nextBook: 'Shift (Silo #2) — Hugh Howey',
   currentPage: 200,
   totalPages: 500, // = %40 ilerleme
 }
@@ -478,6 +486,6 @@ export const learningBacklog = [
   { id: 'docker', label: 'Docker temelleri & konteyner yapısını öğrenmek', done: false },
   { id: 'rn', label: 'React Native ile mobil uygulama denemesi', done: false },
   { id: 'book', label: 'Clean Architecture kitabını bitirmek', done: false },
-  { id: 'portfolio', label: 'Kişisel portfolyo sitesini yayına almak', done: false },
+  { id: 'portfolio', label: 'Kişisel portfolyo sitesini yayına almak', done: true },
   { id: 'oss', label: 'Açık kaynak bir projeye ilk katkımı yapmak', done: false },
 ]

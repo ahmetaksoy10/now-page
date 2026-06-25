@@ -80,9 +80,17 @@ function AuroraBackground() {
       scrollY = window.scrollY
     }
 
+    // Resize sık tetiklenir (özellikle sürükleyerek yeniden boyutlandırmada);
+    // canvas'ı her olayda değil, durulduktan 150ms sonra bir kez yeniden boyutla.
+    let resizeTimer
+    const boyutlaDebounced = () => {
+      clearTimeout(resizeTimer)
+      resizeTimer = setTimeout(boyutla, 150)
+    }
+
     if (!mobil) window.addEventListener('mousemove', fareHareketi, { passive: true })
     window.addEventListener('scroll', scrollGuncelle, { passive: true })
-    window.addEventListener('resize', boyutla)
+    window.addEventListener('resize', boyutlaDebounced)
 
     // ── Döngü ────────────────────────────────────────────────────────────────
     let cerceve = null
@@ -148,7 +156,8 @@ function AuroraBackground() {
       if (cerceve) cancelAnimationFrame(cerceve)
       window.removeEventListener('mousemove', fareHareketi)
       window.removeEventListener('scroll', scrollGuncelle)
-      window.removeEventListener('resize', boyutla)
+      window.removeEventListener('resize', boyutlaDebounced)
+      clearTimeout(resizeTimer)
       document.removeEventListener('visibilitychange', gorunurluk)
       temaGozlemci.disconnect()
     }

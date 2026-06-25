@@ -3,6 +3,7 @@
 /* Glassmorphism kart: tüm bento hücrelerinin ortak zemini */
 .card {
   position: relative;
+  overflow: hidden; /* köşe filigranı (card__sticker) kart sınırında temiz kırpılsın */
   background: var(--glass);
   -webkit-backdrop-filter: blur(22px) saturate(150%);
   backdrop-filter: blur(22px) saturate(150%);
@@ -44,6 +45,32 @@
 
 .card:hover .card__glow {
   opacity: 1;
+}
+
+/* Köşe filigranı: karta dair temayı sessizce fısıldayan, çok soluk büyük ikon.
+   Sağ alt köşeden hafifçe taşar; .card'ın overflow:hidden'ı yuvarlak köşede kırpar.
+   z-index:-1 → cam zeminin üstünde ama içeriğin altında (card__glow ile aynı katman).
+   Dekoratiftir (aria-hidden); hover'da azıcık belirginleşir. */
+.card__sticker {
+  position: absolute;
+  right: -10px;
+  bottom: -16px;
+  z-index: -1;
+  color: var(--text-primary);
+  opacity: 0.06;
+  transform: rotate(-8deg);
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.card__sticker svg {
+  width: 92px;
+  height: 92px;
+  stroke-width: 1.5; /* ince çizgili lucide ikonları, dolgulu octocat'le benzer ağırlıkta okusun */
+}
+
+.card:hover .card__sticker {
+  opacity: 0.1;
 }
 
 /* Kart etiketi: sol üstte, küçük mono başlık. Bu bölümler bir SIRA değil
@@ -195,10 +222,14 @@
   background: var(--success);
 }
 
+/* Ghost: dolu (frosted) hap — siyah çerçeve YOK (border .btn'den transparent
+   miras alır), tema-uyumlu yüzey (light→açık, dark→koyu). İkon currentColor ile
+   metinle aynı koyu tonda; logonun dışı koyu, içi (LinkedIn "in") zemin rengiyle açık. */
 .btn--ghost {
-  border-color: var(--border-strong);
   color: var(--text-primary);
-  background: var(--surface);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
 }
 
 .btn--ghost:hover {

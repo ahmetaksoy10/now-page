@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react'
 import { ArrowUpRight, Send } from 'lucide-react'
 import { GitHubIcon, LinkedInIcon } from './icons/BrandIcons.jsx'
-import { contactCta } from '../data/content.js'
+import { contactCta, socialLinks } from '../data/content.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 import { epostaHatasi } from '../utils/eposta.js'
 import CopyEmailButton from './CopyEmailButton.jsx'
+
+// URL'ler tek doğruluk noktasından (content.js socialLinks) gelir — bileşende tekrar yok
+const githubUrl = socialLinks.find((l) => l.id === 'github').url
+const linkedinUrl = socialLinks.find((l) => l.id === 'linkedin').url
 
 // Alan adı gerçekten e-posta alabiliyor mu? Cloudflare DNS-over-HTTPS ile MX
 // (yoksa A) kaydı kontrolü — var olmayan/uydurma alan adlarını (örn. asdfqwe.com)
@@ -187,7 +191,7 @@ function ContactCta() {
       <div className="cta__links">
         <CopyEmailButton variant="ghost" />
         <a
-          href="https://github.com/ahmetaksoy10"
+          href={githubUrl}
           className="btn btn--ghost"
           target="_blank"
           rel="noopener noreferrer"
@@ -197,7 +201,7 @@ function ContactCta() {
           <ArrowUpRight size={13} className="btn__arrow" aria-hidden="true" />
         </a>
         <a
-          href="https://www.linkedin.com/in/ahmet-aksoy10"
+          href={linkedinUrl}
           className="btn btn--ghost"
           target="_blank"
           rel="noopener noreferrer"

@@ -159,6 +159,34 @@
   animation: intro-line 0.9s var(--ease-out) 0.5s forwards;
 }
 
+/* Açılış terminal satırları: isim/çizgiden sonra altında sırayla belirir.
+   Kompakt ve ince — perdeyi kalabalıklaştırmaz. Blok ortalı, satırlar sola hizalı
+   (terminal hissi). Görünürlük JS'ten gelen .is-visible ile kademeli açılır. */
+.intro__terminal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  margin-top: 26px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  text-align: left;
+}
+
+.intro__term-line {
+  opacity: 0;
+  transform: translateY(5px);
+  transition:
+    opacity 0.35s var(--ease-out),
+    transform 0.35s var(--ease-out);
+}
+
+.intro__term-line.is-visible {
+  opacity: 0.85;
+  transform: translateY(0);
+}
+
 @keyframes intro-rise {
   to {
     opacity: 1;

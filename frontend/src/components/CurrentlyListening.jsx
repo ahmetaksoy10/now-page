@@ -49,7 +49,7 @@ function CurrentlyListening() {
   }, [])
 
   const card = (icerik) => (
-    <BentoCard span={5} label={lastfm.label} labelId="muzik-baslik" className="lastfm">
+    <BentoCard span={5} label={lastfm.label} labelId="muzik-baslik" className="lastfm" sticker={Disc3}>
       {icerik}
     </BentoCard>
   )

@@ -1,4 +1,4 @@
-import { Circle, CircleCheck } from 'lucide-react'
+import { Circle, CircleCheck, GraduationCap } from 'lucide-react'
 import { learningBacklog } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 
@@ -14,7 +14,7 @@ function LearningBacklog() {
   const oran = Math.round((tamamlanan / learningBacklog.length) * 100)
 
   return (
-    <BentoCard span={7} label="Öğrenme Listesi" labelId="backlog-baslik">
+    <BentoCard span={7} label="Öğrenme Listesi" labelId="backlog-baslik" sticker={GraduationCap}>
       <div className="backlog-card__summary">
         <p className="backlog-card__count">
           {tamamlanan} / {learningBacklog.length} tamamlandı

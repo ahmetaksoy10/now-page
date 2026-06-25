@@ -30,6 +30,7 @@ function BentoCard({
   delay = 0,
   id,
   className = '',
+  sticker: Sticker, // karta dair temayı fısıldayan, isteğe bağlı köşe filigranı (lucide/marka ikonu)
   children,
   ...rest // onClick gibi ek davranışlar karta dışarıdan eklenebilir
 }) {
@@ -47,6 +48,12 @@ function BentoCard({
     >
       {/* İmleci izleyen sıcak iç parıltı (hover'da belirir, dekoratif) */}
       <span className="card__glow" aria-hidden="true" />
+      {/* Köşe filigranı: karta dair temayı sessizce fısıldar (dekoratif) */}
+      {Sticker && (
+        <span className="card__sticker" aria-hidden="true">
+          <Sticker />
+        </span>
+      )}
       {label && (
         <p className="card-label" id={labelId}>
           {label}

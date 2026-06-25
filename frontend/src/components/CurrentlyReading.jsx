@@ -1,3 +1,4 @@
+import { BookOpen, Star } from 'lucide-react'
 import { currentlyReading } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 import BlurImage from './BlurImage.jsx'
@@ -9,13 +10,25 @@ import BlurImage from './BlurImage.jsx'
  * İlerleme yüzdesi sayfa sayısından türetilir, elle yazılmaz.
  */
 function CurrentlyReading() {
-  const { title, author, cover, meta, synopsis, reason, currentPage, totalPages } =
-    currentlyReading
+  const {
+    title,
+    author,
+    cover,
+    meta,
+    quote,
+    synopsis,
+    reason,
+    rating,
+    ratingNote,
+    nextBook,
+    currentPage,
+    totalPages,
+  } = currentlyReading
   // İlerleme yüzdesi veriden türetilir — elle yazılmaz
   const ilerleme = Math.round((currentPage / totalPages) * 100)
 
   return (
-    <BentoCard span={7} label="Kütüphanem" labelId="kitap-baslik">
+    <BentoCard span={7} label="Kütüphanem" labelId="kitap-baslik" sticker={BookOpen}>
       <div className="reading-card__top">
         {/* Gerçek kapak: alt yazı zaten kitabı tanıttığı için dekoratif sayılır */}
         <BlurImage
@@ -38,11 +51,37 @@ function CurrentlyReading() {
             ))}
           </ul>
 
+          {/* Kitaptan alıntı: mono, accent — küçük bir epigraf */}
+          <p className="reading-card__quote">{quote}</p>
+
           {/* Konu özeti: objektif, kitabın ne anlattığı */}
           <p className="reading-card__synopsis">{synopsis}</p>
 
           {/* Okuma sebebi: serif italik editorial alıntı (kişisel) */}
           <blockquote className="reading-card__reason">“{reason}”</blockquote>
+
+          {/* Kişisel değerlendirme: 5 üzerinden yıldız + kısa not */}
+          <div className="reading-card__rating">
+            <span
+              className="reading-card__stars"
+              role="img"
+              aria-label={`5 üzerinden ${rating} yıldız`}
+            >
+              {Array.from({ length: 5 }, (_, i) => {
+                const dolu = i < rating
+                return (
+                  <Star
+                    key={i}
+                    size={15}
+                    className={dolu ? '' : 'star--empty'}
+                    fill={dolu ? 'currentColor' : 'none'}
+                    aria-hidden="true"
+                  />
+                )
+              })}
+            </span>
+            <p className="reading-card__rating-note">{ratingNote}</p>
+          </div>
         </div>
       </div>
 
@@ -63,6 +102,8 @@ function CurrentlyReading() {
         <p className="reading-card__progress-text">
           Sayfa {currentPage} / {totalPages} · %{ilerleme}
         </p>
+        {/* Sıradaki kitap: ilerleme çubuğunun altında, ince mono satır */}
+        <p className="reading-card__next">→ Sırada: {nextBook}</p>
       </div>
     </BentoCard>
   )

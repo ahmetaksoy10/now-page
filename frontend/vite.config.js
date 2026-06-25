@@ -1,6 +1,16 @@
+import { execSync } from 'node:child_process'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
+
+// "Son güncelleme" tarihi artık elle değil, son git commit'inden otomatik gelir.
+// Git yoksa (örn. kaynak tarball'ından build) sabit bir yedeğe düşer → build çökmez.
+let gitDate
+try {
+  gitDate = execSync('git log -1 --format=%ci').toString().trim().slice(0, 10) // 'YYYY-MM-DD'
+} catch {
+  gitDate = '2026-06-17'
+}
 
 // https://vite.dev/config/
 //
@@ -30,6 +40,10 @@ export default defineConfig(({ isSsrBuild }) => ({
         ]),
   ],
   base: '/now-page/',
+  // Build-zamanı sabiti: content.js bunu `lastUpdated` olarak kullanır.
+  define: {
+    __GIT_DATE__: JSON.stringify(gitDate),
+  },
   // Geliştirme sunucusu: PORT ortam değişkeni tanımlıysa onu kullan
   // (önizleme araçlarıyla uyum için); yoksa Vite varsayılanında kal.
   server: {

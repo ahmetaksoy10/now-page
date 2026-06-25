@@ -1,5 +1,5 @@
 import { Clock3, Crosshair, MapPin } from 'lucide-react'
-import { profile, lastUpdated } from '../data/content.js'
+import { profile, lastUpdated, currentFocus } from '../data/content.js'
 import { useLocalTime } from '../hooks/useLocalTime.js'
 import CopyEmailButton from './CopyEmailButton.jsx'
 
@@ -96,7 +96,8 @@ function HeroSection() {
             <dt>
               <Crosshair size={13} aria-hidden="true" /> Şu anki odak
             </dt>
-            <dd>Travio · iOS geliştirme</dd>
+            {/* Tek doğruluk noktası: odak başlığı content.js'teki currentFocus'tan gelir */}
+            <dd>{currentFocus.title}</dd>
           </div>
         </dl>
       </aside>

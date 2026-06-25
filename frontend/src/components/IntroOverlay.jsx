@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
 import { profile } from '../data/content.js'
 
+// Açılış perdesinin terminal satırları — UI'a özel dekoratif metin (içerik değil),
+// bu yüzden content.js'te değil burada sabit dizi olarak tutulur.
+const TERMINAL_SATIRLARI = [
+  '> yükleniyor: projeler...',
+  '> github: bağlandı ✓',
+  '> durum: staja açık',
+  '> hoş geldiniz.',
+]
+
 /**
  * IntroOverlay — Kısa, zarif sayfa açılış perdesi.
  *
@@ -21,6 +30,8 @@ import { profile } from '../data/content.js'
 function IntroOverlay() {
   // Başlangıç sabit: sunucu + istemci ilk render'ı "açık" → hydration uyumlu.
   const [durum, setDurum] = useState('acik')
+  // Kaç terminal satırının göründüğü (0'dan başlar, sırayla artar)
+  const [gorunenSatir, setGorunenSatir] = useState(0)
 
   // Mount sonrası (yalnızca istemci): tekrar gezen / reduced-motion kullanıcıda
   // perdeyi hemen kaldır; ilk ziyarette kısa açılış animasyonunu çalıştır.
@@ -35,8 +46,19 @@ function IntroOverlay() {
       return
     }
     sessionStorage.setItem('now-page-intro', '1')
-    const zamanlayici = setTimeout(() => setDurum('kapaniyor'), 1150)
-    return () => clearTimeout(zamanlayici)
+
+    // Terminal satırları: isim animasyonundan sonra (600ms) 180ms arayla sırayla belirir.
+    // (setState'ler setTimeout içinde → asenkron, "effect içinde senkron setState" değil.)
+    const satirZamanlayicilari = TERMINAL_SATIRLARI.map((_, i) =>
+      setTimeout(() => setGorunenSatir((n) => Math.max(n, i + 1)), 600 + i * 180),
+    )
+    // Son satır (~1140ms) görününce perde kapanmaya başlar (en geç 1400ms).
+    const kapatma = setTimeout(() => setDurum('kapaniyor'), 1400)
+
+    return () => {
+      satirZamanlayicilari.forEach(clearTimeout)
+      clearTimeout(kapatma)
+    }
   }, [])
 
   // Kapanış (perde kayma) animasyonu bitince DOM'dan tamamen kaldır
@@ -54,6 +76,18 @@ function IntroOverlay() {
         <span className="intro__name">{profile.name}</span>
         <span className="intro__tag">şu an — bugünkü ben</span>
         <span className="intro__line" />
+
+        {/* Terminal satırları: isim + çizgiden sonra, altında sırayla belirir */}
+        <div className="intro__terminal">
+          {TERMINAL_SATIRLARI.map((satir, i) => (
+            <span
+              key={satir}
+              className={`intro__term-line ${i < gorunenSatir ? 'is-visible' : ''}`}
+            >
+              {satir}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   )

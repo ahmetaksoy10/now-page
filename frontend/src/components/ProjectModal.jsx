@@ -29,6 +29,14 @@ function durumSinifi(durum) {
 function ProjectModal({ project, onClose }) {
   if (!project) return null
 
+  // Galeri karelerine, aynı kareye ait vitrin (screenshots) alt metnini başlık
+  // olarak ekle → lightbox'ta caption görünür. content.js'e dokunmadan, mevcut
+  // anlamlı alt metinlerinden beslenir; eşleşmeyen ekstra kareler captionsız kalır.
+  const galeriKareleri = project.gallery.map((kare) => {
+    const vitrin = project.screenshots.find((s) => s.src === kare.src)
+    return vitrin ? { ...kare, title: vitrin.alt } : kare
+  })
+
   return (
     <Modal
       open={!!project}
@@ -54,7 +62,7 @@ function ProjectModal({ project, onClose }) {
 
         {/* Tüm ekran görüntüleri: 3 sn'de bir otomatik geçer; oklar, küçük
             resimler ve klavye ile de gezilir (fareyle üstüne gelince durur) */}
-        <GalleryViewer images={project.gallery} autoAdvance />
+        <GalleryViewer images={galeriKareleri} autoAdvance />
 
         <div className="project-modal__body">
           <div className="project-modal__story">

@@ -417,6 +417,48 @@
   margin-top: 8px;
 }
 
+/* Kitaptan alıntı (epigraf): synopsis'ten önce, mono + accent, hafif soluk */
+.reading-card__quote {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--accent);
+  opacity: 0.85;
+  margin-top: 14px;
+}
+
+/* Kişisel değerlendirme: yıldız sırası + kısa not */
+.reading-card__rating {
+  margin-top: 16px;
+}
+
+.reading-card__stars {
+  display: inline-flex;
+  gap: 3px;
+  color: var(--accent);
+}
+
+.reading-card__stars .star--empty {
+  color: var(--border-strong);
+}
+
+.reading-card__rating-note {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--text-tertiary);
+  margin-top: 5px;
+}
+
+/* Sıradaki kitap: ilerleme çubuğunun altında, ince mono, üstte ayraç çizgisi */
+.reading-card__next {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
 
 /* ── 15. HAYATTAN BİR KARE (kartpostal) ────────────────────────────────────── */
 
@@ -555,6 +597,9 @@
 
 /* Şehir adı: serif italik — kartpostal el yazısı havası */
 .postcard__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
@@ -562,6 +607,12 @@
   letter-spacing: -0.01em;
   color: var(--text-primary);
   margin-bottom: 10px;
+}
+
+/* Konum işareti: "Roma, İtalya" başlığının önünde sıcak accent vurgusu */
+.postcard__title-pin {
+  flex-shrink: 0;
+  color: var(--accent);
 }
 
 .postcard__description {

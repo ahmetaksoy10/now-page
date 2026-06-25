@@ -42,6 +42,7 @@ function ActiveProject() {
         label="Projeler — Vitrindeki"
         labelId="proje-baslik"
         className="project-card"
+        sticker={FolderGit2}
       >
         <div className="project-card__columns">
           <div className="project-card__story">
