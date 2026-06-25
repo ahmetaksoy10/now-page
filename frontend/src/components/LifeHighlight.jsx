@@ -31,7 +31,6 @@ function LifeHighlight() {
       span={5}
       label="Hayattan Bir Kare"
       labelId="ani-baslik"
-      delay={80}
       className="postcard"
     >
       <div className="postcard__frame">

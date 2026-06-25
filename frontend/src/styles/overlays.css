@@ -210,6 +210,31 @@
   border: 1px solid var(--border);
 }
 
+/* Kare açıklaması (Roma lightbox'ı): başlık + konum/mimari notu.
+   Panelin var(--glass) zemini temaya uyumlu olduğu için tema metin renkleri okunur. */
+.gallery__caption {
+  margin-top: 14px;
+  text-align: center;
+  max-width: 62ch;
+  margin-inline: auto;
+}
+
+.gallery__caption-title {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.gallery__caption-text {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
 /* Küçük resim şeridi: yatay kaydırılabilir */
 .gallery__thumbs {
   display: flex;

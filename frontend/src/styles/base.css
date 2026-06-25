@@ -306,17 +306,11 @@ img {
   transform: perspective(1200px) translateY(0) scale(1) rotateX(0deg);
 }
 
-/* Bento grid'de aynı anda görünen kartlar dalga dalga gelsin:
-   her kolon konumuna küçük bir ek gecikme — "şelale" koreografisi.
-   (Inline --reveal-delay verilmemiş kartlar için; verilenler kendi değerini korur.) */
-@media (min-width: 900px) {
-  .bento-grid > .bento:nth-child(2n) {
-    transition-delay: calc(var(--reveal-delay, 0ms) + 90ms);
-  }
-  .bento-grid > .bento:nth-child(3n) {
-    transition-delay: calc(var(--reveal-delay, 0ms) + 60ms);
-  }
-}
+/* Bento giriş koreografisi: kartlar arası YAPAY gecikme YOK. Her kart kendi
+   IntersectionObserver'ıyla görünür olunca açılır → aynı satırdaki kartlar
+   viewport'a birlikte girdiği için AYNI ANDA gelir; alt satırlar scroll'la
+   girdikçe kademeli (animasyonlu) belirir. (Eski nth-child "şelale" gecikmesi
+   yan yana kartları farklı anlarda getirip kasma hissi yaratıyordu — kaldırıldı.) */
 
 /* Hero giriş: sayfa yüklenince kademeli yükselme */
 .hero-enter {

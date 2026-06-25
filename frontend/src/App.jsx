@@ -32,10 +32,6 @@ import Footer from './components/Footer.jsx'
 function App() {
   return (
     <div className="page" id="top">
-      {/* Klavye/ekran okuyucu kullanıcıları için: ilk Tab'da içeriğe atlar
-          (normalde gizli, yalnızca odaklanınca belirir) */}
-      <a className="skip-link" href="#main">İçeriğe atla</a>
-
       {/* Kısa açılış perdesi (oturumda bir kez, reduced-motion'da atlanır) */}
       <IntroOverlay />
 
@@ -53,7 +49,7 @@ function App() {
 
       <Navbar />
 
-      <main className="page__content" id="main" tabIndex={-1}>
+      <main className="page__content">
         <HeroSection />
 
         {/* Bento grid bir bütün olarak korunur; ayrıca dış API çağrısı yapan

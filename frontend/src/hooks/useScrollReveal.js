@@ -34,10 +34,10 @@ export function useScrollReveal() {
           }
         })
       },
-      // Element ekranın altından ~110px içeri girince tetiklenir —
-      // böylece kullanıcı kaydırırken her kartın açılış animasyonunu
-      // tam görüş alanında, net biçimde yakalar (animasyon "kaçmaz").
-      { threshold: 0.1, rootMargin: '0px 0px -110px 0px' },
+      // Element üst kenarı ekranın altından ~110px içeri girince tetiklenir.
+      // threshold:0 (oran değil, ilk temas) → aynı satırdaki kartlar (üst kenarları
+      // ortak) yükseklik farkından bağımsız AYNI scroll anında, birlikte açılır.
+      { threshold: 0, rootMargin: '0px 0px -110px 0px' },
     )
 
     observer.observe(element)

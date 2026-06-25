@@ -101,12 +101,12 @@ function ActiveProject() {
         </div>
       </BentoCard>
 
-      {/* Proje rafı: her kart tıklanınca detay modalını açar */}
-      {otherProjects.map((proje, sira) => (
+      {/* Proje rafı: her kart tıklanınca detay modalını açar.
+          Gecikme yok: aynı satırdaki iki kart birlikte, alt satır scroll'la gelir. */}
+      {otherProjects.map((proje) => (
         <BentoCard
           key={proje.id}
           span={6}
-          delay={sira * 70}
           className="mini-project mini-project--clickable"
           labelId={`proje-${proje.id}`}
           onClick={() => setAcikProje(proje)}

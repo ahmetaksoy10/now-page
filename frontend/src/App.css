@@ -22,7 +22,7 @@
 
 @import './styles/tokens.css';      /* §1  Tasarım token'ları (renk/tipografi/tema) */
 @import './styles/base.css';        /* §2-4 Reset, sayfa iskeleti + aurora, animasyon sistemi */
-@import './styles/navbar.css';      /* §5  Navbar (cam hap) + skip-link + yukarı-dön */
+@import './styles/navbar.css';      /* §5  Navbar (cam hap) + yukarı-dön */
 @import './styles/primitives.css';  /* §6  Ortak yapı taşları (chip, buton, progress…) */
 @import './styles/hero.css';        /* §7  Hero (açılış sahnesi) */
 @import './styles/sections.css';    /* §8x Yolculuk, açılış perdesi, hakkımda, ayraç, tema, isim, damga */

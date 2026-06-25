@@ -43,7 +43,7 @@ Projenin tüm kod mimarisi ve UI detayları `frontend` klasörü içerisinde yer
 - 🎬 **Sorunsuz Tema Geçişleri:** View Transitions API ile dark/light (karanlık/aydınlık) tema arasında dairesel ve yumuşak bir animasyonla geçiş.
 - 🔎 **Build-zamanı Prerender (SSG):** Sayfa, `react-dom/server` ile statik HTML'e render edilip yayınlanır; içerik kaynak HTML'de gelir (SEO + link önizlemeleri), istemcide React hydrate eder.
 - 🧪 **Test + CI Kalite Kapısı:** Saf mantık için Vitest birim testleri + Testing Library bileşen testi; her PR'da lint + test + build çalışır (GitHub Actions).
-- ⚡ **Performans ve Erişilebilirlik:** `prefers-reduced-motion` desteği, lazy loading, error boundary, "içeriğe atla" (skip-link) ve klavye dostu navigasyon.
+- ⚡ **Performans ve Erişilebilirlik:** `prefers-reduced-motion` desteği, lazy loading, error boundary ve klavye dostu navigasyon.
 
 ---
 

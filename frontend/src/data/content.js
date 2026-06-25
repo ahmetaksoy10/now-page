@@ -56,10 +56,81 @@ const oeeGaleri = galeriYap(
   import.meta.glob('../assets/projects/oee*.png', { eager: true, import: 'default' }),
   'OEE Dashboard ekran görüntüsü',
 )
-export const romaGaleri = galeriYap(
-  import.meta.glob('../assets/roma/roma*.jpg', { eager: true, import: 'default' }),
-  'Roma seyahatinden kare',
-)
+// Roma karelerinin künyesi: her dosyaya gerçek başlık + konum/mimari açıklaması.
+// Dosya adı (roma1, roma2…) üzerinden eşlenir; galeri lightbox'ında alt yazı olur.
+const romaKunye = {
+  roma1: {
+    title: 'Kolezyum',
+    description:
+      'Flavian Amfitiyatrosu (MS 70–80). ~50 bin kişilik, dünyanın en büyük antik ' +
+      'amfitiyatrosu; cephesindeki üç kat kemer sırasıyla Dor, İon ve Korint düzenini taşır.',
+  },
+  roma2: {
+    title: 'Kolezyum’un önünde',
+    description: 'Roma’nın simgesi devasa amfitiyatronun hemen dibinde bir kare.',
+  },
+  roma3: {
+    title: 'Konstantin Takı',
+    description:
+      'Arco di Costantino (MS 315). Kolezyum’un yanındaki üç gözlü zafer takı; ' +
+      'İmparator Konstantin’in Milvius Köprüsü zaferi anısına dikildi, kabartmalarının ' +
+      'çoğu daha eski anıtlardan devşirilmiştir.',
+  },
+  roma4: {
+    title: 'Eski mahalle sokağı',
+    description:
+      'Roma’nın eski mahalle dokusu: daracık arnavut kaldırımı, oker sıvalı evler, ahşap ' +
+      'panjurlar ve dökme demir sokak feneri — Trastevere’yi andıran sakin bir ara sokak.',
+  },
+  roma5: {
+    title: 'İkiz kiliselerin kubbeleri',
+    description:
+      'Trajan Forumu yanındaki “ikiz kiliseler” — Santa Maria di Loreto ve Santissimo Nome ' +
+      'di Maria. Kurşun kaplı kubbelerdeki yuvarlak pencereler (oculi) Roma barok mimarisinin izi.',
+  },
+  roma6: {
+    title: 'Tevere Nehri',
+    description:
+      'Tiber (Tevere) Nehri ve ağaçlı rıhtımı; arkada nehri aşan çok kemerli taş köprülerden ' +
+      'biri. Antik çağdan beri kenti boydan boya kesen bu nehir Roma’nın hayat damarı.',
+  },
+  roma7: {
+    title: 'Villa Borghese gölü',
+    description:
+      'Villa Borghese parkındaki yapay göl; arkada Asklepios Tapınağı ve kürek teknesi kiralayan ' +
+      'ziyaretçiler. Roma’nın en büyük peyzaj bahçelerinden birinde dingin bir mola.',
+  },
+  roma8: {
+    title: 'Asklepios Tapınağı',
+    description:
+      'Tempio di Esculapio (1785–92). Villa Borghese gölündeki adacıkta yükselen, İon düzeninde ' +
+      'sütunlu neoklasik bir bahçe tapınağı; alınlığında sağlık tanrısı Asklepios’a adanışı yazar.',
+  },
+  roma9: {
+    title: 'Altare della Patria',
+    description:
+      'Vittoriano. İtalya’nın birliğini ve ilk kralı II. Vittorio Emanuele’yi anan devasa beyaz ' +
+      'mermer anıt; tepesinde tunç quadriga’lar, ortada kralın atlı heykeli. Piazza Venezia’da yükselir.',
+  },
+}
+
+// Roma galerisi: dosyaları sıralı toplar, her birine künyeden başlık/açıklama ekler.
+const romaModulleri = import.meta.glob('../assets/roma/roma*.jpg', {
+  eager: true,
+  import: 'default',
+})
+export const romaGaleri = Object.keys(romaModulleri)
+  .sort()
+  .map((yol) => {
+    const ad = yol.match(/roma\d+/)?.[0]
+    const kunye = romaKunye[ad] ?? {}
+    return {
+      src: romaModulleri[yol],
+      alt: kunye.title ? `${kunye.title} — Roma` : 'Roma seyahatinden kare',
+      title: kunye.title,
+      description: kunye.description,
+    }
+  })
 
 // ── Kimlik & Sosyal Medya ────────────────────────────────────────────────────
 export const profile = {

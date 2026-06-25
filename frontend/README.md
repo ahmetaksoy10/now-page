@@ -22,7 +22,7 @@
 - 🧱 **Bento grid + glassmorphism** — asimetrik, dergi hissi veren yerleşim; scroll-reveal animasyonları; imleci izleyen kart parıltısı.
 - 🔎 **Build-zamanı prerender (SSG)** — sayfa statik HTML'e render edilip yayınlanır (içerik kaynak HTML'de → SEO + link önizlemeleri), istemcide React hydrate eder.
 - 🧪 **Test + CI** — Vitest birim testleri + Testing Library bileşen testi; her PR'da lint + test + build kalite kapısı.
-- 🛡️ **Sağlamlık & erişilebilirlik** — Error Boundary'ler, blur-up lazy görseller, iletişim formu (Formspree), `prefers-reduced-motion`, "içeriğe atla" skip-link.
+- 🛡️ **Sağlamlık & erişilebilirlik** — Error Boundary'ler, blur-up lazy görseller, iletişim formu (Formspree), `prefers-reduced-motion`, klavye dostu navigasyon.
 - 🥚 Ve keşfedilmeyi bekleyen birkaç **easter egg**.
 
 ---
