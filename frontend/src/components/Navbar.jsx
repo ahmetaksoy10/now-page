@@ -2,17 +2,8 @@ import { navLinks } from '../data/content.js'
 import { useScrollSpy } from '../hooks/useScrollSpy.js'
 import ThemeToggle from './ThemeToggle.jsx'
 import HintButton from './HintButton.jsx'
-
-// İzlenecek bölüm id'leri, navLinks'ten türetilir (#odak → odak)
 const BOLUM_IDLERI = navLinks.map((l) => l.href.replace('#', ''))
 
-/**
- * Navbar — Ekranın üstünde süzülen cam (glass) hap menü.
- *
- * Kısa bir tek-sayfa için tam genişlik menü ağır kaçar; küçük bir hap,
- * sayfaya "ürün" havası verir. Linkler bölüm id'lerine kayar ve scroll-spy
- * ile o an görünen bölüm vurgulanır (kullanıcı sayfada nerede olduğunu bilir).
- */
 function Navbar() {
   const aktifBolum = useScrollSpy(BOLUM_IDLERI)
 

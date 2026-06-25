@@ -1,10 +1,5 @@
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 
-/**
- * kartFareHareketi — İmleç parıltısı için kartın yerel imleç konumunu
- * (--card-x / --card-y) CSS değişkenine yazar. Saf stil mutasyonu →
- * React re-render'ı yok; .card__glow bu değişkenleri okuyup imleci izler.
- */
 function kartFareHareketi(olay) {
   const kart = olay.currentTarget
   const r = kart.getBoundingClientRect()
@@ -12,17 +7,6 @@ function kartFareHareketi(olay) {
   kart.style.setProperty('--card-y', `${olay.clientY - r.top}px`)
 }
 
-/**
- * BentoCard — Bento grid'in ortak kart iskeleti.
- *
- * Tek Sorumluluk: grid'deki yerleşim (span), scroll-reveal girişi, imleç
- * parıltısı ve kart üstündeki küçük etiket (card-label) burada yaşar; içerik
- * component'leri yalnızca kendi içeriğine odaklanır.
- *
- *  span  → 12 kolonluk grid'de kaç kolon kaplayacağı (4, 5, 7, 12)
- *  label → kartın sol üstündeki küçük mono etiket ("ANA ODAK" gibi)
- *  delay → kademeli giriş için ms cinsinden gecikme
- */
 function BentoCard({
   span = 12,
   label,

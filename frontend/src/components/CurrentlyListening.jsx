@@ -6,15 +6,6 @@ import BentoCard from './BentoCard.jsx'
 
 const API = 'https://ws.audioscrobbler.com/2.0/'
 
-/**
- * CurrentlyListening — Last.fm'den GERÇEK "şu an çalıyor / son çalınan" kartı.
- *
- * Apple Music çalışlarım NepTunes ile Last.fm'e scrobble ediliyor; bu kart o
- * veriyi canlı çeker ve 45 sn'de bir yeniler. Bir şey çalıyorsa kapakta dans
- * eden equalizer + "Şu an çalıyor", yoksa "Son çalınan · 3 saat önce" gösterir.
- * Altında son birkaç parça listelenir. Hata/anahtar yoksa kart kibarca bir
- * Last.fm linkine düşer (sayfa bozulmaz). İçerik content.js'ten gelir.
- */
 function CurrentlyListening() {
   const [parcalar, setParcalar] = useState([])
   const [durum, setDurum] = useState(lastfm.apiKey ? 'loading' : 'error')
@@ -40,7 +31,6 @@ function CurrentlyListening() {
     }
 
     getir()
-    // "Şu an çalıyor" tazeliği için periyodik yenile (sayfa açıkken)
     const zamanlayici = setInterval(getir, 45000)
     return () => {
       iptal.abort()
@@ -83,7 +73,6 @@ function CurrentlyListening() {
   const calisiyor = parca['@attr']?.nowplaying === 'true'
   const kapak = kapakSec(parca.image)
   const sanatci = parca.artist?.['#text'] ?? parca.artist?.name ?? ''
-  // Çalan parça ayrıca scrobble olarak da dönebilir → "öncekiler"de tekrarını çıkar
   const oncekiler = kalan
     .filter((p) => !(p.name === parca.name && (p.artist?.['#text'] ?? '') === sanatci))
     .slice(0, 3)

@@ -1,11 +1,3 @@
-// ─────────────────────────────────────────────────────────────────────────────
-//  GitHub veri yardımcıları (saf fonksiyonlar)
-// ─────────────────────────────────────────────────────────────────────────────
-//  GitHubActivity bileşeninden çıkarıldı: ağ/DOM içermeyen, tamamen saf mantık
-//  burada toplanır → bağımsız test edilebilir, bileşen yalnızca çizime odaklanır.
-// ─────────────────────────────────────────────────────────────────────────────
-
-// GitHub'ın resmi dil renkleri (linguist). Bilinmeyen diller accent'e düşer.
 export const DIL_RENKLERI = {
   JavaScript: '#f1e05a',
   TypeScript: '#3178c6',
@@ -27,12 +19,7 @@ export const DIL_RENKLERI = {
   Vue: '#41b883',
   'Jupyter Notebook': '#DA5B0B',
 }
-
-// Bir dilin rengini döndürür; bilinmiyorsa CSS accent değişkenine düşer.
 export const dilRengi = (dil) => DIL_RENKLERI[dil] || 'var(--accent)'
-
-// Günleri haftalara böler: ilk günün haftanın gününe (0=Pazar) göre baştan
-// boşluk eklenir ki sütunlar GitHub'daki gibi doğru hizalansın.
 export function haftalaraBol(gunler) {
   const haftalar = []
   let hafta = new Array(new Date(gunler[0].date).getDay()).fill(null)
@@ -49,9 +36,6 @@ export function haftalaraBol(gunler) {
   }
   return haftalar
 }
-
-// Güncel seri: sondan başa ardışık katkılı gün sayısı. Bugün henüz 0 ise
-// seriyi bozmaz (dünden geriye sayar) — GitHub'ın "current streak" mantığı.
 export function guncelSeri(gunler) {
   let seri = 0
   for (let i = gunler.length - 1; i >= 0; i--) {

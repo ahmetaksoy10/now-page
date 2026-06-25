@@ -5,8 +5,6 @@ import { activeProject, otherProjects } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 import BlurImage from './BlurImage.jsx'
 import ProjectModal from './ProjectModal.jsx'
-
-// Türkçe durum etiketini CSS sınıf adına çevirir ("Tamamlandı" → "tamamlandi").
 function durumSinifi(durum) {
   return durum
     .toLowerCase()
@@ -19,19 +17,9 @@ function durumSinifi(durum) {
     .replace(/\s+/g, '-')
 }
 
-/**
- * ActiveProject — "Projeler" bölgesi: 1 vitrin kartı + 3 raf kartı.
- *
- * Vitrin kartı (12 kolon) iki iç kolona ayrılır: solda hikâye
- * (isim, açıklama, teknolojiler, linkler), sağda mimari kararlar paneli.
- * Raf kartları (4'er kolon) tıklanabilir — her biri ProjectModal'ı açar:
- * tüm ekran görüntüleri, uzun açıklama, özellikler ve GitHub linki.
- */
 function ActiveProject() {
   const { name, status, description, architecture, stack, repoUrl, liveUrl } =
     activeProject
-
-  // Açık olan projeyi tutan tek state — null ise modal kapalıdır.
   const [acikProje, setAcikProje] = useState(null)
 
   return (
@@ -114,7 +102,6 @@ function ActiveProject() {
           className="mini-project mini-project--clickable"
           labelId={`proje-${proje.id}`}
           onClick={() => setAcikProje(proje)}
-          // Karta klavye erişilebilirliği: buton gibi davranır
           role="button"
           tabIndex={0}
           onKeyDown={(olay) => {

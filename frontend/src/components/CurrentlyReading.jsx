@@ -3,12 +3,6 @@ import { currentlyReading } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 import BlurImage from './BlurImage.jsx'
 
-/**
- * CurrentlyReading — Şu an okunan kitabın editorial kartı.
- *
- * Gerçek kitap kapağı + serif italik okuma notu = dergi sayfası hissi.
- * İlerleme yüzdesi sayfa sayısından türetilir, elle yazılmaz.
- */
 function CurrentlyReading() {
   const {
     title,
@@ -24,7 +18,6 @@ function CurrentlyReading() {
     currentPage,
     totalPages,
   } = currentlyReading
-  // İlerleme yüzdesi veriden türetilir — elle yazılmaz
   const ilerleme = Math.round((currentPage / totalPages) * 100)
 
   return (

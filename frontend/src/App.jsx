@@ -19,16 +19,6 @@ import ContactCta from './components/ContactCta.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
 import Footer from './components/Footer.jsx'
 
-/**
- * App — Sayfanın kompozisyon kökü.
- *
- * Mimari karar: App hiçbir iş mantığı içermez; bölümleri doğru sırayla
- * "besteler" (composition root). Kartlar 12 kolonluk bir bento grid'e
- * yerleşir; her kart kendi span'ını BentoCard üzerinden bildirir.
- *
- * Akış: hero → "şu an" kartları → Hakkımda → Yolculuk → iletişim.
- * Mobilde tüm kartlar tek kolona akar (CSS media query).
- */
 function App() {
   return (
     <div className="page" id="top">

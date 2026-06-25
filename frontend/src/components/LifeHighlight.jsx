@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { Maximize2, MapPin, Plane } from 'lucide-react'
 import { lifeHighlight, romaGaleri } from '../data/content.js'
-
-// Şerit fotoğrafının romaGaleri içindeki gerçek sırasını bul (src eşleştirme)
 const galeriIndex = (src) => {
   const idx = romaGaleri.findIndex((g) => g.src === src)
   return idx >= 0 ? idx : 0
@@ -12,18 +10,8 @@ import BlurImage from './BlurImage.jsx'
 import Modal from './Modal.jsx'
 import GalleryViewer from './GalleryViewer.jsx'
 
-/**
- * LifeHighlight — "Hayattan Bir Kare": gerçek fotoğraflı kartpostal.
- *
- * Ana kare (Kolezyum önünde selfie) + üç karelik mini film şeridi.
- * Herhangi bir fotoğrafa tıklayınca, Roma gezisinin 9 karesinin tamamı tam ekran
- * lightbox galeride açılır: 1. kareden başlar ve projelerdeki gibi kendi kendine
- * (3 sn'de bir) ilerler — fareyle üstüne gelince durur.
- */
 function LifeHighlight() {
   const { date, category, title, description, photo, photoAlt, gallery } = lifeHighlight
-
-  // Galeri açık mı? Açıksa hangi kareden başlasın (index); kapalıysa null.
   const [galeriBaslangic, setGaleriBaslangic] = useState(null)
 
   return (

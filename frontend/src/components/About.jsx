@@ -1,8 +1,6 @@
 import { BookOpen, Code2, Coffee, Target } from 'lucide-react'
 import { about } from '../data/content.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
-
-// İçerikteki "icon" anahtarını lucide bileşenine eşler (içerik ↔ sunum ayrımı).
 const IKONLAR = {
   coffee: Coffee,
   code: Code2,
@@ -10,14 +8,6 @@ const IKONLAR = {
   target: Target,
 }
 
-/**
- * About — "Hakkımda": hero'nun kısa tanıtımının ötesinde, kim olduğumu ve
- * nasıl çalıştığımı anlatan editoryal bölüm.
- *
- * Bento'daki "şu an" kartları ile zaman çizelgesinin arasında durur: önce
- * kim olduğum (Hakkımda), sonra buraya nasıl geldiğim (Yolculuk). Solda serif
- * vurgulu prose, sağda küçük "gerçekler" paneli. İçerik content.js'ten gelir.
- */
 function About() {
   const ref = useScrollReveal()
 

@@ -2,13 +2,6 @@ import { Circle, CircleCheck } from 'lucide-react'
 import { learningBacklog } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 
-/**
- * LearningBacklog — Öğrenme bekleme listesi (sıradaki hedefler).
- *
- * Tamamlananlar yeşil onay + üstü çizili, bekleyenler boş daire.
- * Üstteki ilerleme oranı elle yazılmaz, veriden türetilir —
- * liste güncellenince çubuk da kendiliğinden güncellenir.
- */
 function LearningBacklog() {
   const tamamlanan = learningBacklog.filter((oge) => oge.done).length
   const oran = Math.round((tamamlanan / learningBacklog.length) * 100)

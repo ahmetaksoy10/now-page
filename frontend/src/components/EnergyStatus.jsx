@@ -2,13 +2,6 @@ import { Coffee, Zap } from 'lucide-react'
 import { energyStatus } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 
-/**
- * EnergyStatus — "Sistem Durumu": final dönemi enerji göstergesi.
- *
- * Pil tamamen CSS ile çizilir; dolum animasyonu kart scroll ile
- * görünür olduğunda tetiklenir. Esprili ama bilgi veren bir kart —
- * sayfaya "yaşayan günlük" kişiliği katan detaylardan.
- */
 function EnergyStatus() {
   const { level, context, note } = energyStatus
 

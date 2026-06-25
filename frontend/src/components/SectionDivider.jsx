@@ -1,12 +1,5 @@
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 
-/**
- * SectionDivider — Bölümler arası ince, ortadan açılan gradient ayraç.
- *
- * Görünür olunca iki çizgi merkezden dışa doğru çizilir, ortadaki ✦ süsü
- * yumuşakça belirir — sayfaya "dergi" ritmi katar. Tamamen dekoratif
- * (aria-hidden); animasyon CSS'te, reduced-motion'da anında görünür.
- */
 function SectionDivider() {
   const ref = useScrollReveal()
 

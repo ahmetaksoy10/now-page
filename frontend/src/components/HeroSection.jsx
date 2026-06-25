@@ -2,23 +2,11 @@ import { Clock3, Crosshair, MapPin } from 'lucide-react'
 import { profile, lastUpdated, currentFocus } from '../data/content.js'
 import { useLocalTime } from '../hooks/useLocalTime.js'
 import CopyEmailButton from './CopyEmailButton.jsx'
-
-// "Son güncelleme" damgası için kısa Türkçe tarih (ör. "17 Haziran")
 const guncellemeKisa = new Intl.DateTimeFormat('tr-TR', {
   day: 'numeric',
   month: 'long',
 }).format(new Date(lastUpdated))
 
-/**
- * HeroSection — Açılış sahnesi: iki kolonlu, asimetrik kompozisyon.
- *
- * Sol: İSİM manşette (işe alımcı ilk bakışta kimin sayfası olduğunu görür),
- *      altında serif italik "now page" mottosu, tanıtım ve aksiyon butonları.
- * Sağ: gerçek profil fotoğrafı + "staja açık" sticker'ı ve canlı bilgi
- *      paneli (konum, saniye saniye işleyen yerel saat, odak).
- *
- * Giriş animasyonları sayfa yüklenince kademeli çalışır (hero-enter).
- */
 function HeroSection() {
   const yerelSaat = useLocalTime()
 

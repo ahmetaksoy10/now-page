@@ -14,7 +14,6 @@ describe('dilRengi', () => {
 })
 
 describe('haftalaraBol', () => {
-  // Yardımcı: ardışık günler üret
   const gunlerUret = (n, baslangic = '2025-01-01') => {
     const out = []
     const d = new Date(baslangic)
@@ -30,7 +29,6 @@ describe('haftalaraBol', () => {
     const gunler = gunlerUret(10)
     const haftalar = haftalaraBol(gunler)
     const lead = new Date(gunler[0].date).getDay() // 0=Pazar
-    // Baştaki boşluklar null, sonra gerçek ilk gün gelir
     for (let i = 0; i < lead; i++) expect(haftalar[0][i]).toBeNull()
     expect(haftalar[0][lead]).toEqual(gunler[0])
   })
@@ -47,7 +45,6 @@ describe('guncelSeri', () => {
   })
 
   it('bugün (son gün) 0 ise seriyi bozmaz, dünden geriye sayar', () => {
-    // 3 ardışık katkılı gün + bugün 0 → seri 3 olmalı
     expect(guncelSeri([{ count: 1 }, { count: 1 }, { count: 1 }, { count: 0 }])).toBe(3)
   })
 

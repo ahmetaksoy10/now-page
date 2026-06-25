@@ -1,20 +1,3 @@
-/**
- * ─────────────────────────────────────────────────────────────────────────────
- *  İÇERİK KATMANI (Single Source of Truth)
- * ─────────────────────────────────────────────────────────────────────────────
- *  Sayfadaki TÜM metinler ve görseller bu dosyada toplanır. Component'ler
- *  içerik bilmez, sadece bu veriyi import edip ekrana çizer.
- *
- *  Neden böyle? İçerik ile sunum (UI) birbirinden ayrılınca:
- *   1. Bilgileri güncellemek için tek bir dosyayı düzenlemek yeterli olur.
- *   2. Component'ler tekrar kullanılabilir ve test edilebilir kalır.
- *
- *  Görseller ES import ile alınır: Vite build sırasında dosyaları
- *  hash'leyip doğru base path ile sunar (GitHub Pages uyumu otomatik).
- * ─────────────────────────────────────────────────────────────────────────────
- */
-
-// ── Görseller ────────────────────────────────────────────────────────────────
 import profilFoto from '../assets/profile.jpg'
 import siloKapak from '../assets/silo-kapak.jpg'
 import romaSelfie from '../assets/roma/roma2.jpg'
@@ -31,10 +14,6 @@ import travelguidePano from '../assets/projects/travelguide3.png'
 import oeeHome from '../assets/projects/oee1.png'
 import oeeAlarmlar from '../assets/projects/oee2.png'
 import oeeDuruslar from '../assets/projects/oee3.png'
-
-// Galeri setleri: klasördeki TÜM görseller tek seferde, dosya adına göre
-// sıralı toplanır. Yeni ekran görüntüsü eklemek = dosyayı klasöre atmak;
-// kod değişikliği gerekmez (import.meta.glob, Vite'ın derleme zamanı sihri).
 const galeriYap = (moduller, etiket) =>
   Object.keys(moduller)
     .sort()
@@ -56,8 +35,6 @@ const oeeGaleri = galeriYap(
   import.meta.glob('../assets/projects/oee*.png', { eager: true, import: 'default' }),
   'OEE Dashboard ekran görüntüsü',
 )
-// Roma karelerinin künyesi: her dosyaya gerçek başlık + konum/mimari açıklaması.
-// Dosya adı (roma1, roma2…) üzerinden eşlenir; galeri lightbox'ında alt yazı olur.
 const romaKunye = {
   roma1: {
     title: 'Kolezyum',
@@ -131,8 +108,6 @@ const romaKunye = {
       'Görkemiyle Piazza Venezia’ya hâkim.',
   },
 }
-
-// Roma galerisi: dosyaları sıralı toplar, her birine künyeden başlık/açıklama ekler.
 const romaModulleri = import.meta.glob('../assets/roma/roma*.jpg', {
   eager: true,
   import: 'default',
@@ -150,15 +125,12 @@ export const romaGaleri = Object.keys(romaModulleri)
       location: kunye.location,
     }
   })
-
-// ── Kimlik & Sosyal Medya ────────────────────────────────────────────────────
 export const profile = {
   name: 'Ahmet AKSOY',
   role: 'Balıkesir Üniversitesi Bilgisayar Mühendisliği 2. sınıf öğrencisi',
   location: 'Karesi, Balıkesir',
   email: 'ahmet.aksoy17@hotmail.com',
   photo: profilFoto,
-  // GitHub API entegrasyonu bu kullanıcı adıyla canlı veri çeker.
   githubUsername: 'ahmetaksoy10',
   intro:
     'Kod yazmayı, öğrenmeyi ve yeni şeyler denemeyi seviyorum. Bu sayfa, ' +
@@ -172,18 +144,7 @@ export const socialLinks = [
   { id: 'linkedin', label: 'LinkedIn profilim', url: 'https://www.linkedin.com/in/ahmet-aksoy10' },
   { id: 'mail', label: 'Bana e-posta gönder', url: 'mailto:ahmet.aksoy17@hotmail.com' },
 ]
-
-// ── Son güncelleme ───────────────────────────────────────────────────────────
-// Now-page'in en önemli sinyali: sayfanın CANLI olduğu. Bu tarih artık elle değil,
-// son git commit'inden otomatik gelir (vite.config.js `define` → __GIT_DATE__),
-// böylece her yayında kendiliğinden güncellenir. Hero'daki damga ve Footer aynı
-// kaynaktan beslenir (tek doğruluk noktası).
 export const lastUpdated = __GIT_DATE__
-
-// ── Hakkımda ─────────────────────────────────────────────────────────────────
-// Hero'nun kısa tanıtımının ötesinde: kim olduğum, nasıl çalıştığım, birkaç
-// insani gerçek. Sayfaya sıcaklık ve hikâye katar (işe alımcı "bu kişiyle
-// çalışmak nasıl" diye bakar). icon anahtarları About bileşeninde lucide'a eşlenir.
 export const about = {
   lead: 'Kod yazmak benim için bir görev değil, çözmekten keyif aldığım bir bulmaca.',
   paragraphs: [
@@ -205,8 +166,6 @@ export const about = {
     { id: 'hedef', icon: 'target', text: 'Sıradaki hedef: Yaz 2026 stajı' },
   ],
 }
-
-// ── Navigasyon (yapışkan mini menü) ──────────────────────────────────────────
 export const navLinks = [
   { id: 'odak', label: 'Odak', href: '#odak' },
   { id: 'projeler', label: 'Projeler', href: '#projeler' },
@@ -215,9 +174,6 @@ export const navLinks = [
   { id: 'yolculuk', label: 'Yolculuk', href: '#yolculuk' },
   { id: 'iletisim', label: 'İletişim', href: '#iletisim' },
 ]
-
-// ── Zaman çizelgesi (Yolculuk) ───────────────────────────────────────────────
-// Kronolojik sırada okunur; her madde scroll'la kademeli belirir.
 export const timeline = [
   {
     id: 'baslangic',
@@ -265,18 +221,13 @@ export const timeline = [
     icon: 'target',
   },
 ]
-
-// ── Kapanış CTA bölümü ───────────────────────────────────────────────────────
 export const contactCta = {
   label: 'Bir sonraki adım',
   note:
     'Staj dönemim için ekip arıyorum. React, Python/FastAPI veya iOS ' +
     'projelerinizde hem öğrenir hem değer katarım — bir kahve uzaklıktayım.',
-  // İletişim formu gönderimi (Formspree) — sayfa yenilenmeden fetch ile POST edilir
   formAction: 'https://formspree.io/f/mdavqrjy',
 }
-
-// ── 01 · Ana Odak ────────────────────────────────────────────────────────────
 export const currentFocus = {
   title: 'Travio — yapay zekâ destekli iOS seyahat asistanı',
   shortTitle: 'Travio-İOS Geliştirme',
@@ -287,16 +238,11 @@ export const currentFocus = {
     'özellikler ekliyorum.',
   tags: ['SwiftUI', 'Gemini AI', 'Firebase', 'iOS Geliştirme'],
 }
-
-// ── 02 · Kütüphanem ──────────────────────────────────────────────────────────
-// meta: kitaba dair kısa, doğrulanabilir etiketler (tür · seri · yıl).
-// synopsis: kitabın ne anlattığı (objektif); reason: neden okuduğum (kişisel).
 export const currentlyReading = {
   title: 'Silo (Wool)',
   author: 'Hugh Howey',
   cover: siloKapak,
   meta: ['Distopik bilim kurgu', 'Silo Serisi · 1. kitap', '2011'],
-  // Kitabın ruhunu yansıtan kısa alıntı (epigraf)
   quote: '"Bilgi tehlikelidir. Bu yüzden saklanır."',
   synopsis:
     'Yeraltında yüzlerce kat derinleşen dev bir siloda, dış dünyanın ölümcül ' +
@@ -313,27 +259,17 @@ export const currentlyReading = {
   currentPage: 200,
   totalPages: 500, // = %40 ilerleme
 }
-
-// ── 03 · Dinlediklerim (Last.fm — gerçek "şu an / son çalınan") ──────────────
-// Apple Music çalışlarım NepTunes ile Last.fm'e scrobble ediliyor; kart bu
-// veriyi canlı çeker (bir şey çalıyorsa "Şu an çalıyor", yoksa "Son çalınan").
-// apiKey salt-okunur (sadece public veri) ve .env.local'dan gelir — repoya
-// girmez; canlı deploy için GitHub Actions secret'ı olarak da eklenir.
 export const lastfm = {
   user: 'ahmetaksoy10',
   apiKey: import.meta.env.VITE_LASTFM_API_KEY,
   label: 'Dinlediklerim',
   profileUrl: 'https://www.last.fm/user/ahmetaksoy10',
 }
-
-// ── 04 · Sistem Durumu (Enerji) ──────────────────────────────────────────────
 export const energyStatus = {
   level: 85, // yüzde cinsinden enerji seviyesi
   context: 'Haziran 2026 · Yaz Mesaisi',
   note: 'Finallerin stresini attık, şimdi yeni projelere ve geliştirme süreçlerine derinlemesine dalma vakti. Motivasyon oldukça yüksek!',
 }
-
-// ── 05 · Hayattan Bir Kare ───────────────────────────────────────────────────
 export const lifeHighlight = {
   date: 'Nisan 2026',
   category: 'Seyahat Günlüğü',
@@ -342,7 +278,6 @@ export const lifeHighlight = {
     'Antik mimariyi, dar sokakların ritmini ve bambaşka bir yaşam tarzını ' +
     'yakından gözlemledim. Seyahat tutkusu projelerime de sızıyor — ' +
     'TravelGuide ve Travio boşuna değil.',
-  // Ana kare + küçük şerit: gerçek seyahat fotoğrafları
   photo: romaSelfie,
   photoAlt: 'Ahmet AKSOY, Roma’da Kolezyum önünde',
   gallery: [
@@ -351,8 +286,6 @@ export const lifeHighlight = {
     { src: romaKolezyum, alt: 'Kolezyum’un dış cephesi' },
   ],
 }
-
-// ── 06 · Projeler ────────────────────────────────────────────────────────────
 export const activeProject = {
   name: 'Şu An — Now Page',
   status: 'Aktif Geliştirme',
@@ -369,12 +302,6 @@ export const activeProject = {
   stack: ['React', 'Vite', 'Vanilla CSS', 'GitHub API'],
   repoUrl: 'https://github.com/ahmetaksoy10/now-page',
 }
-
-// Raftaki diğer projeler:
-//  - screenshots → karttaki üst medya şeridi (seçilmiş 1-3 kare)
-//  - gallery     → detay modalındaki TÜM ekran görüntüleri (otomatik toplanır)
-//  - features    → modaldaki "Öne Çıkanlar" listesi
-//  - repoUrl     → GitHub linki (null ise repo henüz özel demektir)
 export const otherProjects = [
   {
     id: 'travio',
@@ -498,8 +425,6 @@ export const otherProjects = [
     gallery: oeeGaleri,
   },
 ]
-
-// ── 07 · Öğrenme Listesi (Backlog) ───────────────────────────────────────────
 export const learningBacklog = [
   { id: 'git', label: 'Git ve GitHub temellerini öğrenmek', done: true },
   { id: 'docker', label: 'Docker temelleri & konteyner yapısını öğrenmek', done: false },

@@ -1,12 +1,3 @@
-// ─────────────────────────────────────────────────────────────────────────────
-//  E-posta doğrulama yardımcıları (saf fonksiyonlar)
-// ─────────────────────────────────────────────────────────────────────────────
-//  ContactCta formundan çıkarıldı: senkron format + yaygın yazım/uzantı hatası
-//  kontrolü. Ağ gerektiren DNS/MX kontrolü (alanAdiMailAlir) bileşende kalır.
-// ─────────────────────────────────────────────────────────────────────────────
-
-// Bilinen sağlayıcı + doğru uzantısı. "gmail.co", "gmail.con", "gmail.cm"
-// gibi yaygın uzantı hataları buradan yakalanır (HTML type=email yakalamaz).
 export const SAGLAYICILAR = {
   gmail: 'com',
   googlemail: 'com',
@@ -20,8 +11,6 @@ export const SAGLAYICILAR = {
   proton: 'me',
   protonmail: 'com',
 }
-
-// Tam alan adı yazım hataları (gmial.com → gmail.com)
 export const YAZIM_HATASI = {
   'gmial.com': 'gmail.com',
   'gmai.com': 'gmail.com',
@@ -33,17 +22,9 @@ export const YAZIM_HATASI = {
   'outlok.com': 'outlook.com',
   'iclod.com': 'icloud.com',
 }
-
-// Katı (RFC-5322'ye yakın) format: yerel kısım + geçerli alan adı etiketleri +
-// en az 2 harfli TLD. Ardışık nokta, baş/son tire gibi bozuklukları reddeder.
 export const EPOSTA_REGEX =
   /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i
 
-/**
- * epostaHatasi — Senkron e-posta kontrolü: format + yaygın yazım/uzantı hataları.
- * Hata varsa kullanıcıya gösterilecek Türkçe mesajı, yoksa null döndürür.
- * (Alan adının gerçekten mail alıp almadığı ayrıca DNS ile kontrol edilir.)
- */
 export function epostaHatasi(deger) {
   const e = deger.trim().toLowerCase()
   if (!e) return 'E-posta adresinizi girin.'

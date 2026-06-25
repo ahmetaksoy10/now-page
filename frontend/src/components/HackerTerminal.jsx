@@ -3,9 +3,6 @@ import SnakeGame from './terminal/SnakeGame.jsx'
 import DinoGame from './terminal/DinoGame.jsx'
 import XoxGame from './terminal/XoxGame.jsx'
 
-/**
- * HackerTerminal — Gizli "hacker terminali" easter egg'i.
- */
 const KONAMI = [
   'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
   'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a',
@@ -70,8 +67,6 @@ function neofetch(tema) {
 ╚═╝  ╚═╝      çalışma   : 13g 3sa 12dk
               diller    : swift · js · python`
 }
-
-// Matrix yağmuru componenti
 const MatrixRain = ({ tema }) => {
   const canvasRef = useRef(null)
 
@@ -148,8 +143,6 @@ function HackerTerminal() {
   const [satirlar, setSatirlar] = useState([])
   const [girdi, setGirdi] = useState('')
   const [tema, setTema] = useState('yesil')
-
-  // Draggable window state
   const [pos, setPos] = useState({ x: 0, y: 0 })
   const draggingInfo = useRef({ isDragging: false, startX: 0, startY: 0, initialX: 0, initialY: 0 })
 
@@ -172,8 +165,6 @@ function HackerTerminal() {
   const yaz = useCallback((metin, sinif = '') => {
     setSatirlar((s) => [...s, { metin, sinif, id: Date.now() + Math.random() }])
   }, [])
-
-  // Boot animasyonu — rastgele gecikmelerle gerçek boot hissi
   const botBaslat = useCallback(() => {
     temizleZamanlayicilar()
     setMod('boot')
@@ -191,7 +182,6 @@ function HackerTerminal() {
 
     let toplam = 0
     adimlar.forEach((a, i) => {
-      // Banner için uzun bekleme, diğerleri rastgele kısa gecikmeler
       const gecikme = i === 4 ? 350 : (80 + Math.random() * 120)
       toplam += gecikme
       const id = setTimeout(() => {
@@ -211,8 +201,6 @@ function HackerTerminal() {
       botBaslat()
     }, 1800) // Sinematik intro için biraz daha uzun
   }, [botBaslat])
-
-  // CRT kapanma animasyonu ile kapat
   const kapat = useCallback(() => {
     temizleZamanlayicilar()
     setKapaniyor(true)
@@ -225,8 +213,6 @@ function HackerTerminal() {
       setGirdi('')
     }, 500) // CRT-off animasyon süresi
   }, [temizleZamanlayicilar])
-
-  // ── Açılış: Konami + custom event
   useEffect(() => {
     let girilen = []
     const konami = (e) => {
@@ -250,8 +236,6 @@ function HackerTerminal() {
       window.removeEventListener('hacker-terminal:ac', acEvent)
     }
   }, [ac])
-
-  // Body scroll lock
   useEffect(() => {
     if (!acik && !girisEkrani) return
     const eski = document.body.style.overflow
@@ -260,8 +244,6 @@ function HackerTerminal() {
       document.body.style.overflow = eski
     }
   }, [acik, girisEkrani])
-
-  // Esc ile kapat
   useEffect(() => {
     if (!acik) return
     const esc = (e) => {
@@ -272,13 +254,9 @@ function HackerTerminal() {
     window.addEventListener('keydown', esc)
     return () => window.removeEventListener('keydown', esc)
   }, [acik, mod, kapat])
-
-  // Scroll
   useEffect(() => {
     if (ciktiRef.current) ciktiRef.current.scrollTop = ciktiRef.current.scrollHeight
   }, [satirlar, mod])
-
-  // Auto focus
   const handleWrapperClick = useCallback(() => {
     if (window.getSelection().toString().length === 0 && mod === 'komut') {
       inputRef.current?.focus()
@@ -391,8 +369,6 @@ function HackerTerminal() {
       }
     }
   }
-
-  // Draggable logic
   const handlePointerDown = (e) => {
     draggingInfo.current.isDragging = true
     draggingInfo.current.startX = e.clientX || e.touches?.[0]?.clientX

@@ -2,8 +2,6 @@ import { ArrowUpRight, Lock } from 'lucide-react'
 import { GitHubIcon } from './icons/BrandIcons.jsx'
 import Modal from './Modal.jsx'
 import GalleryViewer from './GalleryViewer.jsx'
-
-// Türkçe durum etiketini CSS sınıf adına çevirir ("Tamamlandı" → "tamamlandi")
 function durumSinifi(durum) {
   return durum
     .toLowerCase()
@@ -16,22 +14,8 @@ function durumSinifi(durum) {
     .replace(/\s+/g, '-')
 }
 
-/**
- * ProjectModal — Proje detay penceresi.
- *
- * Raf kartına tıklanınca açılır: projenin TÜM ekran görüntüleri
- * (gezilebilir galeri), uzun hikâyesi, öne çıkan özellikleri, teknoloji
- * yığını ve GitHub bağlantısı tek pencerede toplanır.
- *
- * `project` null ise hiçbir şey çizilmez — açık/kapalı durumu üst
- * component (ActiveProject) yönetir, modal sadece gösterir.
- */
 function ProjectModal({ project, onClose }) {
   if (!project) return null
-
-  // Galeri karelerine, aynı kareye ait vitrin (screenshots) alt metnini başlık
-  // olarak ekle → lightbox'ta caption görünür. content.js'e dokunmadan, mevcut
-  // anlamlı alt metinlerinden beslenir; eşleşmeyen ekstra kareler captionsız kalır.
   const galeriKareleri = project.gallery.map((kare) => {
     const vitrin = project.screenshots.find((s) => s.src === kare.src)
     return vitrin ? { ...kare, title: vitrin.alt } : kare

@@ -1,13 +1,3 @@
-/**
- * BrandIcons — Marka logoları (GitHub, LinkedIn, X).
- *
- * Neden ayrı bir dosya? lucide-react v1.x itibarıyla marka ikonlarını
- * kütüphaneden kaldırdı (resmi tavsiyeleri: marka logolarını kendiniz barındırın).
- * Bu component'ler, markaların resmi SVG path'lerini lucide ile aynı API
- * (size prop, currentColor) üzerinden sunar — UI'da ikon kaynağı fark edilmez.
- */
-
-// Ortak sarmalayıcı: 24x24 viewBox + currentColor doldurma
 function BrandIcon({ size = 24, fill = "currentColor", stroke = "none", strokeWidth, strokeLinecap, strokeLinejoin, children, ...rest }) {
   return (
     <svg

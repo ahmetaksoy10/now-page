@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { goreceliZaman, kapakSec, PLACEHOLDER } from './lastfm.js'
 
 describe('goreceliZaman', () => {
-  // Zamanı sabitle → testler "şu an"dan bağımsız, deterministik olsun
   const SIMDI = new Date('2025-06-01T12:00:00Z')
   const simdiSn = Math.floor(SIMDI.getTime() / 1000)
 

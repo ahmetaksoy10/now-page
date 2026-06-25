@@ -1,33 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
-
-// Otomatik geçişin bekleme süresi (ms)
 const OTOMATIK_GECIS_SURESI = 3000
 
-/**
- * GalleryViewer — Ana sahne + küçük resim şeridi + klavye desteğiyle galeri.
- *
- * Hem proje detay modalında hem Roma fotoğraf lightbox'ında kullanılır
- * (tek sorumluluk: görsel gezdirmek — nerede durduğunu bilmez).
- *
- * Detaylar:
- *  - `key={aktif}` hilesi: görsel değişince React elementi yeniden yaratır,
- *    böylece CSS giriş animasyonu (gallery-fade) her karede tekrar oynar.
- *  - Ok tuşları ile gezinme; sayaç ekran okuyucuya da durum bildirir.
- *  - Döngüsel gezinme: son kareden ileri = ilk kare.
- *  - `autoAdvance` açıkken kareler 3 sn'de bir kendiliğinden ilerler;
- *    kullanıcı elle gezinince ya da fareyi sahnenin üstüne getirince durur.
- */
 function GalleryViewer({ images, startIndex = 0, autoAdvance = false }) {
   const [aktif, setAktif] = useState(startIndex)
-  // Fare sahnenin üstündeyken otomatik geçiş duraklar (kullanıcı inceliyordur)
   const [duraklat, setDuraklat] = useState(false)
   const toplam = images.length
 
   const ileri = useCallback(() => setAktif((i) => (i + 1) % toplam), [toplam])
   const geri = useCallback(() => setAktif((i) => (i - 1 + toplam) % toplam), [toplam])
-
-  // Klavye okları: modal açıkken galeriyi gezdirir
   useEffect(() => {
     if (toplam < 2) return
     const tusDinleyici = (olay) => {
@@ -37,10 +18,6 @@ function GalleryViewer({ images, startIndex = 0, autoAdvance = false }) {
     document.addEventListener('keydown', tusDinleyici)
     return () => document.removeEventListener('keydown', tusDinleyici)
   }, [ileri, geri, toplam])
-
-  // Otomatik geçiş: `aktif` bağımlılığı sayesinde her kare değişiminde
-  // (elle ya da otomatik) zamanlayıcı sıfırlanır — yani elle ilerlettiğinizde
-  // sonraki otomatik geçiş yine tam 3 sn sonra olur, "çift atlama" yaşanmaz.
   useEffect(() => {
     if (!autoAdvance || toplam < 2 || duraklat) return
     const zamanlayici = setTimeout(ileri, OTOMATIK_GECIS_SURESI)

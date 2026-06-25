@@ -3,13 +3,6 @@ import { Crosshair } from 'lucide-react'
 import { currentFocus } from '../data/content.js'
 import BentoCard from './BentoCard.jsx'
 
-/**
- * CurrentFocus — Bento'nun amiral kartı: "Şu anki ana odak".
- *
- * "Wow" detayı: fareyi takip eden ışık halesi (spotlight). JS yalnızca
- * koordinatı iki CSS değişkenine yazar; çizim tamamen GPU-dostu CSS'te.
- * State kullanılmadığı için React render tetiklenmez.
- */
 function CurrentFocus() {
   const kartRef = useRef(null)
 

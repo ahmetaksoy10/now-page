@@ -1,24 +1,4 @@
-/* ════════════════════════════════════════════════════════════════════════════
-   NOW PAGE — TASARIM SİSTEMİ v2 "Sıcak Editoryal Bento"
-   ────────────────────────────────────────────────────────────────────────────
-   Tasarım dili:
-   • Bento grid      → tek kolon yerine asimetrik, dergi hissi veren yerleşim
-   • Sıcak amber     → klişe mor/indigo yerine altın vurgu + ılık zeminler
-   • Editoryal serif → Inter'in yanında Instrument Serif italik vurgular
-   • Canlı detaylar  → işleyen saat, kayan şerit, nabız atan rozetler
 
-   Teknik yaklaşım:
-   1. Tüm renk/gölge değerleri CSS değişkeni → tema, tek attribute ile döner.
-   2. BEM isimlendirme (blok__element--modifier) → çakışmasız, okunabilir.
-   3. Animasyonlar yalnızca transform + opacity → GPU katmanı, 60fps.
-
-   ────────────────────────────────────────────────────────────────────────────
-   YAPI: Bu dosya artık yalnızca bir İNDEKS. Tasarım, bakımı kolaylaştırmak için
-   `styles/` altında anlamlı modüllere bölünmüştür. @import SIRASI = cascade
-   sırasıdır (tokens → temel → bileşenler → responsive → hareket); değiştirmeyin.
-   Tüm dosyalar tek bir stylesheet'e derlenir; CSS değişkenleri ve @keyframes
-   küresel kalır.
-   ════════════════════════════════════════════════════════════════════════════ */
 
 @import './styles/tokens.css';      /* §1  Tasarım token'ları (renk/tipografi/tema) */
 @import './styles/base.css';        /* §2-4 Reset, sayfa iskeleti + aurora, animasyon sistemi */

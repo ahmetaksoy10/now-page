@@ -1,14 +1,4 @@
-// ─────────────────────────────────────────────────────────────────────────────
-//  Last.fm veri yardımcıları (saf fonksiyonlar)
-// ─────────────────────────────────────────────────────────────────────────────
-//  CurrentlyListening bileşeninden çıkarıldı: görece zaman biçimleme ve kapak
-//  seçimi — ağsız, saf mantık → bağımsız test edilebilir.
-// ─────────────────────────────────────────────────────────────────────────────
-
-// Last.fm'in "kapak yok" yıldız görselinin hash'i — gerçek kapak sayılmaz
 export const PLACEHOLDER = '2a96cbd8b46e442fc41c2b86b821562f'
-
-// Görece zaman: "az önce", "12 dk önce", "3 saat önce", "dün", "5 gün önce"
 export function goreceliZaman(uts) {
   const saniye = Math.floor(Date.now() / 1000) - Number(uts)
   if (saniye < 90) return 'az önce'
@@ -19,8 +9,6 @@ export function goreceliZaman(uts) {
   const gun = Math.round(saat / 24)
   return gun === 1 ? 'dün' : `${gun} gün önce`
 }
-
-// image dizisinden en büyük geçerli kapağı seç (placeholder'ı atla)
 export function kapakSec(images) {
   if (!Array.isArray(images)) return null
   for (const boyut of ['extralarge', 'large', 'medium', 'small']) {

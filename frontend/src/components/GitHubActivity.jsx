@@ -7,23 +7,10 @@ import BentoCard from './BentoCard.jsx'
 import Counter from './Counter.jsx'
 
 const GITHUB_API = 'https://api.github.com'
-// Vitrine çıkarılacak repo sayısı — yıldız sayısına göre en iyi N repo seçilir.
 const ONE_CIKAN_REPO_SAYISI = 4
-// Dil dağılımında ayrı gösterilecek en fazla dil; gerisi "Diğer"de toplanır.
 const EN_FAZLA_DIL = 5
-
-// Katkı haritası için ücretsiz, auth gerektirmeyen public API (CORS açık).
-// GitHub'ın resmi REST API'si katkı grafiği verisini vermez; bu servis
-// profil sayfasındaki gerçek heatmap'i JSON olarak döndürür.
 const KATKI_API = 'https://github-contributions-api.jogruber.de/v4'
 
-/**
- * KatkiHaritasi — Son bir yılın GERÇEK GitHub katkı ısı haritası.
- *
- * Kendi verisini bağımsız çeker (ana kart isteklerini bloklamaz); başarısız
- * olursa sessizce gizlenir, kartın geri kalanı çalışmaya devam eder. Toplam
- * katkı ve güncel seri veriden türetilir — elle yazılmaz.
- */
 function KatkiHaritasi({ username }) {
   const [veri, setVeri] = useState(null)
   const [durum, setDurum] = useState('loading')
@@ -44,8 +31,6 @@ function KatkiHaritasi({ username }) {
       })
     return () => iptal.abort()
   }, [username])
-
-  // Hata/yükleme: sessizce gizle (üçüncü taraf servis; kart geri kalanı sağlam)
   if (durum !== 'success' || !veri?.contributions?.length) return null
 
   const gunler = veri.contributions
@@ -99,10 +84,6 @@ function KatkiHaritasi({ username }) {
   )
 }
 
-/**
- * GitHubSkeleton — Veri yüklenirken gösterilen "shimmer" iskelet.
- * Amatör bir "Loading..." yazısı yerine gelecek içeriğin silüetini çizer.
- */
 function GitHubSkeleton() {
   return (
     <div className="github-card__layout" aria-hidden="true">
@@ -130,19 +111,6 @@ function GitHubSkeleton() {
   )
 }
 
-/**
- * GitHubActivity — GitHub REST API'sinden canlı veri çeken zengin kart.
- *
- * Çekilen veriden türetilenler (hepsi istemci tarafında hesaplanır):
- *  - Dil dağılımı: tüm repoların `language` alanları sayılıp yüzdelenir.
- *  - Toplam yıldız: repoların yıldızları toplanır.
- *  - Öne çıkan repolar: en çok yıldız alan ilk N repo.
- *
- * Teknik kararlar:
- *  - Promise.all: profil + repo istekleri paralel atılır (~2x hızlı).
- *  - AbortController: component kalkarsa istekler iptal edilir.
- *  - Üç durumlu UI (loading / error / success): ziyaretçi asla boş ekran görmez.
- */
 function GitHubActivity() {
   const [kullanici, setKullanici] = useState(null)
   const [repolar, setRepolar] = useState([])
@@ -176,8 +144,6 @@ function GitHubActivity() {
         const kullaniciVerisi = await kullaniciYaniti.json()
         const repoVerisi = await repoYaniti.json()
         const starredVerisi = await starredYaniti.json()
-
-        // ── Dil dağılımı: her repodaki ana dili say, yüzdeye çevir ──
         const dilSayaci = {}
         for (const repo of repoVerisi) {
           if (repo.language) {
@@ -192,8 +158,6 @@ function GitHubActivity() {
             yuzde: Math.round((adet / dilToplami) * 100),
             renk: dilRengi(ad),
           }))
-
-        // İlk EN_FAZLA_DIL dili göster, kalanları "Diğer" olarak topla
         const ustDiller = siraliDiller.slice(0, EN_FAZLA_DIL)
         const kalanYuzde = siraliDiller
           .slice(EN_FAZLA_DIL)
@@ -201,8 +165,6 @@ function GitHubActivity() {
         if (kalanYuzde > 0) {
           ustDiller.push({ ad: 'Diğer', yuzde: kalanYuzde, renk: 'var(--text-tertiary)' })
         }
-
-        // ── Toplam yıldız (Kullanıcının yıldızladıkları) + öne çıkan repolar ──
         const yildizToplami = starredVerisi.length
         const oneCikanlar = [...repoVerisi]
           .sort((a, b) => b.stargazers_count - a.stargazers_count)
@@ -214,7 +176,6 @@ function GitHubActivity() {
         setToplamYildiz(yildizToplami)
         setDurum('success')
       } catch (hata) {
-        // Bilinçli iptal (unmount) hata sayılmaz
         if (hata.name !== 'AbortError') setDurum('error')
       }
     }

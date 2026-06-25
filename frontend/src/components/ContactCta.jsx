@@ -5,15 +5,8 @@ import { contactCta, socialLinks } from '../data/content.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
 import { epostaHatasi } from '../utils/eposta.js'
 import CopyEmailButton from './CopyEmailButton.jsx'
-
-// URL'ler tek doğruluk noktasından (content.js socialLinks) gelir — bileşende tekrar yok
 const githubUrl = socialLinks.find((l) => l.id === 'github').url
 const linkedinUrl = socialLinks.find((l) => l.id === 'linkedin').url
-
-// Alan adı gerçekten e-posta alabiliyor mu? Cloudflare DNS-over-HTTPS ile MX
-// (yoksa A) kaydı kontrolü — var olmayan/uydurma alan adlarını (örn. asdfqwe.com)
-// yakalar. CORS açık, ücretsiz, anahtarsız. Ağ/hizmet hatasında ENGELLEMEZ
-// (gerçek kullanıcıyı DNS sorunu yüzünden mağdur etmemek için).
 async function alanAdiMailAlir(domain) {
   const sor = async (tip) => {
     const r = await fetch(
@@ -44,23 +37,11 @@ function dogrula({ name, email, message }) {
   return hata
 }
 
-/**
- * ContactCta — Sayfanın finali: doğrudan sayfada doldurulan iletişim formu.
- *
- * Form Formspree'ye `fetch` ile POST edilir (sayfa yenilenmez). Ayrıntılı
- * istemci-tarafı doğrulama (format + yaygın e-posta yazım hataları) hatalı
- * gönderimi engeller. Başarı mesajı bir animasyonla belirip birkaç saniye
- * sonra kendiliğinden kaybolur. Gönder butonu kartın ortasında; e-posta
- * kopyalama ve LinkedIn ise kartın dışında, altta ortalı durur.
- */
 function ContactCta() {
   const ref = useScrollReveal()
   const [deger, setDeger] = useState({ name: '', email: '', message: '' })
   const [hatalar, setHatalar] = useState({})
   const [durum, setDurum] = useState('idle') // 'idle' | 'gonderiliyor' | 'basarili' | 'hata'
-
-  // Başarı mesajı birkaç saniye sonra kendiliğinden kaybolur (animasyondan
-  // bağımsız zamanlayıcı → "hareketi azalt" tercihinde de düzgün çalışır).
   useEffect(() => {
     if (durum !== 'basarili') return
     const zamanlayici = setTimeout(() => setDurum('idle'), 4200)
@@ -70,7 +51,6 @@ function ContactCta() {
   const guncelle = (alan) => (olay) => {
     const v = olay.target.value
     setDeger((d) => ({ ...d, [alan]: v }))
-    // Yazmaya başlayınca o alanın hatasını temizle
     if (hatalar[alan]) setHatalar((h) => ({ ...h, [alan]: undefined }))
   }
 
@@ -83,8 +63,6 @@ function ContactCta() {
     }
     setHatalar({})
     setDurum('gonderiliyor')
-
-    // Alan adı gerçekten e-posta alabiliyor mu? (uydurma alan adlarını yakalar)
     const domain = deger.email.trim().toLowerCase().split('@')[1]
     if (!(await alanAdiMailAlir(domain))) {
       setHatalar({ email: 'Bu alan adı e-posta alamıyor gibi görünüyor.' })

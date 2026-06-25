@@ -1,14 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Lightbulb } from 'lucide-react'
 
-/**
- * HintButton — Navbar'da tema butonunun yanında duran "ipucu" (ampül) butonu.
- *
- * Tıklanınca şık bir popover açar: gizli terminali açan Konami kombinasyonunu
- * (↑ ↑ ↓ ↓ ← → ← → B A) gösterir. Klavyeyle deneyemeyenler için bir de manuel
- * "Terminali Aç" yedek butonu sunar — bu, HackerTerminal'in dinlediği
- * `hacker-terminal:ac` custom event'ini gönderir (gevşek bağlama).
- */
 const TUSLAR = ['↑', '↑', '↓', '↓', '←', '→', '←', '→', 'B', 'A']
 
 function HintButton() {

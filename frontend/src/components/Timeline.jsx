@@ -1,8 +1,6 @@
 import { Code2, GraduationCap, MapPin, Smartphone, Target, Trophy } from 'lucide-react'
 import { timeline } from '../data/content.js'
 import { useScrollReveal } from '../hooks/useScrollReveal.js'
-
-// İçerikteki "icon" anahtarını lucide bileşenine eşler (içerik ↔ sunum ayrımı).
 const IKONLAR = {
   school: GraduationCap,
   code: Code2,
@@ -12,11 +10,6 @@ const IKONLAR = {
   trophy: Trophy,
 }
 
-/**
- * TimelineItem — Tek bir kilometre taşı. Kendi scroll-reveal'ını yönetir
- * (her madde viewport'a girince tek tek, soldan sağa belirir). Bu yüzden
- * ayrı bir bileşen: useScrollReveal her örnek için bağımsız bir ref verir.
- */
 function TimelineItem({ olay, sira }) {
   const ref = useScrollReveal()
   const Ikon = IKONLAR[olay.icon] ?? Target
@@ -39,14 +32,6 @@ function TimelineItem({ olay, sira }) {
   )
 }
 
-/**
- * Timeline — "Yolculuk": üniversiteden bugüne dikey zaman çizelgesi.
- *
- * Bento grid'in CV'nin anlatamadığı "anlık kesit"ini tamamlar: nereden
- * geldiğimi gösteren kronolojik bir hikâye. Dikey ray + duran noktalar;
- * her madde scroll'la kademeli belirir. Navbar'daki "Yolculuk" linki
- * #yolculuk id'sine kayar (scroll-spy otomatik vurgular).
- */
 function Timeline() {
   return (
     <section className="timeline-section" id="yolculuk" aria-labelledby="yolculuk-baslik">
