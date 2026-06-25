@@ -155,7 +155,7 @@ function GitHubActivity() {
 
     async function verileriGetir() {
       try {
-        const [kullaniciYaniti, repoYaniti] = await Promise.all([
+        const [kullaniciYaniti, repoYaniti, starredYaniti] = await Promise.all([
           fetch(`${GITHUB_API}/users/${profile.githubUsername}`, {
             signal: iptalKontrol.signal,
           }),
@@ -163,14 +163,19 @@ function GitHubActivity() {
             `${GITHUB_API}/users/${profile.githubUsername}/repos?per_page=100&sort=updated`,
             { signal: iptalKontrol.signal },
           ),
+          fetch(
+            `${GITHUB_API}/users/${profile.githubUsername}/starred?per_page=100`,
+            { signal: iptalKontrol.signal },
+          ),
         ])
 
-        if (!kullaniciYaniti.ok || !repoYaniti.ok) {
+        if (!kullaniciYaniti.ok || !repoYaniti.ok || !starredYaniti.ok) {
           throw new Error(`GitHub API hatası: ${kullaniciYaniti.status}`)
         }
 
         const kullaniciVerisi = await kullaniciYaniti.json()
         const repoVerisi = await repoYaniti.json()
+        const starredVerisi = await starredYaniti.json()
 
         // ── Dil dağılımı: her repodaki ana dili say, yüzdeye çevir ──
         const dilSayaci = {}
@@ -197,8 +202,8 @@ function GitHubActivity() {
           ustDiller.push({ ad: 'Diğer', yuzde: kalanYuzde, renk: 'var(--text-tertiary)' })
         }
 
-        // ── Toplam yıldız + öne çıkan repolar ──
-        const yildizToplami = repoVerisi.reduce((a, r) => a + r.stargazers_count, 0)
+        // ── Toplam yıldız (Kullanıcının yıldızladıkları) + öne çıkan repolar ──
+        const yildizToplami = starredVerisi.length
         const oneCikanlar = [...repoVerisi]
           .sort((a, b) => b.stargazers_count - a.stargazers_count)
           .slice(0, ONE_CIKAN_REPO_SAYISI)

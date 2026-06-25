@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react'
 
 // Otomatik geçişin bekleme süresi (ms)
 const OTOMATIK_GECIS_SURESI = 3000
@@ -113,7 +113,7 @@ function GalleryViewer({ images, startIndex = 0, autoAdvance = false }) {
             <span className="gallery__caption-text">{gorsel.description}</span>
           )}
           {gorsel.location && (
-            <span className="gallery__caption-loc">📍 {gorsel.location}</span>
+            <span className="gallery__caption-loc"><MapPin size={13} aria-hidden="true" /> {gorsel.location}</span>
           )}
         </figcaption>
       )}

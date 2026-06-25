@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { Maximize2, MapPin, Plane } from 'lucide-react'
 import { lifeHighlight, romaGaleri } from '../data/content.js'
+
+// Şerit fotoğrafının romaGaleri içindeki gerçek sırasını bul (src eşleştirme)
+const galeriIndex = (src) => {
+  const idx = romaGaleri.findIndex((g) => g.src === src)
+  return idx >= 0 ? idx : 0
+}
 import BentoCard from './BentoCard.jsx'
 import BlurImage from './BlurImage.jsx'
 import Modal from './Modal.jsx'
@@ -17,8 +23,8 @@ import GalleryViewer from './GalleryViewer.jsx'
 function LifeHighlight() {
   const { date, category, title, description, photo, photoAlt, gallery } = lifeHighlight
 
-  // Galeri açık mı? Lightbox her zaman 1. kareden, slayt gösterisi gibi başlar.
-  const [galeriAcik, setGaleriAcik] = useState(false)
+  // Galeri açık mı? Açıksa hangi kareden başlasın (index); kapalıysa null.
+  const [galeriBaslangic, setGaleriBaslangic] = useState(null)
 
   return (
     <BentoCard
@@ -37,7 +43,7 @@ function LifeHighlight() {
         <button
           type="button"
           className="postcard__photo-button"
-          onClick={() => setGaleriAcik(true)}
+          onClick={() => setGaleriBaslangic(galeriIndex(photo))}
           aria-label="Roma fotoğraf galerisini aç"
         >
           <BlurImage src={photo} alt={photoAlt} className="postcard__photo" loading="lazy" />
@@ -55,7 +61,7 @@ function LifeHighlight() {
               key={kare.src}
               type="button"
               className="postcard__strip-button"
-              onClick={() => setGaleriAcik(true)}
+              onClick={() => setGaleriBaslangic(galeriIndex(kare.src))}
               aria-label={`${kare.alt} — galeride aç`}
             >
               <BlurImage
@@ -84,16 +90,16 @@ function LifeHighlight() {
 
       {/* Tam ekran lightbox: Roma'nın 9 karesi, 1. kareden başlar + otomatik geçiş */}
       <Modal
-        open={galeriAcik}
-        onClose={() => setGaleriAcik(false)}
+        open={galeriBaslangic !== null}
+        onClose={() => setGaleriBaslangic(null)}
         labelledBy="roma-lightbox-baslik"
         variant="modal--lightbox"
       >
         <h2 id="roma-lightbox-baslik" className="visually-hidden">
           Roma seyahati fotoğraf galerisi
         </h2>
-        {galeriAcik && (
-          <GalleryViewer images={romaGaleri} startIndex={0} autoAdvance />
+        {galeriBaslangic !== null && (
+          <GalleryViewer images={romaGaleri} startIndex={galeriBaslangic} autoAdvance />
         )}
       </Modal>
     </BentoCard>
