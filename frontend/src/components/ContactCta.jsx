@@ -198,7 +198,6 @@ function ContactCta() {
         >
           <GitHubIcon size={15} aria-hidden="true" />
           GitHub
-          <ArrowUpRight size={13} className="btn__arrow" aria-hidden="true" />
         </a>
         <a
           href={linkedinUrl}
@@ -208,7 +207,6 @@ function ContactCta() {
         >
           <LinkedInIcon size={14} aria-hidden="true" />
           LinkedIn
-          <ArrowUpRight size={13} className="btn__arrow" aria-hidden="true" />
         </a>
       </div>
     </section>

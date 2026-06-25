@@ -226,7 +226,7 @@
    miras alır), tema-uyumlu yüzey (light→açık, dark→koyu). İkon currentColor ile
    metinle aynı koyu tonda; logonun dışı koyu, içi (LinkedIn "in") zemin rengiyle açık. */
 .btn--ghost {
-  color: var(--text-primary);
+  color: var(--text-secondary);
   background: var(--glass);
   -webkit-backdrop-filter: blur(10px) saturate(140%);
   backdrop-filter: blur(10px) saturate(140%);
